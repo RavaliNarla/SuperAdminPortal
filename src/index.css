@@ -1,0 +1,82 @@
+:root {
+  color-scheme: light;
+  font-family: 'Poppins', system-ui, sans-serif;
+  background: #f4f6fb;
+  color: #1f2937;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #f4f6fb;
+}
+
+a {
+  text-decoration: none;
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.content-panel {
+  flex: 1;
+  padding: 24px;
+  background: #f4f6fb;
+}
+
+.page-title {
+  margin-bottom: 16px;
+}
+
+.card-bg {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+}
+
+.card-body {
+  padding: 24px;
+}
+
+.sidebar {
+  width: 280px;
+  min-height: 100vh;
+  background: #15233b;
+  color: #f8fafc;
+}
+
+.sidebar .nav-link {
+  color: rgba(248, 250, 252, 0.8);
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+  color: #ffffff;
+}
+
+.header-row {
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.status-badge {
+  min-width: 100px;
+}
+
+.organization-logo {
+  border-radius: 10px;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.form-section + .form-section {
+  margin-top: 24px;
+}
