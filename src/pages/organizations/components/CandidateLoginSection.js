@@ -1,129 +1,478 @@
 // src/pages/organizations/components/CandidateLoginSection.js
 
 import React from "react";
-import { Card, Row, Col, Form } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
+import {
+    FiLogIn,
+    FiUser,
+    FiMail,
+    FiSmartphone,
+    FiCreditCard,
+    FiKey,
+    FiShield,
+    FiUserPlus,
+    FiCheckCircle,
+} from "react-icons/fi";
+
+import "../../../css/Section.css";
+
+const loginMethods = [
+    {
+        value: "USERNAME",
+        label: "Username",
+        icon: <FiUser />,
+        description: "Login using Username",
+    },
+    {
+        value: "EMAIL",
+        label: "Email Address",
+        icon: <FiMail />,
+        description: "Login using Email",
+    },
+    {
+        value: "MOBILE",
+        label: "Mobile Number",
+        icon: <FiSmartphone />,
+        description: "Login using Mobile",
+    },
+    {
+        value: "AADHAAR",
+        label: "Aadhaar Number",
+        icon: <FiCreditCard />,
+        description: "Login using Aadhaar",
+    },
+    {
+        value: "PAN",
+        label: "PAN Number",
+        icon: <FiCreditCard />,
+        description: "Login using PAN",
+    },
+];
 
 const CandidateLoginSection = ({ data, onChange }) => {
     return (
-        <Card className="shadow-sm mb-4">
-            <Card.Header className="bg-primary text-white">
-                <h5 className="mb-0">Candidate Login Configuration</h5>
-            </Card.Header>
+        <div className="candidate-login-card">
 
-            <Card.Body>
-                <Row>
-                    <Col md={4}>
-                        <Form.Check
-                            type="radio"
-                            name="candidateLoginMethod"
-                            label="Username"
-                            checked={data.defaultLoginMethod === "USERNAME"}
-                            onChange={() => onChange("defaultLoginMethod", "USERNAME")}
-                        />
+            {/* Header */}
+
+            <div className="candidate-header">
+                <div>
+                    <h4>
+                        <FiLogIn className="me-2" />
+                        Candidate Portal Login
+                    </h4>
+
+                    <p>
+                        Configure authentication and registration settings for
+                        candidates.
+                    </p>
+                </div>
+            </div>
+
+            {/* Login Methods */}
+
+            <h5 className="candidate-section-title">
+                Choose Login Method
+            </h5>
+
+            <Row className="g-3 mb-4">
+                {loginMethods.map((item) => (
+                    <Col lg={4} md={6} key={item.value}>
+                        <div
+                            className={`candidate-method-card ${data.defaultLoginMethod === item.value ? "active" : ""
+                                }`}
+                            onClick={() =>
+                                onChange("defaultLoginMethod", item.value)
+                            }
+                        >
+                            <div className="candidate-method-left">
+                                <div className="candidate-method-icon">
+                                    {item.icon}
+                                </div>
+
+                                <div>
+                                    <h6>{item.label}</h6>
+                                    <small>{item.description}</small>
+                                </div>
+                            </div>
+
+                            <div
+                                className={`candidate-radio ${data.defaultLoginMethod === item.value
+                                    ? "active"
+                                    : ""
+                                    }`}
+                            >
+                                <div className="candidate-radio-dot"></div>
+                            </div>
+                        </div>
                     </Col>
+                ))}
+            </Row>
 
-                    <Col md={4}>
-                        <Form.Check
-                            type="radio"
-                            name="candidateLoginMethod"
-                            label="Email"
-                            checked={data.defaultLoginMethod === "EMAIL"}
-                            onChange={() => onChange("defaultLoginMethod", "EMAIL")}
-                        />
-                    </Col>
+            {/* Default Login */}
 
-                    <Col md={4}>
-                        <Form.Check
-                            type="radio"
-                            name="candidateLoginMethod"
-                            label="Mobile Number"
-                            checked={data.defaultLoginMethod === "MOBILE"}
-                            onChange={() => onChange("defaultLoginMethod", "MOBILE")}
-                        />
-                    </Col>
-                </Row>
-
-                <Row className="mt-3">
-                    <Col md={4}>
-                        <Form.Check
-                            type="radio"
-                            name="candidateLoginMethod"
-                            label="Aadhaar Number"
-                            checked={data.defaultLoginMethod === "AADHAAR"}
-                            onChange={() => onChange("defaultLoginMethod", "AADHAAR")}
-                        />
-                    </Col>
-
-                    <Col md={4}>
-                        <Form.Check
-                            type="radio"
-                            name="candidateLoginMethod"
-                            label="PAN Number"
-                            checked={data.defaultLoginMethod === "PAN"}
-                            onChange={() => onChange("defaultLoginMethod", "PAN")}
-                        />
-                    </Col>
-                </Row>
-
-                <hr />
-
-                <Form.Group>
-                    <Form.Label>
+            <Row className="mb-4">
+                <Col lg={6}>
+                    <Form.Label className="candidate-label">
                         Default Login Method
                     </Form.Label>
 
                     <Form.Select
+                        className="candidate-input"
                         value={data.defaultLoginMethod || ""}
                         onChange={(e) =>
-                            onChange("defaultLoginMethod", e.target.value)
+                            onChange(
+                                "defaultLoginMethod",
+                                e.target.value
+                            )
                         }
                     >
-                        <option value="">Select Login Method</option>
-                        <option value="USERNAME">Username</option>
-                        <option value="EMAIL">Email</option>
-                        <option value="MOBILE">Mobile Number</option>
-                        <option value="AADHAAR">Aadhaar Number</option>
-                        <option value="PAN">PAN Number</option>
+                        <option value="">
+                            Select Login Method
+                        </option>
+
+                        {loginMethods.map((item) => (
+                            <option
+                                key={item.value}
+                                value={item.value}
+                            >
+                                {item.label}
+                            </option>
+                        ))}
                     </Form.Select>
-                </Form.Group>
+                </Col>
+            </Row>
 
-                <div className="mt-4">
-                    <Form.Check
-                        type="switch"
-                        id="candidate-forgot-password"
-                        label="Enable Forgot Password"
-                        checked={data.enableForgotPassword || false}
-                        onChange={(e) =>
-                            onChange("enableForgotPassword", e.target.checked)
-                        }
-                    />
-                </div>
+            {/* Portal Settings */}
 
-                <div className="mt-3">
-                    <Form.Check
-                        type="switch"
-                        id="candidate-self-registration"
-                        label="Allow Self Registration"
-                        checked={data.allowRegistration || false}
-                        onChange={(e) =>
-                            onChange("allowRegistration", e.target.checked)
-                        }
-                    />
-                </div>
+            <h5 className="candidate-section-title">
+                Portal Settings
+            </h5>
 
-                <div className="mt-3">
-                    <Form.Check
-                        type="switch"
-                        id="candidate-captcha"
-                        label="Enable CAPTCHA"
-                        checked={data.enableCaptcha || false}
-                        onChange={(e) =>
-                            onChange("enableCaptcha", e.target.checked)
-                        }
-                    />
-                </div>
-            </Card.Body>
-        </Card>
+            <Row className="g-3">
+
+                <Col lg={6}>
+                    <div className="candidate-setting-card">
+
+                        <div className="candidate-setting-left">
+
+                            <div className="candidate-setting-icon">
+                                <FiKey />
+                            </div>
+
+                            <div>
+                                <h6>Forgot Password</h6>
+
+                                <small>
+                                    Allow candidates to recover their
+                                    passwords securely.
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <Form.Check
+                            type="switch"
+                            checked={
+                                data.enableForgotPassword ||
+                                false
+                            }
+                            onChange={(e) =>
+                                onChange(
+                                    "enableForgotPassword",
+                                    e.target.checked
+                                )
+                            }
+                        />
+
+                    </div>
+                </Col>
+
+                <Col lg={6}>
+                    <div className="candidate-setting-card">
+
+                        <div className="candidate-setting-left">
+
+                            <div className="candidate-setting-icon">
+                                <FiUserPlus />
+                            </div>
+
+                            <div>
+                                <h6>Allow Self Registration</h6>
+
+                                <small>
+                                    Let candidates create their own
+                                    accounts.
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <Form.Check
+                            type="switch"
+                            checked={
+                                data.allowRegistration || false
+                            }
+                            onChange={(e) =>
+                                onChange(
+                                    "allowRegistration",
+                                    e.target.checked
+                                )
+                            }
+                        />
+
+                    </div>
+                </Col>
+
+                <Col lg={6}>
+                    <div className="candidate-setting-card">
+
+                        <div className="candidate-setting-left">
+
+                            <div className="candidate-setting-icon">
+                                <FiShield />
+                            </div>
+
+                            <div>
+                                <h6>Enable CAPTCHA</h6>
+
+                                <small>
+                                    Protect the portal from spam and
+                                    bots.
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <Form.Check
+                            type="switch"
+                            checked={
+                                data.enableCaptcha || false
+                            }
+                            onChange={(e) =>
+                                onChange(
+                                    "enableCaptcha",
+                                    e.target.checked
+                                )
+                            }
+                        />
+
+                    </div>
+                </Col>
+
+            </Row>
+
+            {/* Verification */}
+
+            <h5 className="candidate-section-title mt-5">
+                Registration Verification
+            </h5>
+
+            <Row className="g-3">
+
+                <Col lg={6}>
+                    <div className="candidate-option-card">
+                        <div className="candidate-option-left">
+                            <div className="candidate-option-icon">
+                                <FiSmartphone />
+                            </div>
+
+                            <div>
+                                <h6>Verify Mobile using OTP</h6>
+                                <small>
+                                    Candidate must verify their mobile number before registration.
+                                </small>
+                            </div>
+                        </div>
+
+                        <Form.Check
+                            type="switch"
+                            className="candidate-switch"
+                            checked={data.mobileOtp || false}
+                            onChange={(e) =>
+                                onChange("mobileOtp", e.target.checked)
+                            }
+                        />
+                    </div>
+                </Col>
+
+                <Col lg={6}>
+                    <div className="candidate-option-card">
+                        <div className="candidate-option-left">
+                            <div className="candidate-option-icon">
+                                <FiMail />
+                            </div>
+
+                            <div>
+                                <h6>Verify Email using OTP</h6>
+                                <small>
+                                    Candidate must verify their email before activation.
+                                </small>
+                            </div>
+                        </div>
+
+                        <Form.Check
+                            type="switch"
+                            className="candidate-switch"
+                            checked={data.emailOtp || false}
+                            onChange={(e) =>
+                                onChange("emailOtp", e.target.checked)
+                            }
+                        />
+                    </div>
+                </Col>
+
+                <Col lg={6}>
+                    <div className="candidate-option-card">
+                        <div className="candidate-option-left">
+                            <div className="candidate-option-icon">
+                                <FiCreditCard />
+                            </div>
+
+                            <div>
+                                <h6>Aadhaar Verification</h6>
+                                <small>
+                                    Validate Aadhaar details during registration.
+                                </small>
+                            </div>
+                        </div>
+
+                        <Form.Check
+                            type="switch"
+                            className="candidate-switch"
+                            checked={data.aadhaarVerification || false}
+                            onChange={(e) =>
+                                onChange("aadhaarVerification", e.target.checked)
+                            }
+                        />
+                    </div>
+                </Col>
+
+                <Col lg={6}>
+                    <div className="candidate-option-card">
+                        <div className="candidate-option-left">
+                            <div className="candidate-option-icon">
+                                <FiShield />
+                            </div>
+
+                            <div>
+                                <h6>PAN Verification</h6>
+                                <small>
+                                    Validate PAN details during registration.
+                                </small>
+                            </div>
+                        </div>
+
+                        <Form.Check
+                            type="switch"
+                            className="candidate-switch"
+                            checked={data.panVerification || false}
+                            onChange={(e) =>
+                                onChange("panVerification", e.target.checked)
+                            }
+                        />
+                    </div>
+                </Col>
+
+            </Row>
+            {/* Recovery */}
+
+            <h5 className="candidate-section-title mt-5">
+                Password Recovery Options
+            </h5>
+
+            <Row className="g-3">
+
+                <Col lg={4}>
+                    <div className="candidate-option-card">
+                        <div className="candidate-option-left">
+                            <div className="candidate-option-icon">
+                                <FiSmartphone />
+                            </div>
+
+                            <div>
+                                <h6>Mobile OTP</h6>
+                                <small>
+                                    Recover password using mobile OTP.
+                                </small>
+                            </div>
+                        </div>
+
+                        <Form.Check
+                            type="switch"
+                            className="candidate-switch"
+                            checked={data.mobileRecovery || false}
+                            onChange={(e) =>
+                                onChange(
+                                    "mobileRecovery",
+                                    e.target.checked
+                                )
+                            }
+                        />
+                    </div>
+                </Col>
+
+                <Col lg={4}>
+                    <div className="candidate-option-card">
+                        <div className="candidate-option-left">
+                            <div className="candidate-option-icon">
+                                <FiMail />
+                            </div>
+
+                            <div>
+                                <h6>Email OTP</h6>
+                                <small>
+                                    Recover password using email OTP.
+                                </small>
+                            </div>
+                        </div>
+
+                        <Form.Check
+                            type="switch"
+                            className="candidate-switch"
+                            checked={data.emailRecovery || false}
+                            onChange={(e) =>
+                                onChange(
+                                    "emailRecovery",
+                                    e.target.checked
+                                )
+                            }
+                        />
+                    </div>
+                </Col>
+
+                <Col lg={4}>
+                    <div className="candidate-option-card">
+                        <div className="candidate-option-left">
+                            <div className="candidate-option-icon">
+                                <FiShield />
+                            </div>
+
+                            <div>
+                                <h6>Security Questions</h6>
+                                <small>
+                                    Recover password using security questions.
+                                </small>
+                            </div>
+                        </div>
+
+                        <Form.Check
+                            type="switch"
+                            className="candidate-switch"
+                            checked={data.securityQuestions || false}
+                            onChange={(e) =>
+                                onChange(
+                                    "securityQuestions",
+                                    e.target.checked
+                                )
+                            }
+                        />
+                    </div>
+                </Col>
+
+            </Row>
+
+        </div>
     );
 };
 

@@ -1,120 +1,272 @@
-// src/pages/organizations/components/OTPSettingsSection.js
-
 import React from "react";
-import { Card, Row, Col, Form } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
+import {
+  FiMessageSquare,
+  FiClock,
+  FiRepeat,
+  FiLogIn,
+  FiRefreshCw,
+  FiSmartphone,
+  FiMail
+} from "react-icons/fi";
+import "../../../css/Section.css";
+
 
 const OTPSettingsSection = ({ data, onChange }) => {
   return (
-    <Card className="shadow-sm mb-4">
-      <Card.Header className="bg-info text-white">
-        <h5 className="mb-0">OTP Settings</h5>
-      </Card.Header>
+    <div className="organization-card mb-4">
 
-      <Card.Body>
-        <Row>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>OTP Delivery Method</Form.Label>
-              <Form.Select
-                value={data.method || ""}
-                onChange={(e) => onChange("method", e.target.value)}
-              >
-                <option value="">Select Method</option>
-                <option value="SMS">SMS</option>
-                <option value="EMAIL">Email</option>
-                <option value="BOTH">SMS + Email</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
+      <div className="card-body">
 
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>OTP Expiry (Minutes)</Form.Label>
-              <Form.Control
-                type="number"
-                min="1"
-                max="30"
-                value={data.expiry || ""}
-                onChange={(e) => onChange("expiry", e.target.value)}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
+        <div className="section-header mb-4">
+          <div>
+            <h5 className="section-title">
+              <FiMessageSquare className="me-2" />
+              OTP Settings
+            </h5>
 
-        <Row>
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Maximum Resend Count</Form.Label>
-              <Form.Control
-                type="number"
-                min="1"
-                max="10"
-                value={data.resendCount || ""}
-                onChange={(e) => onChange("resendCount", e.target.value)}
-              />
-            </Form.Group>
-          </Col>
+            <p className="section-subtitle">
+              Configure one-time password delivery and security options.
+            </p>
+          </div>
+        </div>
 
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Label>Resend Cooldown (Seconds)</Form.Label>
-              <Form.Control
-                type="number"
-                min="0"
-                value={data.cooldown || ""}
-                onChange={(e) => onChange("cooldown", e.target.value)}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
+        <Row className="g-4">
 
-        <Row>
-          <Col md={6}>
-            <Form.Check
-              type="switch"
-              id="enableOtpOnLogin"
-              label="Require OTP During Login"
-              checked={data.loginOtp || false}
-              onChange={(e) => onChange("loginOtp", e.target.checked)}
-            />
-          </Col>
+          {/* Delivery Method */}
 
-          <Col md={6}>
-            <Form.Check
-              type="switch"
-              id="enableOtpOnPasswordReset"
-              label="Require OTP for Password Reset"
-              checked={data.passwordResetOtp || false}
+          <Col lg={6}>
+            <label className="form-label">
+              <FiMessageSquare className="me-2" />
+              OTP Delivery Method
+            </label>
+
+            <Form.Select
+              className="modern-input"
+              value={data.method || ""}
               onChange={(e) =>
-                onChange("passwordResetOtp", e.target.checked)
+                onChange("method", e.target.value)
+              }
+            >
+              <option value="">
+                Select Method
+              </option>
+
+              <option value="SMS">
+                SMS
+              </option>
+
+              <option value="EMAIL">
+                Email
+              </option>
+
+              <option value="BOTH">
+                SMS + Email
+              </option>
+
+            </Form.Select>
+          </Col>
+
+          {/* Expiry */}
+
+          <Col lg={6}>
+            <label className="form-label">
+              <FiClock className="me-2" />
+              OTP Expiry (Minutes)
+            </label>
+
+            <Form.Control
+              type="number"
+              className="modern-input"
+              min="1"
+              max="30"
+              value={data.expiry || ""}
+              onChange={(e) =>
+                onChange("expiry", e.target.value)
               }
             />
           </Col>
-        </Row>
 
-        <Row className="mt-3">
-          <Col md={6}>
-            <Form.Check
-              type="switch"
-              id="maskMobile"
-              label="Mask Mobile Number"
-              checked={data.maskMobile || false}
-              onChange={(e) => onChange("maskMobile", e.target.checked)}
+          {/* Resend Count */}
+
+          <Col lg={6}>
+            <label className="form-label">
+              <FiRepeat className="me-2" />
+              Maximum Resend Count
+            </label>
+
+            <Form.Control
+              type="number"
+              className="modern-input"
+              min="1"
+              max="10"
+              value={data.resendCount || ""}
+              onChange={(e) =>
+                onChange("resendCount", e.target.value)
+              }
             />
           </Col>
 
-          <Col md={6}>
-            <Form.Check
-              type="switch"
-              id="maskEmail"
-              label="Mask Email Address"
-              checked={data.maskEmail || false}
-              onChange={(e) => onChange("maskEmail", e.target.checked)}
+          {/* Cooldown */}
+
+          <Col lg={6}>
+            <label className="form-label">
+              <FiClock className="me-2" />
+              Resend Cooldown (Seconds)
+            </label>
+
+            <Form.Control
+              type="number"
+              className="modern-input"
+              min="0"
+              value={data.cooldown || ""}
+              onChange={(e) =>
+                onChange("cooldown", e.target.value)
+              }
             />
           </Col>
+
         </Row>
-      </Card.Body>
-    </Card>
+
+        {/* Switch Cards */}
+
+        <div className="row g-3 mt-2">
+
+          <div className="col-lg-6">
+
+            <div className="setting-switch-card">
+
+              <div>
+
+                <h6>
+                  <FiLogIn className="me-2" />
+                  Login OTP
+                </h6>
+
+                <small>
+                  Require OTP verification during user login.
+                </small>
+
+              </div>
+
+              <Form.Check
+                type="switch"
+                checked={data.loginOtp || false}
+                onChange={(e) =>
+                  onChange(
+                    "loginOtp",
+                    e.target.checked
+                  )
+                }
+              />
+
+            </div>
+
+          </div>
+
+          <div className="col-lg-6">
+
+            <div className="setting-switch-card">
+
+              <div>
+
+                <h6>
+                  <FiRefreshCw className="me-2" />
+                  Password Reset OTP
+                </h6>
+
+                <small>
+                  Verify users before resetting passwords.
+                </small>
+
+              </div>
+
+              <Form.Check
+                type="switch"
+                checked={
+                  data.passwordResetOtp || false
+                }
+                onChange={(e) =>
+                  onChange(
+                    "passwordResetOtp",
+                    e.target.checked
+                  )
+                }
+              />
+
+            </div>
+
+          </div>
+
+          <div className="col-lg-6">
+
+            <div className="setting-switch-card">
+
+              <div>
+
+                <h6>
+                  <FiSmartphone className="me-2" />
+                  Mask Mobile Number
+                </h6>
+
+                <small>
+                  Hide part of the mobile number while sending OTP.
+                </small>
+
+              </div>
+
+              <Form.Check
+                type="switch"
+                checked={data.maskMobile || false}
+                onChange={(e) =>
+                  onChange(
+                    "maskMobile",
+                    e.target.checked
+                  )
+                }
+              />
+
+            </div>
+
+          </div>
+
+          <div className="col-lg-6">
+
+            <div className="setting-switch-card">
+
+              <div>
+
+                <h6>
+                  <FiMail className="me-2" />
+                  Mask Email Address
+                </h6>
+
+                <small>
+                  Hide part of the email address while sending OTP.
+                </small>
+
+              </div>
+
+              <Form.Check
+                type="switch"
+                checked={data.maskEmail || false}
+                onChange={(e) =>
+                  onChange(
+                    "maskEmail",
+                    e.target.checked
+                  )
+                }
+              />
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
   );
 };
 

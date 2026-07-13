@@ -1,14 +1,45 @@
+/* ==========================
+   Sidebar
+========================== */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 280px;
+    height: 100vh;
+
+    background: #2d2c63;
+    color: #fff;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow-y: auto;
+
+    transition: left .3s ease;
+
+    z-index: 1200;
+
+    box-shadow: 3px 0 12px rgba(0,0,0,.2);
+}
+
+/* Logo */
+
 .sidebar-logo {
     height: 80px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
 .logo {
     width: 180px;
 }
+
+/* Menu */
 
 .sidebar-menu {
     margin-top: 20px;
@@ -22,157 +53,135 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    color: rgba(255, 255, 255, 0.85);
-    text-decoration: none;
+
     padding: 14px 16px;
-    border-radius: 18px;
-    transition: 0.3s;
-    font-size: 17px;
-    font-weight: 500;
+
+    border-radius: 14px;
+
+    text-decoration: none;
+
+    color: rgba(255,255,255,.85);
+
+    transition: .25s;
 }
 
 .menu-item i {
-    font-size: 22px;
+    font-size: 20px;
     width: 24px;
 }
 
 .menu-item:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255,255,255,.08);
     color: #19b5ff;
 }
 
 .menu-item.active {
-    background: #35356d;
-    color: #18b7ff;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+    /* background: #3d3b78; */
+    color: #19b5ff;
+      box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.25);
+        /* 0 2px 8px rgba(25, 181, 255, 0.25); */
+
+    /* border-left: 4px solid #19b5ff; */
+
+    font-weight: 600;
 }
 
-.sidebar {
-    width: 280px;
-    min-width: 280px;
-    height: 100vh;
-    background: #2d2c63;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    transition: .3s;
-}
-
-@media(max-width:991px) {
-
-    .sidebar {
-        position: fixed;
-        left: -280px;
-        top: 0;
-        z-index: 1050;
-    }
-
-    .sidebar.show {
-        left: 0;
-    }
-
-}
-
-.sidebar {
-    width: 280px;
-    transition: left .3s ease;
-}
-
-@media(max-width:991px) {
-
-    .sidebar {
-        position: fixed;
-        top: 0;
-        left: -280px;
-        height: 100vh;
-        z-index: 1050;
-    }
-
-    .sidebar.show {
-        left: 0;
-    }
-
-}
+/* Backdrop */
 
 .sidebar-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, .45);
+    background: rgba(0,0,0,.45);
     z-index: 1100;
 }
 
-@media (min-width:992px) {
+/* Close button */
 
-    .sidebar {
-        position: relative;
-        left: 0;
-    }
+.sidebar-close {
+    display: none;
+}
 
-    .menu-btn {
-        display: none;
-    }
+/* ==========================
+   Desktop
+========================== */
+
+@media (min-width:992px){
+
+.sidebar{
+    left:0;
+}
+
+.menu-btn{
+    display:none;
+}
 
 }
+
+/* ==========================
+   Tablet
+========================== */
+
+/* ==========================
+   Tablet
+========================== */
 
 @media (max-width:991px) {
 
     .sidebar {
-
-        position: fixed;
-        top: 0;
-        left: -280px;
-
-        width: 280px;
-        height: 100vh;
-
-        z-index: 1200;
-
-        transition: left .3s ease;
+        width: 70%;
+        max-width: 320px;
+        left: -70%;
     }
 
     .sidebar.show {
-
         left: 0;
     }
 
     .menu-btn {
-
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
+    .sidebar-close {
+        display: block;
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        background: none;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+    }
 }
 
-@media(max-width:767px) {
+/* ==========================
+   Mobile
+========================== */
+
+/* ==========================
+   Mobile
+========================== */
+
+@media (max-width:767px) {
 
     .sidebar {
-
-        width: 100%;
-        left: -100%;
-
+        width: 70%;
+        max-width: 300px;
+        left: -70%;
     }
 
     .sidebar.show {
-
         left: 0;
     }
 
-}
+    .logo {
+        width: 150px;
+    }
 
-.sidebar-close {
-
-    position: absolute;
-
-    top: 20px;
-
-    right: 20px;
-
-    color: #fff;
-
-    background: none;
-
-    border: none;
-
-    cursor: pointer;
+    .menu-item {
+        padding: 16px 18px;
+        font-size: 16px;
+    }
 }

@@ -1,38 +1,91 @@
 import React from "react";
-import { Card, Badge, Form, Button } from "react-bootstrap";
+import { Card, Badge, Form, Button, Row, Col } from "react-bootstrap";
+import {
+    FiUser,
+    FiMail,
+    FiSmartphone,
+    FiCreditCard,
+    FiShield,
+    FiLock,
+    FiCheckCircle,
+} from "react-icons/fi";
 
 const LoginPreview = ({ config }) => {
     const getCandidateMethod = () => {
         switch (config.candidateLogin.defaultLoginMethod) {
             case "EMAIL":
-                return "Email";
+                return {
+                    label: "Email Address",
+                    icon: <FiMail />,
+                    placeholder: "Enter Email Address",
+                };
+
             case "MOBILE":
-                return "Mobile Number";
-            case "USERNAME":
-                return "Username";
+                return {
+                    label: "Mobile Number",
+                    icon: <FiSmartphone />,
+                    placeholder: "Enter Mobile Number",
+                };
+
             case "AADHAAR":
-                return "Aadhaar Number";
+                return {
+                    label: "Aadhaar Number",
+                    icon: <FiCreditCard />,
+                    placeholder: "Enter Aadhaar Number",
+                };
+
             case "PAN":
-                return "PAN Number";
+                return {
+                    label: "PAN Number",
+                    icon: <FiCreditCard />,
+                    placeholder: "Enter PAN Number",
+                };
+
             default:
-                return "Username";
+                return {
+                    label: "Username",
+                    icon: <FiUser />,
+                    placeholder: "Enter Username",
+                };
         }
     };
 
     const getRecruitmentMethod = () => {
         switch (config.recruitmentLogin.defaultLoginMethod) {
             case "EMAIL":
-                return "Email";
-            case "EMPLOYEE_ID":
-                return "Employee ID";
+                return {
+                    label: "Email",
+                    icon: <FiMail />,
+                    placeholder: "Enter Email",
+                };
+
             case "USERNAME":
-                return "Username";
+                return {
+                    label: "Username",
+                    icon: <FiUser />,
+                    placeholder: "Enter Username",
+                };
+
             case "AD":
-                return "Microsoft Entra ID";
+                return {
+                    label: "Microsoft Entra ID",
+                    icon: <FiShield />,
+                    placeholder: "Login with Microsoft",
+                };
+
             case "SSO":
-                return "Single Sign-On";
+                return {
+                    label: "Single Sign-On",
+                    icon: <FiShield />,
+                    placeholder: "SSO Login",
+                };
+
             default:
-                return "Employee ID";
+                return {
+                    label: "Employee ID",
+                    icon: <FiUser />,
+                    placeholder: "Enter Employee ID",
+                };
         }
     };
 
@@ -40,27 +93,36 @@ const LoginPreview = ({ config }) => {
         switch (config.twoFactor.type) {
             case "OTP_EMAIL":
                 return "Email OTP";
+
             case "OTP_SMS":
                 return "SMS OTP";
+
             case "AUTHENTICATOR":
                 return "Google Authenticator";
+
             case "SMS_EMAIL":
                 return "SMS OTP + Email OTP";
+
             default:
                 return "Not Configured";
         }
     };
 
+    const candidate = getCandidateMethod();
+    const recruitment = getRecruitmentMethod();
+
     return (
-        <Card className="shadow-sm sticky-top">
-            <Card.Header className="bg-primary text-white">
-                <h5 className="mb-0">Login Screen Preview</h5>
+        <Card className="login-preview-card">
+            <Card.Header>
+                <h5>Login Screen Preview</h5>
             </Card.Header>
 
             <Card.Body>
 
                 <div className="text-center mb-4">
-                    <Badge bg="success" className="px-3 py-2">
+
+                    <Badge className="preview-badge bg-success">
+
                         {config.portal === ""
                             ? "No Portal Selected"
                             : config.portal === "candidate"
@@ -68,187 +130,405 @@ const LoginPreview = ({ config }) => {
                                 : config.portal === "recruitment"
                                     ? "Recruitment Portal"
                                     : "Candidate + Recruitment"}
+
                     </Badge>
+
                 </div>
 
                 {(config.portal === "candidate" ||
                     config.portal === "both") && (
-                        <>
-                            <Card className="mb-4 border-primary">
 
-                                <Card.Header className="bg-light">
-                                    <strong>Candidate Portal</strong>
-                                </Card.Header>
+                        <Card className="preview-portal-card mb-4">
 
-                                <Card.Body>
+                            <Card.Header>
 
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>
-                                            {getCandidateMethod()}
-                                        </Form.Label>
+                                Candidate Portal
+
+                            </Card.Header>
+
+                            <Card.Body>
+
+                                <div className="text-center mb-4">
+
+                                    <div className="preview-avatar">
+
+                                        {candidate.icon}
+
+                                    </div>
+
+                                </div>
+
+                                <Form.Group className="mb-3">
+
+                                    <Form.Label>
+
+                                        {candidate.label}
+
+                                    </Form.Label>
+                                    <div className="preview-input-wrapper">
+
+                                        <span className="preview-input-icon">
+                                            {candidate.icon}
+                                        </span>
 
                                         <Form.Control
-                                            placeholder={`Enter ${getCandidateMethod()}`}
+                                            className="preview-input"
+                                            placeholder={candidate.placeholder}
                                             readOnly
                                         />
-                                    </Form.Group>
 
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Password</Form.Label>
+                                    </div>
+
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+
+                                    <Form.Label>Password</Form.Label>
+
+                                    <div className="preview-input-wrapper">
+
+                                        <span className="preview-input-icon">
+                                            <FiLock />
+                                        </span>
 
                                         <Form.Control
+                                            className="preview-input"
                                             type="password"
                                             value="********"
                                             readOnly
                                         />
-                                    </Form.Group>
 
-                                    <Form.Check
-                                        className="mb-2"
-                                        label="Remember Me"
-                                        checked
-                                        readOnly
-                                    />
+                                    </div>
+
+                                </Form.Group>
+
+                                <div className="preview-remember">
+
+                                    <label className="remember-container">
+
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            readOnly
+                                        />
+
+                                        <span className="checkmark"></span>
+
+                                        <span>Remember Me</span>
+
+                                    </label>
 
                                     {config.candidateLogin.enableForgotPassword && (
-                                        <div className="text-primary mb-2 text-end">
+                                        <span className="preview-link">
                                             Forgot Password?
-                                        </div>
+                                        </span>
                                     )}
 
+                                </div>
+                                {config.candidateLogin.enableCaptcha && (
 
+                                    <div className="preview-captcha">
 
-                                    {config.candidateLogin.enableCaptcha && (
-                                        <div className="border rounded p-2 text-center bg-light mb-3">
-                                            CAPTCHA Preview
-                                        </div>
-                                    )}
+                                        CAPTCHA Preview
 
-                                    <Button
-                                        className="w-100"
-                                        disabled
-                                    >
-                                        Login
-                                    </Button>
+                                    </div>
 
-                                    <hr />
-                                    {config.candidateLogin.allowRegistration && (
-                                        <div className="text-success mb-2 text-center">
-                                            New User? Register Here
-                                        </div>
-                                    )}
-                                </Card.Body>
+                                )}
 
-                            </Card>
-                        </>
+                                <Button
+                                    className="preview-login-btn w-100 mt-3"
+                                    disabled
+                                >
+
+                                    Login
+
+                                </Button>
+
+                                {config.candidateLogin.allowRegistration && (
+
+                                    <div className="preview-register">
+
+                                        <FiCheckCircle className="me-2" />
+
+                                        New User? Register Here
+
+                                    </div>
+
+                                )}
+
+                            </Card.Body>
+
+                        </Card>
+
                     )}
-
                 {(config.portal === "recruitment" ||
                     config.portal === "both") && (
-                        <>
-                            <Card className="mb-4 border-success">
 
-                                <Card.Header className="bg-light">
-                                    <strong>Recruitment Portal</strong>
-                                </Card.Header>
+                        <Card className="preview-portal-card mb-4">
 
-                                <Card.Body>
+                            <Card.Header>
 
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>
-                                            {getRecruitmentMethod()}
-                                        </Form.Label>
+                                Recruitment Portal
+
+                            </Card.Header>
+
+                            <Card.Body>
+
+                                <div className="text-center mb-4">
+
+                                    <div className="preview-avatar">
+
+                                        {recruitment.icon}
+
+                                    </div>
+
+                                </div>
+
+                                <Form.Group className="mb-3">
+
+                                    <Form.Label>
+
+                                        {recruitment.label}
+
+                                    </Form.Label>
+
+                                    <Form.Control
+                                        className="preview-input"
+                                        placeholder={recruitment.placeholder}
+                                        readOnly
+                                    />
+
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+
+                                    <Form.Label>Password</Form.Label>
+                                    <div className="preview-input-wrapper">
+
+                                        <span className="preview-input-icon">
+                                            <FiLock />
+                                        </span>
 
                                         <Form.Control
-                                            placeholder={`Enter ${getRecruitmentMethod()}`}
-                                            readOnly
-                                        />
-                                    </Form.Group>
-
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Password</Form.Label>
-
-                                        <Form.Control
+                                            className="preview-input"
                                             type="password"
                                             value="********"
                                             readOnly
                                         />
-                                    </Form.Group>
 
-                                    <Form.Check
-                                        className="mb-2"
-                                        label="Remember Me"
-                                        checked
-                                        readOnly
-                                    />
+                                    </div>
 
-                                    {config.recruitmentLogin.enableForgotPassword && (
-                                        <div className="text-primary mb-2">
+                                </Form.Group>
+
+                                <div className="preview-remember">
+
+                                    <label className="remember-container">
+
+                                        <input
+                                            type="checkbox"
+                                            checked
+                                            readOnly
+                                        />
+
+                                        <span className="checkmark"></span>
+
+                                        <span>Remember Me</span>
+
+                                    </label>
+
+                                    {config.candidateLogin.enableForgotPassword && (
+                                        <span className="preview-link">
                                             Forgot Password?
-                                        </div>
+                                        </span>
                                     )}
 
-                                    {config.recruitmentLogin.enableCaptcha && (
-                                        <div className="border rounded p-2 text-center bg-light mb-3">
-                                            CAPTCHA Preview
-                                        </div>
-                                    )}
+                                </div>
 
-                                    <Button
-                                        variant="success"
-                                        className="w-100"
-                                        disabled
-                                    >
-                                        Login
-                                    </Button>
+                                {config.recruitmentLogin.enableCaptcha && (
 
-                                    <hr />
+                                    <div className="preview-captcha">
+
+                                        CAPTCHA Preview
+
+                                    </div>
+
+                                )}
+
+                                <Button
+                                    className="preview-login-btn w-100 mt-3"
+                                    disabled
+                                >
+                                    Login
+                                </Button>
+
+                                <div className="preview-divider" />
+
+                                <div className="preview-settings">
 
                                     <h6>Authentication Settings</h6>
 
-                                    <Form.Check
-                                        label="Forgot Password"
-                                        checked={config.recruitmentLogin.enableForgotPassword}
-                                        readOnly
-                                    />
+                                    <Row className="g-3">
 
-                                    <Form.Check
-                                        label="CAPTCHA"
-                                        checked={config.recruitmentLogin.enableCaptcha}
-                                        readOnly
-                                    />
+                                        <Col xs={12}>
 
-                                    <Form.Check
-                                        label="Force Password Change"
-                                        checked={config.recruitmentLogin.forcePasswordChange}
-                                        readOnly
-                                    />
+                                            <div className="preview-setting-item">
 
-                                    <Form.Check
-                                        label="Two-Factor Authentication"
-                                        checked={config.twoFactor.enabled}
-                                        readOnly
-                                    />
+                                                <div>
+
+                                                    <strong>Forgot Password</strong>
+
+                                                    <small>
+                                                        Password recovery is enabled.
+                                                    </small>
+
+                                                </div>
+
+                                                <Badge
+                                                    bg={
+                                                        config.recruitmentLogin
+                                                            .enableForgotPassword
+                                                            ? "success"
+                                                            : "secondary"
+                                                    }
+                                                >
+                                                    {config.recruitmentLogin
+                                                        .enableForgotPassword
+                                                        ? "Enabled"
+                                                        : "Disabled"}
+                                                </Badge>
+
+                                            </div>
+
+                                        </Col>
+
+                                        <Col xs={12}>
+
+                                            <div className="preview-setting-item">
+
+                                                <div>
+
+                                                    <strong>CAPTCHA</strong>
+
+                                                    <small>
+                                                        Bot protection for login.
+                                                    </small>
+
+                                                </div>
+
+                                                <Badge
+                                                    bg={
+                                                        config.recruitmentLogin
+                                                            .enableCaptcha
+                                                            ? "success"
+                                                            : "secondary"
+                                                    }
+                                                >
+                                                    {config.recruitmentLogin
+                                                        .enableCaptcha
+                                                        ? "Enabled"
+                                                        : "Disabled"}
+                                                </Badge>
+
+                                            </div>
+
+                                        </Col>
+
+                                        <Col xs={12}>
+
+                                            <div className="preview-setting-item">
+
+                                                <div>
+
+                                                    <strong>Force Password Change</strong>
+
+                                                    <small>
+                                                        Require password update after first login.
+                                                    </small>
+
+                                                </div>
+
+                                                <Badge
+                                                    bg={
+                                                        config.recruitmentLogin
+                                                            .forcePasswordChange
+                                                            ? "success"
+                                                            : "secondary"
+                                                    }
+                                                >
+                                                    {config.recruitmentLogin
+                                                        .forcePasswordChange
+                                                        ? "Enabled"
+                                                        : "Disabled"}
+                                                </Badge>
+
+                                            </div>
+
+                                        </Col>
+
+                                        <Col xs={12}>
+
+                                            <div className="preview-setting-item">
+
+                                                <div>
+
+                                                    <strong>Two-Factor Authentication</strong>
+
+                                                    <small>
+                                                        Additional authentication layer.
+                                                    </small>
+
+                                                </div>
+
+                                                <Badge
+                                                    bg={
+                                                        config.twoFactor.enabled
+                                                            ? "success"
+                                                            : "secondary"
+                                                    }
+                                                >
+                                                    {config.twoFactor.enabled
+                                                        ? "Enabled"
+                                                        : "Disabled"}
+                                                </Badge>
+
+                                            </div>
+
+                                        </Col>
+
+                                    </Row>
 
                                     {config.twoFactor.enabled && (
-                                        <Form.Group className="mt-3">
-                                            <Form.Label>2FA Method</Form.Label>
+
+                                        <Form.Group className="mt-4">
+
+                                            <Form.Label>
+
+                                                2FA Method
+
+                                            </Form.Label>
 
                                             <Form.Control
+                                                className="preview-input"
                                                 value={get2FAMethod()}
                                                 readOnly
                                             />
+
                                         </Form.Group>
+
                                     )}
 
-                                </Card.Body>
+                                </div>
 
-                            </Card>
-                        </>
+                            </Card.Body>
+
+                        </Card>
+
                     )}
 
             </Card.Body>
+
         </Card>
+
     );
 };
 

@@ -115,16 +115,30 @@ const AuthenticationConfiguration = () => {
     <Container fluid className="py-4">
       <Row>
         <Col lg={8}>
-          <Card className="shadow-sm">
+          <Card className="auth-config-card">
             <Card.Header>
               <h4>Authentication Configuration</h4>
             </Card.Header>
 
             <Card.Body>
-              <Form.Group className="mb-4">
-                <Form.Label>Select Portal</Form.Label>
+              <div className="portal-selection-card mb-4">
+
+                <div className="portal-selection-header">
+
+                  <div>
+
+                    <h5>Select Portal</h5>
+
+                    <p>
+                      Choose which portal you want to configure.
+                    </p>
+
+                  </div>
+
+                </div>
 
                 <Form.Select
+                  className="portal-select"
                   value={config.portal}
                   onChange={(e) =>
                     setConfig({
@@ -133,12 +147,25 @@ const AuthenticationConfiguration = () => {
                     })
                   }
                 >
-                  <option value="">Select Portal</option>
-                  <option value="candidate">Candidate Portal</option>
-                  <option value="recruitment">Recruitment Portal</option>
-                  <option value="both">Candidate + Recruitment</option>
+                  <option value="">
+                    Select Portal
+                  </option>
+
+                  <option value="candidate">
+                    Candidate Portal
+                  </option>
+
+                  <option value="recruitment">
+                    Recruitment Portal
+                  </option>
+
+                  <option value="both">
+                    Candidate + Recruitment
+                  </option>
+
                 </Form.Select>
-              </Form.Group>
+
+              </div>
               {(config.portal === "candidate" || config.portal === "both") && (
                 <CandidateLoginSection
                   data={config.candidateLogin}
@@ -188,8 +215,10 @@ const AuthenticationConfiguration = () => {
           </Card>
         </Col>
 
-        <Col lg={4}>
-          <LoginPreview config={config} />
+        <Col lg={4} className="d-none d-lg-block">
+          <div className="login-preview-wrapper">
+            <LoginPreview config={config} />
+          </div>
         </Col>
       </Row>
 

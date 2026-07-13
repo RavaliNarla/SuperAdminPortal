@@ -1,0 +1,1463 @@
+.twofa-enable-card {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 18px 22px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    background: #fafbfd;
+}
+
+.twofa-enable-card h6 {
+
+    margin-bottom: 4px;
+
+    font-weight: 600;
+}
+
+.twofa-enable-card small {
+
+    color: #6b7280;
+}
+
+.remember-device-card {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 18px 22px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    background: #fafbfd;
+}
+
+.remember-device-card h6 {
+
+    margin-bottom: 4px;
+
+    font-weight: 600;
+}
+
+.remember-device-card small {
+
+    color: #6b7280;
+}
+
+.form-check-input {
+
+    width: 48px;
+
+    height: 24px;
+
+    cursor: pointer;
+}
+
+.modern-input {
+
+    height: 48px;
+
+    border-radius: 10px;
+
+    border: 1px solid #d7dde8;
+}
+
+.modern-input:focus {
+
+    border-color: #1891d0;
+
+    box-shadow: 0 0 0 .15rem rgba(24, 145, 208, .15);
+}
+
+@media(max-width:768px) {
+
+    .twofa-enable-card,
+    .remember-device-card {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+}
+
+
+.setting-switch-card {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 18px 20px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    background: #fafbfd;
+
+    transition: .3s;
+}
+
+.setting-switch-card:hover {
+
+    border-color: #1891d0;
+
+    box-shadow: 0 8px 20px rgba(24, 145, 208, .08);
+}
+
+.setting-switch-card h6 {
+
+    margin-bottom: 4px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: #1f2937;
+}
+
+.setting-switch-card small {
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+.setting-switch-card .form-check-input {
+
+    width: 48px;
+
+    height: 24px;
+
+    cursor: pointer;
+}
+
+@media(max-width:768px) {
+
+    .setting-switch-card {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+}
+
+/* ==========================================
+   Password Policy
+========================================== */
+
+.password-policy-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.password-policy-card .card-body {
+    padding: 24px;
+}
+
+/* ==========================================
+   Header
+========================================== */
+
+.password-policy-header {
+    margin-bottom: 24px;
+}
+
+.password-policy-title {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 6px;
+}
+
+.password-policy-title svg {
+    color: #1891d0;
+}
+
+.password-policy-subtitle {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* ==========================================
+   Labels
+========================================== */
+
+.password-policy-card .form-label {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.password-policy-card .form-label svg {
+    color: #1891d0;
+}
+
+/* ==========================================
+   Inputs
+========================================== */
+
+.password-policy-input {
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid #d7dde8;
+}
+
+.password-policy-input:focus {
+    border-color: #1891d0;
+    box-shadow: 0 0 0 0.15rem rgba(24, 145, 208, 0.15);
+}
+
+.password-policy-input:disabled {
+    background: #f3f4f6;
+    cursor: not-allowed;
+}
+
+/* ==========================================
+   Switch Cards
+========================================== */
+
+.password-switch-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #fafbfd;
+    transition: 0.3s;
+    height: 100%;
+}
+
+.password-switch-card:hover {
+    border-color: #1891d0;
+    box-shadow: 0 8px 20px rgba(24, 145, 208, 0.08);
+}
+
+.password-switch-card h6 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.password-switch-card h6 svg {
+    color: #1891d0;
+}
+
+.password-switch-card small {
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ==========================================
+   Switch
+========================================== */
+
+.password-switch-card .form-check {
+    margin: 0;
+}
+
+.password-switch-card .form-check-input {
+    width: 48px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.password-switch-card .form-check-input:checked {
+    background-color: #1891d0;
+    border-color: #1891d0;
+}
+
+.password-switch-card .form-check-input:focus {
+    box-shadow: 0 0 0 0.15rem rgba(24, 145, 208, 0.15);
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width: 768px) {
+    .password-policy-card .card-body {
+        padding: 18px;
+    }
+
+    .password-switch-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .password-policy-title {
+        font-size: 20px;
+    }
+}
+
+.session-policy-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.session-policy-card .card-body {
+    padding: 24px;
+}
+
+.session-policy-header {
+    margin-bottom: 24px;
+}
+
+.session-policy-title {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 6px;
+}
+
+.session-policy-title svg {
+    color: #1891d0;
+}
+
+.session-policy-subtitle {
+    color: #6b7280;
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.session-policy-card .form-label {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.session-policy-card .form-label svg {
+    color: #1891d0;
+}
+
+@media (max-width: 768px) {
+    .session-policy-card .card-body {
+        padding: 18px;
+    }
+
+    .session-policy-title {
+        font-size: 20px;
+    }
+}
+
+
+
+.recruitment-login-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.recruitment-login-card .card-body {
+    padding: 24px;
+}
+
+.recruitment-login-header {
+    margin-bottom: 24px;
+}
+
+.recruitment-login-title {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 6px;
+}
+
+.recruitment-login-title svg {
+    color: #1891d0;
+}
+
+.recruitment-login-subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.login-method-card {
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #fafbfd;
+    transition: 0.3s;
+    height: 100%;
+}
+
+.login-method-card:hover {
+    border-color: #1891d0;
+    box-shadow: 0 8px 20px rgba(24, 145, 208, 0.08);
+}
+
+.login-method-card .form-check {
+    margin: 0;
+}
+
+.login-method-card .form-check-label {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.recruitment-login-card .form-label {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.recruitment-login-card .form-label svg {
+    color: #1891d0;
+}
+
+@media (max-width: 768px) {
+    .recruitment-login-card .card-body {
+        padding: 18px;
+    }
+
+    .recruitment-login-title {
+        font-size: 20px;
+    }
+}
+
+
+/* ===========================================
+   Recruitment Login Methods
+=========================================== */
+
+.recruitment-method-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #fff;
+    cursor: pointer;
+    transition: all .3s ease;
+    height: 100%;
+}
+
+.recruitment-method-card:hover {
+    border-color: #1891d0;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(24, 145, 208, .10);
+}
+
+.recruitment-method-card.active {
+    border: 2px solid #1891d0;
+    background: #f5fbfe;
+}
+
+.recruitment-method-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.recruitment-method-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(24, 145, 208, .10);
+    color: #1891d0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.recruitment-method-card h6 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.recruitment-method-card small {
+    color: #6b7280;
+    font-size: 13px;
+    display: block;
+}
+
+/* =============================
+   Custom Radio
+============================= */
+
+.recruitment-radio {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .3s ease;
+    flex-shrink: 0;
+}
+
+.recruitment-radio-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #1891d0;
+    transform: scale(0);
+    transition: .3s;
+}
+
+.recruitment-radio.active {
+    border-color: #1891d0;
+}
+
+.recruitment-radio.active .recruitment-radio-dot {
+    transform: scale(1);
+}
+
+/* =====================================================
+   Candidate Login Section
+===================================================== */
+
+.candidate-login-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+/* =====================================================
+   Header
+===================================================== */
+
+.candidate-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #edf2f7;
+    padding-bottom: 18px;
+}
+
+.candidate-header h4 {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.candidate-header h4 svg {
+    color: #1891d0;
+}
+
+.candidate-header p {
+    color: #6b7280;
+    margin: 0;
+    font-size: 14px;
+}
+
+/* =====================================================
+   Section Titles
+===================================================== */
+
+.candidate-section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 18px;
+}
+
+/* =====================================================
+   Login Method Cards
+===================================================== */
+
+.candidate-method-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    padding: 18px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    transition: all .3s ease;
+
+    height: 100%;
+}
+
+.candidate-method-card:hover {
+    border-color: #1891d0;
+    box-shadow: 0 8px 20px rgba(24, 145, 208, .10);
+    transform: translateY(-2px);
+}
+
+.candidate-method-card.active {
+    border: 2px solid #1891d0;
+    background: rgba(24, 145, 208, .05);
+}
+
+.candidate-method-icon {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 14px;
+
+    background: rgba(24, 145, 208, .10);
+
+    color: #1891d0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 22px;
+
+    flex-shrink: 0;
+}
+
+.candidate-method-card h6 {
+    margin: 0 0 5px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.candidate-method-card small {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+/* =====================================================
+   Label
+===================================================== */
+
+.candidate-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+/* =====================================================
+   Input
+===================================================== */
+
+.candidate-input {
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid #d7dde8;
+}
+
+.candidate-input:focus {
+    border-color: #1891d0;
+    box-shadow: 0 0 0 .15rem rgba(24, 145, 208, .15);
+}
+
+/* =====================================================
+   Setting Cards
+===================================================== */
+
+.candidate-setting-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 20px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    background: #fafbfd;
+
+    transition: .3s;
+
+    height: 100%;
+}
+
+.candidate-setting-card:hover {
+    border-color: #1891d0;
+    box-shadow: 0 8px 20px rgba(24, 145, 208, .08);
+}
+
+.candidate-setting-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.candidate-setting-icon {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 12px;
+
+    background: rgba(24, 145, 208, .08);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #1891d0;
+    font-size: 22px;
+
+    flex-shrink: 0;
+}
+
+.candidate-setting-card h6 {
+    margin-bottom: 4px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.candidate-setting-card small {
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* =====================================================
+   Switch
+===================================================== */
+
+.candidate-setting-card .form-check {
+    margin: 0;
+}
+
+.candidate-setting-card .form-check-input {
+    width: 50px;
+    height: 26px;
+    cursor: pointer;
+}
+
+.candidate-setting-card .form-check-input:checked {
+    background-color: #1891d0;
+    border-color: #1891d0;
+}
+
+/* =====================================================
+   Checkbox Section
+===================================================== */
+
+.candidate-login-card .form-check {
+    padding: 12px 0;
+}
+
+.candidate-login-card .form-check-label {
+    font-weight: 500;
+    color: #374151;
+}
+
+.candidate-login-card .form-check-input:checked {
+    background-color: #1891d0;
+    border-color: #1891d0;
+}
+
+/* =====================================================
+   Responsive
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .candidate-login-card {
+        padding: 18px;
+    }
+
+    .candidate-method-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .candidate-setting-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .candidate-setting-left {
+        width: 100%;
+    }
+
+    .candidate-setting-card .form-check {
+        align-self: flex-end;
+    }
+
+    .candidate-header h4 {
+        font-size: 20px;
+    }
+}
+
+/* ===========================
+   Method Card
+=========================== */
+
+.candidate-method-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #fff;
+    cursor: pointer;
+    transition: .3s;
+    height: 100%;
+}
+
+.candidate-method-card:hover {
+    border-color: #1891d0;
+    box-shadow: 0 8px 20px rgba(24, 145, 208, .12);
+    transform: translateY(-3px);
+}
+
+.candidate-method-card.active {
+    border: 2px solid #1891d0;
+    background: #f5fbfe;
+}
+
+.candidate-method-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.candidate-method-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: #e9f7fd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #1891d0;
+    font-size: 22px;
+}
+
+.candidate-method-card h6 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.candidate-method-card small {
+    color: #6b7280;
+}
+
+/* ===========================
+   Custom Radio
+=========================== */
+
+.candidate-radio {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .3s;
+    flex-shrink: 0;
+}
+
+.candidate-radio-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #1891d0;
+    transform: scale(0);
+    transition: .3s;
+}
+
+.candidate-radio.active {
+    border-color: #1891d0;
+}
+
+.candidate-radio.active .candidate-radio-dot {
+    transform: scale(1);
+}
+
+/* ===============================
+   Option Cards
+================================= */
+
+.candidate-option-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #fff;
+    transition: .3s;
+    height: 100%;
+}
+
+.candidate-option-card:hover {
+    border-color: #1891d0;
+    box-shadow: 0 10px 24px rgba(24, 145, 208, .08);
+    transform: translateY(-2px);
+}
+
+.candidate-option-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.candidate-option-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: #eef8fd;
+    color: #1891d0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.candidate-option-card h6 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.candidate-option-card small {
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+/* ===============================
+   Modern Switch
+================================= */
+
+.candidate-switch .form-check-input {
+    width: 52px;
+    height: 28px;
+    cursor: pointer;
+    border-radius: 30px;
+    border: 1px solid #cbd5e1;
+    background-color: #d1d5db;
+    transition: all .3s ease;
+}
+
+.candidate-switch .form-check-input:checked {
+    background-color: #1891d0;
+    border-color: #1891d0;
+}
+
+.candidate-switch {
+    margin: 0;
+}
+
+
+/* ==========================================================
+   Login Preview
+========================================================== */
+
+.login-preview-card {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 12px 35px rgba(15, 23, 42, .08);
+}
+
+.login-preview-card>.card-header {
+    background: linear-gradient(135deg, #1891d0, #0f6ea8);
+    color: #fff;
+    border: none;
+    padding: 18px 24px;
+}
+
+.login-preview-card>.card-header h5 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ===========================
+   Badge
+=========================== */
+
+.preview-badge {
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 30px;
+    padding: 8px 20px;
+}
+
+/* ===========================
+   Portal Card
+=========================== */
+
+.preview-portal-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: .3s;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, .05);
+}
+
+.preview-portal-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(24, 145, 208, .12);
+}
+
+.preview-portal-card>.card-header {
+    background: #f8fafc;
+    color: #1f2937;
+    font-weight: 600;
+    padding: 15px 22px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+/* ===========================
+   Avatar
+=========================== */
+
+.preview-avatar {
+    width: 72px;
+    height: 72px;
+    margin: auto;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1891d0, #3ba8df);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    box-shadow: 0 8px 22px rgba(24, 145, 208, .25);
+}
+
+/* ===========================
+   Inputs
+=========================== */
+
+.preview-input {
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid #d7dde8;
+    background: #fff;
+}
+
+.preview-input:focus {
+    border-color: #1891d0;
+    box-shadow: 0 0 0 .15rem rgba(24, 145, 208, .15);
+}
+
+/* ===========================
+   Checkbox
+=========================== */
+
+.preview-check {
+    margin: 0;
+}
+
+.preview-check .form-check-input {
+    border-color: #1891d0;
+    cursor: pointer;
+}
+
+.preview-check .form-check-input:checked {
+    background-color: #1891d0;
+    border-color: #1891d0;
+}
+
+.preview-check label {
+    font-weight: 500;
+}
+
+/* ===========================
+   Forgot Password
+=========================== */
+
+.preview-link {
+    color: #1891d0;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.preview-link:hover {
+    color: #0f6ea8;
+    text-decoration: underline;
+}
+
+/* ===========================
+   Captcha
+=========================== */
+
+.preview-captcha {
+    margin-top: 15px;
+    padding: 14px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    background: #f8fafc;
+    color: #6b7280;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* ===========================
+   Login Button
+=========================== */
+
+.preview-login-btn {
+    height: 48px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1891d0, #147bb1);
+    color: #fff;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.preview-login-btn:hover {
+    background: linear-gradient(135deg, #147bb1, #1891d0);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(24, 145, 208, .25);
+}
+
+/* ===========================
+   Divider
+=========================== */
+
+.preview-divider {
+    border-top: 1px solid #edf2f7;
+    margin: 25px 0;
+}
+
+/* ===========================
+   Register
+=========================== */
+
+.preview-register {
+    margin-top: 20px;
+    text-align: center;
+    color: #16a34a;
+    font-weight: 600;
+}
+
+/* ===========================
+   Authentication Settings
+=========================== */
+
+.preview-settings {
+    background: #f9fbfd;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px;
+}
+
+.preview-settings h6 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1f2937;
+}
+
+.preview-setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 16px;
+    border: 1px solid #eef2f7;
+    border-radius: 10px;
+    background: #fff;
+    transition: .3s;
+}
+
+.preview-setting-item:hover {
+    border-color: #1891d0;
+    background: #f8fcfe;
+}
+
+.preview-setting-item strong {
+    display: block;
+    color: #1f2937;
+    font-size: 14px;
+}
+
+.preview-setting-item small {
+    color: #6b7280;
+    display: block;
+    margin-top: 3px;
+}
+
+.preview-setting-item .badge {
+    min-width: 85px;
+    padding: 8px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width:768px) {
+
+    .login-preview-card .card-body {
+        padding: 18px;
+    }
+
+    .preview-setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .preview-login-btn {
+        height: 44px;
+    }
+
+}
+
+
+.remember-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 500;
+    color: #374151;
+    position: relative;
+}
+
+.remember-container input {
+    display: none;
+}
+
+.checkmark {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid #1891d0;
+    margin-right: 10px;
+    position: relative;
+    transition: .3s;
+}
+
+.remember-container input:checked+.checkmark {
+    background: #1891d0;
+}
+
+.checkmark::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+}
+
+.remember-container input:checked+.checkmark::after {
+    opacity: 1;
+}
+
+/* ==========================================
+   Sticky Login Preview
+========================================== */
+
+
+.login-preview-wrapper {
+    position: sticky;
+    top: 90px;
+    z-index: 10;
+    height: calc(100vh - 110px);
+}
+
+/* ==========================================
+   Login Preview Scroll
+========================================== */
+
+.login-preview-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.login-preview-card>.card-header {
+    flex-shrink: 0;
+}
+
+.login-preview-card>.card-body {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+/* Custom Scrollbar */
+
+.login-preview-card>.card-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.login-preview-card>.card-body::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 20px;
+}
+
+.login-preview-card>.card-body::-webkit-scrollbar-thumb {
+    background: #1891d0;
+    border-radius: 20px;
+}
+
+.login-preview-card>.card-body::-webkit-scrollbar-thumb:hover {
+    background: #147bb1;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .login-preview-wrapper {
+        position: static;
+        margin-top: 20px;
+    }
+}
+
+.preview-input-wrapper {
+    position: relative;
+}
+
+.preview-input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #1891d0;
+    font-size: 18px;
+    z-index: 2;
+}
+
+.preview-input {
+    padding-left: 48px !important;
+}
+
+.preview-remember {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 18px 0;
+}
+
+/* ==========================================
+   Authentication Page
+========================================== */
+
+.auth-config-card {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(15, 23, 42, .08);
+}
+
+.auth-config-header {
+    background: linear-gradient(135deg, #1891d0, #0f6ea8);
+    color: #fff;
+    border: none;
+    padding: 28px;
+}
+
+.auth-config-header h3 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.auth-config-header p {
+    margin-top: 8px;
+    margin-bottom: 0;
+    opacity: .95;
+    font-size: 15px;
+}
+
+.portal-selection-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px;
+    background: #fff;
+}
+
+.portal-selection-header {
+    margin-bottom: 15px;
+}
+
+.portal-selection-header h5 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.portal-selection-header p {
+    margin-top: 6px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.portal-select {
+    height: 52px;
+    border-radius: 10px;
+    border: 1px solid #d7dde8;
+}
+
+.portal-select:focus {
+    border-color: #1891d0;
+    box-shadow: 0 0 0 .15rem rgba(24, 145, 208, .15);
+}

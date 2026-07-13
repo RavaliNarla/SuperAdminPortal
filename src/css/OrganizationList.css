@@ -1,0 +1,185 @@
+/* ===================================
+   Add Organization Button
+=================================== */
+
+.add-org-btn{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px 22px;
+
+    background:#1891d0;
+
+    color:#fff;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    box-shadow:0 8px 20px rgba(24,145,208,.25);
+
+    transition:.3s;
+}
+
+.add-org-btn:hover{
+
+    color:#fff;
+
+    background:#0f7eb8;
+
+    transform:translateY(-2px);
+}
+
+/* ===================================
+   Status Badge
+=================================== */
+
+.status-badge-table{
+
+    display:inline-block;
+
+    padding:6px 14px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    text-transform:capitalize;
+}
+
+.status-badge-table.active{
+
+    background:#e8f8ee;
+
+    color:#16a34a;
+}
+
+.status-badge-table.inactive{
+
+    background:#fdecec;
+
+    color:#ef4444;
+}
+
+/* ===================================
+   Action Buttons
+=================================== */
+
+.action-buttons{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.action-btn{
+
+    width:38px;
+
+    height:38px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#f8fafc;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#64748b;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-size:18px;
+}
+
+.action-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 18px rgba(0,0,0,.12);
+}
+
+/* View */
+
+.view-btn:hover{
+
+    background:#eef5ff;
+
+    color:#1891d0;
+}
+
+/* Edit */
+
+.edit-btn:hover{
+
+    background:#eef4ff;
+
+    color:#2d2c63;
+}
+
+/* Delete */
+
+.delete-btn:hover{
+
+    background:#fff2f2;
+
+    color:#ef4444;
+}
+
+/* ===================================
+   Responsive
+=================================== */
+
+@media(max-width:768px){
+
+.action-buttons{
+
+    gap:6px;
+}
+
+.action-btn{
+
+    width:34px;
+
+    height:34px;
+
+    font-size:16px;
+}
+
+.add-org-btn{
+
+    width:100%;
+
+    justify-content:center;
+}
+
+}
+
+.enable-btn:hover{
+    background:#e8f8ee;
+    color:#16a34a;
+}
+
+.disable-btn:hover{
+    background:#fff2f2;
+    color:#ef4444;
+}
