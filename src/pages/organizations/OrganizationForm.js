@@ -7,6 +7,7 @@ import "../../css/OrganizationForm.css";
 const defaultFormData = {
   name: '',
   code: '',
+  slug: '',
   type: '',
   domain: '',
   registrationNumber: '',
@@ -61,6 +62,7 @@ export default function OrganizationForm() {
       setFormData({
         name: existingOrganization.name || '',
         code: existingOrganization.code || '',
+        slug: existingOrganization.slug || '',
         type: existingOrganization.type || '',
         domain: existingOrganization.domain || '',
         registrationNumber: existingOrganization.registrationNumber || '',
@@ -260,102 +262,31 @@ export default function OrganizationForm() {
                 </p>
               </div>
             </div>
-
-            <div className="row g-4">
-
-              {/* Organization Name */}
-              <div className="col-lg-6 col-md-6">
-                <label className="form-label">
-                  Organization Name <span className="required">*</span>
-                </label>
-
-                <input
-                  type="text"
-                  className="form-control modern-input"
-                  placeholder="Enter Organization Name"
-                  value={formData.name}
-                  onChange={(event) =>
-                    handleChange("name", event.target.value)
-                  }
-                  required
-                />
-              </div>
-
-              {/* Organization Code */}
-              <div className="col-lg-6 col-md-6">
-                <label className="form-label">
-                  Organization Code
-                </label>
-
-                <input
-                  type="text"
-                  className="form-control modern-input"
-                  placeholder="Enter Organization Code"
-                  value={formData.code}
-                  onChange={(event) =>
-                    handleChange("code", event.target.value)
-                  }
-                />
-              </div>
-
-              {/* Organization Type */}
-              <div className="col-lg-6 col-md-6">
-                <label className="form-label">
-                  Organization Type
-                </label>
-
-                <select
-                  className="form-select modern-input"
-                  value={formData.type}
-                  onChange={(event) =>
-                    handleChange("type", event.target.value)
-                  }
-                >
-                  <option value="">Select Type</option>
-                  <option value="Government">Government</option>
-                  <option value="Private">Private</option>
-                  <option value="PSU">PSU</option>
-                  <option value="NGO">NGO</option>
-                </select>
-              </div>
-
-              {/* Organization Domain */}
-              <div className="col-lg-6 col-md-6">
-                <label className="form-label">
-                  Business Domain
-                </label>
-
-                <input
-                  type="text"
-                  className="form-control modern-input"
-                  placeholder="Ex : Banking, IT"
-                  value={formData.domain}
-                  onChange={(event) =>
-                    handleChange("domain", event.target.value)
-                  }
-                />
-              </div>
-
-              {/* Registration Number */}
-              <div className="col-lg-6 col-md-6">
-                <label className="form-label">
-                  Registration Number
-                </label>
-
-                <input
-                  type="text"
-                  className="form-control modern-input"
-                  placeholder="Registration Number"
-                  value={formData.registrationNumber}
-                  onChange={(event) =>
-                    handleChange(
-                      "registrationNumber",
-                      event.target.value
-                    )
-                  }
-                />
-              </div>
-
+            <div className="col-lg-6">
+              <label className="form-label">Organization Code</label>
+              <input className="form-control" value={formData.code} onChange={(event) => handleChange('code', event.target.value)} />
+            </div>
+            <div className="col-lg-6">
+              <label className="form-label">Slug</label>
+              <input
+                className="form-control"
+                value={formData.slug}
+                onChange={(event) => handleChange('slug', event.target.value)}
+                placeholder="e.g. bob"
+              />
+              <div className="form-text">Must match this organization's login URL key in the Recruitment Portal (e.g. "bob" for /bob/login).</div>
+            </div>
+            <div className="col-lg-6">
+              <label className="form-label">Organization Type</label>
+              <input className="form-control" value={formData.type} onChange={(event) => handleChange('type', event.target.value)} />
+            </div>
+            <div className="col-lg-6">
+              <label className="form-label">Organization Domain</label>
+              <input className="form-control" value={formData.domain} onChange={(event) => handleChange('domain', event.target.value)} />
+            </div>
+            <div className="col-lg-6">
+              <label className="form-label">Registration Number</label>
+              <input className="form-control" value={formData.registrationNumber} onChange={(event) => handleChange('registrationNumber', event.target.value)} />
             </div>
 
           </div>

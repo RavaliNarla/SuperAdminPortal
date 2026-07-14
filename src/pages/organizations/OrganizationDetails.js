@@ -52,9 +52,14 @@ export default function OrganizationDetails() {
             {statusLabel}
           </span>
         </div>
-        <Link to={`/organizations/${organization.id}/edit`} className="btn btn-outline-secondary">
-          Edit Organization
-        </Link>
+        <div className="d-flex gap-2">
+          <Link to={`/organizations/${organization.id}/dynamic-forms`} className="btn btn-outline-primary">
+            Dynamic Forms
+          </Link>
+          <Link to={`/organizations/${organization.id}/edit`} className="btn btn-outline-secondary">
+            Edit Organization
+          </Link>
+        </div>
       </div>
 
       <div className="row gy-4">
@@ -62,6 +67,8 @@ export default function OrganizationDetails() {
           <div className="card-bg card-body">
             <h3 className="h6 mb-3">Organization Settings</h3>
             <dl className="row">
+              <dt className="col-sm-5 text-muted">Slug</dt>
+              <dd className="col-sm-7">{organization.slug || '—'}</dd>
               <dt className="col-sm-5 text-muted">Domain</dt>
               <dd className="col-sm-7">{organization.domain}</dd>
               <dt className="col-sm-5 text-muted">Timezone</dt>

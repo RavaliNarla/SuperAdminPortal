@@ -1,6 +1,7 @@
 export const organizations = [
   {
     id: 'org-001',
+    slug: 'bob',
     name: 'Public Sector Banking Consortium',
     domain: 'psb-consortium.in',
     timezone: 'Asia/Kolkata',
@@ -21,6 +22,7 @@ export const organizations = [
   },
   {
     id: 'org-002',
+    slug: 'pnb',
     name: 'Insurance Regulatory Authority',
     domain: 'ira.gov',
     timezone: 'Asia/Kolkata',

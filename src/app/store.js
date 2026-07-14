@@ -12,6 +12,7 @@ import {
 import storage from 'redux-persist/lib/storage';
 import organizationReducer from '../features/organizations/orgSlice';
 import authReducer from '../features/auth/authSlice';
+import formSchemaReducer from '../features/formSchemas/formSchemaSlice';
 
 const persistConfig = {
   key: 'rms-super-admin',
@@ -22,6 +23,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   organizations: organizationReducer,
   auth: authReducer,
+  formSchemas: formSchemaReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
