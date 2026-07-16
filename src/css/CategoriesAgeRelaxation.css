@@ -1,0 +1,491 @@
+/* ===================================================
+   Categories & Age Relaxation
+=================================================== */
+
+.category-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ==========================
+   Header
+========================== */
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.category-header .section-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #062b80;
+    margin-bottom: 6px;
+}
+
+.category-header .section-subtitle {
+    font-size: 15px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* ==========================
+   Global Settings
+========================== */
+
+.setting-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 18px 20px;
+
+    border: 1px solid #edf1f7;
+
+    border-radius: 14px;
+
+    transition: .25s;
+
+    background: #fff;
+}
+
+.setting-item:hover {
+
+    border-color: #1891d0;
+
+    box-shadow: 0 8px 18px rgba(24, 145, 208, .08);
+}
+
+.setting-item h6 {
+
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: #1f2937;
+}
+
+.setting-item small {
+
+    color: #64748b;
+
+    display: block;
+
+    margin-top: 4px;
+}
+
+/* Switch */
+
+.form-check-input {
+
+    width: 48px;
+
+    height: 24px;
+
+    cursor: pointer;
+}
+
+/* ==========================
+   Tabs
+========================== */
+
+.category-tab-wrapper {
+
+    display: flex;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+}
+
+.category-tab {
+
+    border: none;
+
+    background: #f8fafc;
+
+    border: 1px solid #dbe4ef;
+
+    color: #64748b;
+
+    border-radius: 12px;
+
+    padding: 12px 22px;
+
+    font-weight: 600;
+
+    transition: .25s;
+}
+
+.category-tab:hover {
+
+    background: #eef6fc;
+
+    color: #1891d0;
+}
+
+.category-tab.active {
+
+    background: #1891d0;
+
+    color: #fff;
+
+    border-color: #1891d0;
+
+    box-shadow: 0 10px 18px rgba(24, 145, 208, .18);
+}
+
+/* ==========================
+   Toolbar
+========================== */
+
+.table-toolbar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.search-box {
+
+    position: relative;
+
+    width: 340px;
+}
+
+.search-box i {
+
+    position: absolute;
+
+    left: 14px;
+
+    top: 15px;
+
+    color: #94a3b8;
+}
+
+.search-box input {
+
+    padding-left: 40px;
+}
+
+/* ==========================
+   Table
+========================== */
+
+.category-table {
+
+    margin: 0;
+}
+
+.category-table thead {
+
+    background: #f8fafc;
+}
+
+.category-table th {
+
+    border: none;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    text-transform: uppercase;
+
+    font-weight: 700;
+
+    padding: 16px;
+}
+
+.category-table td {
+
+    padding: 18px 16px;
+
+    vertical-align: middle;
+
+    border-color: #edf1f7;
+}
+
+.category-table tbody tr {
+
+    transition: .25s;
+}
+
+.category-table tbody tr:hover {
+
+    background: #f8fbff;
+}
+
+/* ==========================
+   Pills
+========================== */
+
+.reservation-pill {
+
+    background: #eef4ff;
+
+    color: #1891d0;
+
+    border-radius: 20px;
+
+    padding: 6px 14px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+/* ==========================
+   Status
+========================== */
+
+.status-active {
+
+    display: inline-block;
+
+    background: #e8f8ee;
+
+    color: #16a34a;
+
+    padding: 6px 14px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.status-inactive {
+
+    display: inline-block;
+
+    background: #fdecec;
+
+    color: #dc2626;
+
+    padding: 6px 14px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+/* ==========================
+   Action Button
+========================== */
+
+.action-btn {
+
+    border: none;
+
+    background: transparent;
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 10px;
+
+    transition: .25s;
+}
+
+.action-btn:hover {
+
+    background: #eef6fc;
+
+    color: #1891d0;
+}
+
+.action-btn i {
+
+    font-size: 18px;
+}
+
+/* ==========================
+   Dropdown
+========================== */
+
+.dropdown-menu {
+
+    border: none;
+
+    border-radius: 12px;
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .08);
+
+    padding: 8px;
+}
+
+.dropdown-item {
+
+    border-radius: 8px;
+
+    padding: 10px 14px;
+
+    font-size: 14px;
+
+    transition: .25s;
+}
+
+.dropdown-item:hover {
+
+    background: #eef6fc;
+}
+
+/* ==========================
+   Empty State
+========================== */
+
+.empty-state {
+
+    padding: 50px 20px;
+
+    text-align: center;
+}
+
+.empty-state i {
+
+    font-size: 55px;
+
+    color: #cbd5e1;
+}
+
+.empty-state h6 {
+
+    margin-top: 15px;
+
+    font-weight: 600;
+}
+
+.empty-state p {
+
+    color: #64748b;
+}
+
+/* ==========================
+   Card Animation
+========================== */
+
+.organization-card {
+
+    transition: .25s;
+}
+
+.organization-card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 12px 30px rgba(15, 23, 42, .08);
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media(max-width:991px) {
+
+    .category-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .table-toolbar {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+    }
+
+    .search-box {
+
+        width: 100%;
+
+    }
+
+}
+
+.action-icon-btn {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 8px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
+}
+
+.action-icon-btn:hover {
+    background: #eef6fc;
+}
+
+.action-icon-btn i {
+    font-size: 16px;
+}
+
+.status-disabled {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+@media(max-width:767px) {
+
+    .category-tab-wrapper {
+
+        overflow: auto;
+
+        flex-wrap: nowrap;
+
+        padding-bottom: 5px;
+
+    }
+
+    .category-tab {
+
+        white-space: nowrap;
+
+    }
+
+    .setting-item {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+
+    }
+
+    .category-table {
+
+        min-width: 800px;
+
+    }
+
+}

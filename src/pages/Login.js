@@ -20,7 +20,7 @@ export default function Login() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
+    if (username.trim() === VALID_CREDENTIALS.username && password.trim() === VALID_CREDENTIALS.password) {
       dispatch(login());
       navigate('/organizations');
       return;
@@ -50,7 +50,7 @@ export default function Login() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
 
           <div className="mb-3">
             <label>Username</label>
@@ -59,6 +59,7 @@ export default function Login() {
               type="text"
               className="form-control"
               value={username}
+              autoComplete="off"
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter Username"
             />
@@ -71,6 +72,7 @@ export default function Login() {
               type="password"
               className="form-control"
               value={password}
+              autoComplete="new-password"
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter Password"
             />

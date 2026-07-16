@@ -1,0 +1,151 @@
+.inclusion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 20px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #062b80;
+    margin-bottom: 6px;
+}
+
+.page-subtitle {
+    color: #64748b;
+    margin: 0;
+}
+
+.btn-save {
+    background: #1891d0;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.btn-save:hover {
+    background: #0f7db5;
+    color: #fff;
+}
+
+.info-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #eef8ff;
+    border-left: 4px solid #1891d0;
+    padding: 16px;
+    border-radius: 10px;
+    color: #334155;
+}
+
+.info-card i {
+    font-size: 20px;
+    color: #1891d0;
+}
+
+.search-wrapper {
+    position: relative;
+    max-width: 350px;
+}
+
+.search-wrapper i {
+    position: absolute;
+    left: 14px;
+    top: 13px;
+    color: #94a3b8;
+}
+
+.search-input {
+    padding-left: 42px;
+    border-radius: 10px;
+}
+
+.table-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, .06);
+    overflow: hidden;
+}
+
+.inclusion-table thead {
+    background: #f8fafc;
+}
+
+.inclusion-table th {
+    padding: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    border: none;
+}
+
+.inclusion-table td {
+    padding: 18px 16px;
+}
+
+.inclusion-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.age-pill {
+    background: #eef6ff;
+    color: #1891d0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.status-active {
+    display: inline-block;
+    background: #e8f8ee;
+    color: #16a34a;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-disabled {
+    display: inline-block;
+    background: #f1f5f9;
+    color: #64748b;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.action-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: #f8fafc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn:hover {
+    background: #eef6fc;
+}
+
+@media(max-width:768px) {
+
+    .inclusion-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-wrapper {
+        max-width: 100%;
+    }
+
+}

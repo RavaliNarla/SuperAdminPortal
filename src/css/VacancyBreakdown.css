@@ -1,0 +1,25 @@
+.category-cutoff-table {
+    margin-bottom: 0;
+}
+
+.category-cutoff-table thead {
+    background: #f8fafc;
+}
+
+.category-cutoff-table th {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 1px solid #edf1f7;
+    padding: 14px 16px;
+}
+
+.category-cutoff-table td {
+    vertical-align: middle;
+    padding: 14px 16px;
+}
+
+.category-cutoff-table tbody tr:hover {
+    background: #f8fbff;
+}

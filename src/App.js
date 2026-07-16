@@ -1,11 +1,19 @@
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import AppShell from './components/layout/AppShell';
 import Login from './pages/Login';
-import OrganizationDetails from './pages/organizations/OrganizationDetails';
-import OrganizationForm from './pages/organizations/OrganizationForm';
-import OrganizationList from './pages/organizations/OrganizationList';
+import OrganizationDetails from '../src/pages/organizations/components/OrganizationDetails';
+import OrganizationForm from '../src/pages/organizations/components/OrganizationForm';
+import OrganizationList from '../src/pages/organizations/components/OrganizationList';
 import { useAppSelector } from './app/hooks';
-import AuthenticationConfiguration from "./pages/organizations/AuthenticationConfiguration";
+import AuthenticationConfiguration from "../src/pages/organizations/AuthenticationConfiguration";
+import EligibilityConfiguration from "./pages/EligibilityConfiguration/EligibilityConfiguration";
+
+import CategoriesAgeRelaxation from "./pages/EligibilityConfiguration/components/CategoriesAgeRelaxation";
+import Inclusions from "./pages/EligibilityConfiguration/components/Inclusions";
+import EducationExperience from "./pages/EligibilityConfiguration/components/EducationExperience";
+import Exclusions from "./pages/EligibilityConfiguration/components/Exclusions";
+import VacancyBreakdown from "./pages/EligibilityConfiguration/components/VacancyBreakdown";
+import ValidationWorkflow from "./pages/ValidationWorkflow/components/ValidationWorkflow";
 import DynamicFormsHome from './pages/organizations/DynamicForms/DynamicFormsHome';
 
 function ProtectedLayout() {
@@ -32,6 +40,30 @@ function App() {
         <Route path="/organizations/new" element={<OrganizationForm />} />
         <Route path="/organizations/:organizationId/edit" element={<OrganizationForm />} />
         <Route path="/organizations/:organizationId" element={<OrganizationDetails />} />
+
+        {/* Eligibility Configuration */}
+        <Route
+          path="/eligibility-configuration"
+          element={<EligibilityConfiguration />}
+        >
+          <Route index element={<CategoriesAgeRelaxation />} />
+          <Route path="categories" element={<CategoriesAgeRelaxation />} />
+          <Route path="inclusions" element={<Inclusions />} />
+          <Route
+            path="education-experience"
+            element={<EducationExperience />}
+          />
+          <Route path="exclusions" element={<Exclusions />} />
+          <Route
+            path="vacancy-breakdown"
+            element={<VacancyBreakdown />}
+          />
+        </Route>
+        <Route
+          path="/validation-workflow"
+          element={<ValidationWorkflow />}
+        />
+
         <Route path="/organizations/:organizationId/dynamic-forms" element={<DynamicFormsHome />} />
         <Route
           path="/authentication-configuration"

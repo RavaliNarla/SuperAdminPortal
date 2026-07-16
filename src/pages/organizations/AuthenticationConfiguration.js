@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
 
-import CandidateLoginSection from "./components/CandidateLoginSection";
+import CandidateLoginSection from "../organizations/CandidateLoginSection";
 import RecruitmentLoginSection from "./components/RecruitmentLoginSection";
 import TwoFactorSection from "./components/TwoFactorSection";
 import OTPSettingsSection from "./components/OTPSettingsSection";

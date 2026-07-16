@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   FiPlus,
@@ -6,10 +7,11 @@ import {
   FiEye,
   FiCheckCircle,
 } from "react-icons/fi";
-import "../../css/OrganizationList.css";
+import "../../../css/OrganizationList.css";
 
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { toggleOrganizationStatus } from "../../features/organizations/orgSlice";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+// import { toggleOrganizationStatus } from "../../features/organizations/orgSlice";
+import { fetchOrganizations } from "../../../features/organizations/organizationThunk";
 
 export default function OrganizationList() {
   const organizations = useAppSelector(
@@ -17,6 +19,9 @@ export default function OrganizationList() {
   );
 
   const dispatch = useAppDispatch();
+  useEffect(() => {
+  dispatch(fetchOrganizations());
+}, [dispatch]);
 
   return (
     <div className="card-bg card-body">
@@ -140,9 +145,10 @@ export default function OrganizationList() {
                             ? "Deactivate"
                             : "Activate"
                         }
-                        onClick={() =>
-                          dispatch(toggleOrganizationStatus({ id: org.id }))
-                        }
+                        // onClick={() =>
+                        //   dispatch(toggleOrganizationStatus({ id: org.id })
+                        // )
+                        // }
                       >
                         {statusValue === "active" ? (
                           <FiSlash />

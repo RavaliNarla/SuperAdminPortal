@@ -1,7 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-
-
 import "../../css/Sidebar.css";
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
@@ -24,6 +22,11 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
     {
       name: "Roles & Privileges",
       icon: "bi-shield",
+      path: "/Roles & Privileges",
+    },
+    {
+      name: "Authentication",
+      icon: "bi-shield-lock",
       path: "/authentication-configuration",
     },
     {
@@ -36,6 +39,16 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
       icon: "bi-gear",
       path: "/site-configuration",
     },
+     {
+    name: "Eligibility Configuration",
+    icon: "bi bi-card-checklist",
+    path: "/eligibility-configuration/categories",
+  },
+  {
+    name: "Validation Workflow",
+    icon: "bi bi-bar-chart-line",
+    path: "/validation-workflow",
+  },
   ];
 
   return (

@@ -1,0 +1,247 @@
+/* ===========================
+   Eligibility Configuration
+===========================*/
+
+.eligibility-page {
+
+    padding: 24px;
+}
+
+/* Header */
+
+.eligibility-page .page-title {
+
+    font-size: 30px;
+
+    font-weight: 600;
+
+    color: #062b80;
+
+    margin-bottom: 8px;
+}
+
+.eligibility-page .page-subtitle {
+
+    color: #64748b;
+
+    font-size: 15px;
+
+    max-width: 900px;
+}
+
+/* Tabs */
+
+.eligibility-tabs {
+
+    margin-top: 30px;
+
+    display: flex;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+
+    border-bottom: 1px solid #dbe3ef;
+
+    padding-bottom: 14px;
+}
+
+.eligibility-tab {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px 20px;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    color: #64748b;
+
+    font-weight: 600;
+
+    transition: .25s;
+
+    border: 1px solid transparent;
+}
+
+.eligibility-tab i {
+
+    font-size: 18px;
+}
+
+.eligibility-tab:hover {
+
+    background: #eef6fc;
+
+    color: #1891d0;
+}
+
+.eligibility-tab.active {
+
+    background: #1891d0;
+
+    color: #fff;
+
+    box-shadow: 0 8px 18px rgba(24, 145, 208, .18);
+}
+
+/* Content */
+
+.eligibility-content {
+
+    margin-top: 30px;
+}
+
+/* Cards */
+
+.eligibility-card {
+
+    background: #fff;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    box-shadow: 0 2px 12px rgba(15, 23, 42, .08);
+
+    margin-bottom: 24px;
+}
+
+.eligibility-card-title {
+
+    font-size: 20px;
+
+    font-weight: 600;
+
+    color: #1f2937;
+}
+
+.eligibility-card-subtitle {
+
+    color: #64748b;
+
+    margin-top: 6px;
+
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+
+.btn-theme {
+
+    background: #1891d0;
+
+    color: #fff;
+
+    border: none;
+
+    border-radius: 12px;
+
+    padding: 10px 20px;
+
+    font-weight: 600;
+
+    transition: .25s;
+}
+
+.btn-theme:hover {
+
+    background: #0f7eb8;
+
+    color: #fff;
+
+    transform: translateY(-2px);
+}
+
+/* Table */
+
+.eligibility-table {
+
+    border-radius: 14px;
+
+    overflow: hidden;
+}
+
+.eligibility-table thead {
+
+    background: #f8fafc;
+}
+
+.eligibility-table th {
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.eligibility-table td {
+
+    vertical-align: middle;
+}
+
+/* Status */
+
+.status-active {
+
+    background: #e8f8ee;
+
+    color: #16a34a;
+
+    padding: 6px 14px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+.status-disabled {
+
+    background: #eef2f7;
+
+    color: #64748b;
+
+    padding: 6px 14px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+/* Responsive */
+
+@media(max-width:768px) {
+
+    .eligibility-page {
+
+        padding: 15px;
+
+    }
+
+    .eligibility-tabs {
+
+        overflow: auto;
+
+        flex-wrap: nowrap;
+
+    }
+
+    .eligibility-tab {
+
+        white-space: nowrap;
+
+    }
+
+}
