@@ -1,8 +1,9 @@
-import { NavLink } from 'react-router-dom';
-import logo from '../../assets/logo.png';
+import { NavLink, useLocation } from "react-router-dom";
+import logo from "../../assets/logo.png";
 import "../../css/Sidebar.css";
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
+  const location = useLocation();
   const menus = [
     {
       name: "Dashboard",
@@ -39,29 +40,28 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
       icon: "bi-gear",
       path: "/site-configuration",
     },
-     {
-    name: "Eligibility Configuration",
-    icon: "bi bi-card-checklist",
-    path: "/eligibility-configuration/categories",
-  },
-  {
-    name: "Validation Workflow",
-    icon: "bi bi-bar-chart-line",
-    path: "/validation-workflow",
-  },
+    {
+      name: "Overview",
+      icon: "bi bi-speedometer2",
+      path: "/eligibility-overview",
+    },
+    {
+      name: "Eligibility Configuration",
+      icon: "bi bi-card-checklist",
+       path: "/eligibility-configuration",
+    },
+    {
+      name: "Validation Workflow",
+      icon: "bi bi-bar-chart-line",
+      path: "/validation-workflow",
+    },
   ];
 
   return (
-<aside
-    className={`sidebar ${sidebarOpen ? "show" : ""}`}
->
+    <aside className={`sidebar ${sidebarOpen ? "show" : ""}`}>
       {/* Logo */}
       <div className="sidebar-logo">
-        <img
-          src={logo}
-          alt="Logo"
-          className="logo"
-        />
+        <img src={logo} alt="Logo" className="logo" />
       </div>
 
       {/* Menu */}
@@ -70,9 +70,27 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
           <NavLink
             key={menu.path}
             to={menu.path}
-            className={({ isActive }) =>
-              isActive ? "menu-item active" : "menu-item"
-            }
+            className={() => {
+              const isEligibility =
+                menu.path === "/eligibility-configuration" &&
+                location.pathname.startsWith("/eligibility-configuration");
+
+              const isValidation =
+                menu.path === "/validation-workflow" &&
+                location.pathname.startsWith("/validation-workflow");
+
+              const isOverview =
+                menu.path === "/eligibility-overview" &&
+                location.pathname.startsWith("/eligibility-overview");
+
+              const active =
+                isEligibility ||
+                isValidation ||
+                isOverview ||
+                location.pathname === menu.path;
+
+              return active ? "menu-item active" : "menu-item";
+            }}
             onClick={() => {
               if (window.innerWidth < 992) {
                 setSidebarOpen(false);
@@ -103,10 +121,6 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
 //         </NavLink>
 //       </nav>
 
-      
 //     </aside>
 //   );
 // }
-
-
-

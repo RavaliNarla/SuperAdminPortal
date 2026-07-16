@@ -1,0 +1,26 @@
+.organization-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 20px;
+}
+
+.organization-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #062b80;
+  margin: 0;
+}
+
+.organization-dropdown {
+  width: 240px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #dbe4ef;
+  font-size: 14px;
+}
+
+.organization-dropdown:focus {
+  border-color: rgb(242, 102, 35);
+  box-shadow: 0 0 0 0.15rem rgba(242, 102, 35, 0.2);
+}

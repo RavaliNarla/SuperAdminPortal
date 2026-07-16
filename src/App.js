@@ -1,10 +1,10 @@
-import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
-import AppShell from './components/layout/AppShell';
-import Login from './pages/Login';
-import OrganizationDetails from '../src/pages/organizations/components/OrganizationDetails';
-import OrganizationForm from '../src/pages/organizations/components/OrganizationForm';
-import OrganizationList from '../src/pages/organizations/components/OrganizationList';
-import { useAppSelector } from './app/hooks';
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import AppShell from "./components/layout/AppShell";
+import Login from "./pages/Login";
+import OrganizationDetails from "../src/pages/organizations/components/OrganizationDetails";
+import OrganizationForm from "../src/pages/organizations/components/OrganizationForm";
+import OrganizationList from "../src/pages/organizations/components/OrganizationList";
+import { useAppSelector } from "./app/hooks";
 import AuthenticationConfiguration from "../src/pages/organizations/AuthenticationConfiguration";
 import EligibilityConfiguration from "./pages/EligibilityConfiguration/EligibilityConfiguration";
 
@@ -14,7 +14,8 @@ import EducationExperience from "./pages/EligibilityConfiguration/components/Edu
 import Exclusions from "./pages/EligibilityConfiguration/components/Exclusions";
 import VacancyBreakdown from "./pages/EligibilityConfiguration/components/VacancyBreakdown";
 import ValidationWorkflow from "./pages/ValidationWorkflow/ValidationWorkflow";
-import DynamicFormsHome from './pages/organizations/DynamicForms/DynamicFormsHome';
+import DynamicFormsHome from "./pages/organizations/DynamicForms/DynamicFormsHome";
+import EligibilityOverview from "./pages/EligibilityOverview/Overview";
 
 function ProtectedLayout() {
   const loggedIn = useAppSelector((state) => state.auth.loggedIn);
@@ -38,8 +39,14 @@ function App() {
         <Route path="/" element={<Navigate to="/organizations" replace />} />
         <Route path="/organizations" element={<OrganizationList />} />
         <Route path="/organizations/new" element={<OrganizationForm />} />
-        <Route path="/organizations/:organizationId/edit" element={<OrganizationForm />} />
-        <Route path="/organizations/:organizationId" element={<OrganizationDetails />} />
+        <Route
+          path="/organizations/:organizationId/edit"
+          element={<OrganizationForm />}
+        />
+        <Route
+          path="/organizations/:organizationId"
+          element={<OrganizationDetails />}
+        />
 
         {/* Eligibility Configuration */}
         <Route
@@ -54,23 +61,25 @@ function App() {
             element={<EducationExperience />}
           />
           <Route path="exclusions" element={<Exclusions />} />
-          <Route
-            path="vacancy-breakdown"
-            element={<VacancyBreakdown />}
-          />
+          <Route path="vacancy-breakdown" element={<VacancyBreakdown />} />
         </Route>
-        <Route
-          path="/validation-workflow"
-          element={<ValidationWorkflow />}
+        <Route path="/validation-workflow" element={<ValidationWorkflow />} />
+          <Route
+            path="/eligibility-overview"
+            element={<EligibilityOverview />}
         />
 
-        <Route path="/organizations/:organizationId/dynamic-forms" element={<DynamicFormsHome />} />
+
+        <Route
+          path="/organizations/:organizationId/dynamic-forms"
+          element={<DynamicFormsHome />}
+        />
         <Route
           path="/authentication-configuration"
           element={<AuthenticationConfiguration />}
         />
       </Route>
-
+      
     </Routes>
   );
 }
