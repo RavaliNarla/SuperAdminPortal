@@ -2,7 +2,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import organizationApiService from "../../pages/organizations/services/ApiService.js";
 import {
   mapOrganizations,
-  mapEditOrganization
+  mapEditOrganization,
+  mapOrganizationList
 } from "../../pages/organizations/mapper/mapper.js";
 
 export const fetchOrganizations = createAsyncThunk(
@@ -11,7 +12,7 @@ export const fetchOrganizations = createAsyncThunk(
     try {
       const response = await organizationApiService.getOrganizations();
 
-      return mapOrganizations(response.data.data);
+     return mapOrganizationList(response.data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data || error.message

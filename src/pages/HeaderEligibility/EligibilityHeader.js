@@ -10,8 +10,18 @@ const EligibilityHeader = () => {
   return (
     <div className="organization-header">
       <label className="organization-label">Organization</label>
-
       <select
+        className="form-select organization-dropdown"
+        value={selectedOrganization}
+        onChange={(e) => setSelectedOrganization(e.target.value)}
+      >
+        {organizations.map((organization) => (
+          <option key={organization.id} value={organization.id}>
+            {organization.name}
+          </option>
+        ))}
+      </select>
+      {/* <select
         className="form-select organization-dropdown"
         value={selectedOrganization}
         onChange={(e) => setSelectedOrganization(Number(e.target.value))}
@@ -21,7 +31,7 @@ const EligibilityHeader = () => {
             {organization.name}
           </option>
         ))}
-      </select>
+      </select> */}
     </div>
   );
 };

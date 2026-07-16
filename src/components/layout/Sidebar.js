@@ -48,7 +48,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
     {
       name: "Eligibility Configuration",
       icon: "bi bi-card-checklist",
-       path: "/eligibility-configuration",
+       path: "/eligibility-configuration/categories",
     },
     {
       name: "Validation Workflow",

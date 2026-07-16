@@ -1,5 +1,15 @@
 // mapper/organization.mapper.js
 
+export const mapOrganizationList = (organizations = []) => {
+  return organizations.map((organization) => ({
+    id: organization.id,
+    name: organization.name || "",
+    domain: organization.domain || "",
+    timeZone: organization.timeZone || "",
+    status: organization.status || "Inactive",
+  }));
+};
+
 export const mapOrganization = (item) => ({
   id: item.id,
 

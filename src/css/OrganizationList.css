@@ -55,18 +55,25 @@
     text-transform:capitalize;
 }
 
-.status-badge-table.active{
+.status-badge-table.configured{
 
     background:#e8f8ee;
 
     color:#16a34a;
 }
 
-.status-badge-table.inactive{
+.status-badge-table.not_configured{
 
     background:#fdecec;
 
     color:#ef4444;
+}
+
+.status-badge-table.partially_configured{
+
+    background: orange;
+
+    color: white;
 }
 
 /* ===================================
