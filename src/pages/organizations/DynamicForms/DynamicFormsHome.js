@@ -3,18 +3,29 @@ import { Link, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
 import FormFieldsBuilder from './FormFieldsBuilder';
 
+const PORTALS = [
+  { key: 'recruitment', label: 'Recruitment Portal' },
+  { key: 'candidate', label: 'Candidate Portal' },
+];
+
 const CONFIGURABLE_FORMS = [
   {
     key: 'requisition',
+    portal: 'recruitment',
     title: 'Requisition Form',
     description: 'Extra fields shown when creating a job requisition in the Recruitment Portal.',
   },
   {
     key: 'jobPosting',
+    portal: 'recruitment',
     title: 'Job Posting Form',
     description: 'Extra fields shown when adding a position under a requisition in the Recruitment Portal.',
   },
 ];
+
+function formValue(form) {
+  return `${form.portal}.${form.key}`;
+}
 
 export default function DynamicFormsHome() {
   const { organizationId } = useParams();
@@ -34,7 +45,7 @@ export default function DynamicFormsHome() {
     );
   }
 
-  const selectedForm = CONFIGURABLE_FORMS.find((form) => form.key === selectedFormKey);
+  const selectedForm = CONFIGURABLE_FORMS.find((form) => formValue(form) === selectedFormKey);
   const organizationKey = organization.slug || organization.id;
 
   return (
@@ -65,11 +76,19 @@ export default function DynamicFormsHome() {
             onChange={(e) => setSelectedFormKey(e.target.value)}
           >
             <option value="">Choose a form...</option>
-            {CONFIGURABLE_FORMS.map((form) => (
-              <option key={form.key} value={form.key}>
-                {form.title}
-              </option>
-            ))}
+            {PORTALS.map((portal) => {
+              const forms = CONFIGURABLE_FORMS.filter((form) => form.portal === portal.key);
+              if (forms.length === 0) return null;
+              return (
+                <optgroup key={portal.key} label={portal.label}>
+                  {forms.map((form) => (
+                    <option key={formValue(form)} value={formValue(form)}>
+                      {form.title}
+                    </option>
+                  ))}
+                </optgroup>
+              );
+            })}
           </select>
           {selectedForm && <p className="text-muted mt-2 mb-0">{selectedForm.description}</p>}
         </div>
@@ -79,10 +98,10 @@ export default function DynamicFormsHome() {
         <div className="card-bg card-body mt-4">
           <h3 className="h6 mb-3">{selectedForm.title} — Fields</h3>
           <FormFieldsBuilder
-            key={selectedForm.key}
+            key={formValue(selectedForm)}
             organizationKey={organizationKey}
+            portal={selectedForm.portal}
             formKey={selectedForm.key}
-            title={selectedForm.title}
           />
         </div>
       )}

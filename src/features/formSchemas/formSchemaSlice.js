@@ -10,11 +10,14 @@ const formSchemaSlice = createSlice({
   initialState,
   reducers: {
     saveFormSchema(state, action) {
-      const { organizationKey, formKey, schema } = action.payload;
+      const { organizationKey, portal, formKey, schema } = action.payload;
       if (!state.items[organizationKey]) {
         state.items[organizationKey] = {};
       }
-      state.items[organizationKey][formKey] = schema;
+      if (!state.items[organizationKey][portal]) {
+        state.items[organizationKey][portal] = {};
+      }
+      state.items[organizationKey][portal][formKey] = schema;
     },
   },
 });

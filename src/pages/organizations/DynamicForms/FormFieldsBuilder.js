@@ -24,8 +24,7 @@ function emptyField(type) {
   return field;
 }
 
-export default function FormFieldsBuilder({ organizationKey, formKey, title: defaultTitle }) {
-  const [title, setTitle] = useState(defaultTitle);
+export default function FormFieldsBuilder({ organizationKey, portal, formKey }) {
   const [fields, setFields] = useState([]);
   const [loading, setLoading] = useState(true);
   const [savedAt, setSavedAt] = useState(null);
@@ -34,9 +33,8 @@ export default function FormFieldsBuilder({ organizationKey, formKey, title: def
     let cancelled = false;
     setLoading(true);
     setSavedAt(null);
-    fetchFormSchema(organizationKey, formKey).then((schema) => {
+    fetchFormSchema(organizationKey, portal, formKey).then((schema) => {
       if (cancelled) return;
-      setTitle(schema?.title || defaultTitle);
       setFields(schema?.fields || []);
       setLoading(false);
     });
@@ -44,7 +42,7 @@ export default function FormFieldsBuilder({ organizationKey, formKey, title: def
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [organizationKey, formKey]);
+  }, [organizationKey, portal, formKey]);
 
   const addField = (type) => {
     setFields((prev) => [...prev, emptyField(type)]);
@@ -90,12 +88,10 @@ export default function FormFieldsBuilder({ organizationKey, formKey, title: def
   };
 
   const handleSave = async () => {
-    const schema = {
-      formId: `form-${formKey}-${organizationKey}`,
-      title,
-      fields,
-    };
-    await saveFormSchema(organizationKey, formKey, schema);
+    const schema = { fields };
+    console.log("organizationKey:", organizationKey, "portal:", portal, "formKey:", formKey);
+    console.log('Saving schema:', schema);
+    await saveFormSchema(organizationKey, portal, formKey, schema);
     setSavedAt(new Date());
   };
 
@@ -105,11 +101,6 @@ export default function FormFieldsBuilder({ organizationKey, formKey, title: def
 
   return (
     <div>
-      <div className="mb-3">
-        <label className="form-label">Form Title</label>
-        <input className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} />
-      </div>
-
       <div className="d-flex gap-2 mb-3">
         {FIELD_TYPES.map((type) => (
           <button

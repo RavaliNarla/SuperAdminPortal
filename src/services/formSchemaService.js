@@ -1,18 +1,29 @@
 import { store } from '../app/store';
 import { saveFormSchema as saveFormSchemaAction } from '../features/formSchemas/formSchemaSlice';
+import formSchemaApiService from './formSchemaApiService';
 
-// Backend team: replace the bodies of these two functions with real HTTP calls
-// (e.g. axios GET/PUT `/organizations/{organizationKey}/form-schema/{formKey}`,
-// where organizationKey is the organization's slug — the same key used in the
-// Recruitment Portal's login URL, e.g. "bob").
-// Call sites only depend on the Promise-based signatures below, not on Redux.
+// TEMPORARY FALLBACK — remove once the real backend endpoints
+// (see docs/dynamic-forms-backend-spec.md) are live. Until then, calls hit
+// formSchemaApiService first; on failure (endpoint not implemented yet, or no
+// backend running locally) fall back to the local Redux mock store so the
+// Dynamic Forms UI keeps working end-to-end for local development. Mirrors
+// the fallback pattern in the Recruitment Portal's orgFormSchemaService.js.
 
-export async function fetchFormSchema(organizationKey, formKey) {
-  const schema = store.getState().formSchemas.items[organizationKey]?.[formKey] ?? null;
-  return schema;
+export async function fetchFormSchema(organizationKey, portal, formKey) {
+  try {
+    const schema = await formSchemaApiService.getFormSchema(organizationKey, portal, formKey);
+    if (schema?.fields) return schema;
+  } catch {
+    // endpoint not live yet — fall through to mock
+  }
+  return store.getState().formSchemas.items[organizationKey]?.[portal]?.[formKey] ?? null;
 }
 
-export async function saveFormSchema(organizationKey, formKey, schema) {
-  store.dispatch(saveFormSchemaAction({ organizationKey, formKey, schema }));
-  return schema;
+export async function saveFormSchema(organizationKey, portal, formKey, schema) {
+  try {
+    return await formSchemaApiService.saveFormSchema(organizationKey, portal, formKey, schema);
+  } catch {
+    store.dispatch(saveFormSchemaAction({ organizationKey, portal, formKey, schema }));
+    return schema;
+  }
 }
