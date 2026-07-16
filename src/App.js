@@ -13,7 +13,7 @@ import Inclusions from "./pages/EligibilityConfiguration/components/Inclusions";
 import EducationExperience from "./pages/EligibilityConfiguration/components/EducationExperience";
 import Exclusions from "./pages/EligibilityConfiguration/components/Exclusions";
 import VacancyBreakdown from "./pages/EligibilityConfiguration/components/VacancyBreakdown";
-import ValidationWorkflow from "./pages/ValidationWorkflow/components/ValidationWorkflow";
+import ValidationWorkflow from "./pages/ValidationWorkflow/ValidationWorkflow";
 import DynamicFormsHome from './pages/organizations/DynamicForms/DynamicFormsHome';
 
 function ProtectedLayout() {
