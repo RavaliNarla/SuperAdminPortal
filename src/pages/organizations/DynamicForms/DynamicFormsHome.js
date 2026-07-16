@@ -46,19 +46,19 @@ export default function DynamicFormsHome() {
   }
 
   const selectedForm = CONFIGURABLE_FORMS.find((form) => formValue(form) === selectedFormKey);
-  const organizationKey = organization.slug || organization.id;
+  const organizationKey = organization.code || organization.id;
 
   return (
     <div className="card-bg card-body">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h2 className="h5 page-title">Dynamic Forms — {organization.name}</h2>
+          <h2 className="h5 page-title">Dynamic Forms — {organization.name || organization.id}</h2>
           <p className="text-muted mb-0">Configure extra fields for this organization's forms.</p>
-          {!organization.slug && (
+          {!organization.code && (
             <p className="text-warning small mb-0">
-              No slug set for this organization — fields will be saved under its internal id
-              instead, which won't match the Recruitment Portal's login URL key. Set a slug on the
-              Edit Organization page first.
+              No code set for this organization — fields will be saved under its internal id
+              instead, which won't match the Recruitment Portal's login URL key. Set an
+              Organization Code on the Edit Organization page first.
             </p>
           )}
         </div>

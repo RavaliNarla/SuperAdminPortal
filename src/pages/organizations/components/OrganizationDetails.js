@@ -68,9 +68,14 @@ export default function OrganizationDetails() {
             {statusLabel}
           </span>
         </div>
-        <Link to={`/organizations/${organization.id}/edit`} className="btn btn-outline-secondary">
-          Edit Organization
-        </Link>
+        <div className="d-flex gap-2">
+          <Link to={`/organizations/${organization.id}/dynamic-forms`} className="btn btn-outline-primary">
+            Dynamic Forms
+          </Link>
+          <Link to={`/organizations/${organization.id}/edit`} className="btn btn-outline-secondary">
+            Edit Organization
+          </Link>
+        </div>
       </div>
 
       <div className="row gy-4">

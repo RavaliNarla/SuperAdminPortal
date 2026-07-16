@@ -5,6 +5,7 @@ const FIELD_TYPES = [
   { label: 'Text', value: 'text' },
   { label: 'Dropdown', value: 'dropdown' },
   { label: 'Date', value: 'date' },
+  { label: 'Checkbox', value: 'checkbox' },
 ];
 
 function emptyField(type) {
@@ -197,6 +198,10 @@ export default function FormFieldsBuilder({ organizationKey, portal, formKey }) 
           {field.type === 'date' && (
             <p className="text-muted mt-2 mb-0">Renders as a date picker on the target form.</p>
           )}
+
+          {field.type === 'checkbox' && (
+            <p className="text-muted mt-2 mb-0">Renders as a single checkbox on the target form.</p>
+          )}
         </div>
       ))}
 
@@ -204,7 +209,7 @@ export default function FormFieldsBuilder({ organizationKey, portal, formKey }) 
         <button type="button" className="btn btn-primary" onClick={handleSave}>
           Save
         </button>
-        {savedAt && <span className="text-muted">Saved at {savedAt.toLocaleTimeString()}</span>}
+        {savedAt && <span className="text-muted">Saved</span>}
       </div>
     </div>
   );

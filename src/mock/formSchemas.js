@@ -1,4 +1,4 @@
-// Keyed by organization slug (matches the "slug" field on each organization
+// Keyed by organization code (matches the "code" field on each organization
 // and the Recruitment Portal's login URL key, e.g. /bob/login), then by
 // portal ("recruitment" or "candidate"), then by form key.
 export const formSchemas = {

@@ -42,7 +42,7 @@ INSERT INTO portal_screens (portal, screen_key, screen_name) VALUES
 -- of their own, since they're not a separate sub-form.
 CREATE TABLE organization_form_schemas (
     id                BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    organization_key  VARCHAR(100) NOT NULL,   -- organization's slug, e.g. "bob"
+    organization_key  VARCHAR(100) NOT NULL,   -- organization's code, e.g. "bob"
     screen_id         BIGINT NOT NULL REFERENCES portal_screens(id),
     fields            JSONB NOT NULL DEFAULT '[]',
     created_at        TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -52,8 +52,8 @@ CREATE TABLE organization_form_schemas (
 ```
 
 `fields` is stored as JSON rather than normalized columns because field shape varies by
-`type` (`text` has `placeholder`/`maxLength`, `dropdown` has `options`, `date` has neither) and
-new types may be added later. Example element:
+`type` (`text` has `placeholder`/`maxLength`, `dropdown` has `options`, `date` and `checkbox`
+have neither) and new types may be added later. Example element:
 
 ```json
 {
@@ -110,7 +110,7 @@ handle request(organizationKey, portal, formKey):
     return row or 404
 
     # PUT (SuperAdmin only):
-    validate body.fields: each has type in {text, dropdown, date}, non-empty label;
+    validate body.fields: each has type in {text, dropdown, date, checkbox}, non-empty label;
         text requires numeric maxLength; dropdown requires non-empty options array
     UPSERT organization_form_schemas (organization_key, screen_id, fields)
         ON CONFLICT (organization_key, screen_id) DO UPDATE ...
