@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../../../css/CategoriesAgeRelaxation.css";
 import CategoryModal from "./CategoryModal";
+
 const CategoriesAgeRelaxation = () => {
     const [settings, setSettings] = useState({
         applyRelaxation: true,
