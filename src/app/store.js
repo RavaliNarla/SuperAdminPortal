@@ -10,7 +10,7 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import organizationReducer from '../features/organizations/orgSlice';
+import organizationReducer from '../pages/organizations/hooks/orgSlice';
 import authReducer from '../features/auth/authSlice';
 import formSchemaReducer from '../features/formSchemas/formSchemaSlice';
 

@@ -9,7 +9,7 @@ import {
   createOrganization,
   updateOrganization,
   fetchOrganizationById,
-} from "../../../features/organizations/organizationThunk";
+} from "../hooks/organizationThunk";
 import "../../../css/OrganizationForm.css";
 import { validateOrganizationForm } from "../validation/organizationValidation";
 const defaultFormData = {

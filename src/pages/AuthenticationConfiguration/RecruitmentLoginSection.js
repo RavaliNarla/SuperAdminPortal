@@ -12,7 +12,7 @@ import {
     FiUsers,
 } from "react-icons/fi";
 
-import "../../../css/Section.css";
+import "../../css/Section.css";
 
 const loginMethods = [
     {

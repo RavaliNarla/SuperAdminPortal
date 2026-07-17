@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { fetchOrganizationById } from "../../../features/organizations/organizationThunk";
+import { fetchOrganizationById } from "../hooks/organizationThunk";
 
 export default function OrganizationDetails() {
   const { organizationId } = useParams();

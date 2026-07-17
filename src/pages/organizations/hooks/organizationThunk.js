@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import organizationApiService from "../../pages/organizations/services/ApiService.js";
+import organizationApiService from "../services/ApiService.js";
 import {
   mapOrganizations,
   mapEditOrganization,
   mapOrganizationList
-} from "../../pages/organizations/mapper/mapper.js";
+} from "../mapper/mapper.js";
 
 export const fetchOrganizations = createAsyncThunk(
   "organizations/fetchOrganizations",

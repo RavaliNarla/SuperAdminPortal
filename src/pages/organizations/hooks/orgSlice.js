@@ -3,7 +3,7 @@ import {
   fetchOrganizations,
   createOrganization,
   fetchOrganizationById,
-} from "../organizations/organizationThunk";
+} from "../hooks/organizationThunk";
 
 const initialState = {
   items: [],

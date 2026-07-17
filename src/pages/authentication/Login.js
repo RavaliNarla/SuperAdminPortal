@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../app/hooks';
-import { login } from '../features/auth/authSlice';
-import "../../src/css/Login.css";
-import logo from '../../src/assets/login_logo.png';
+import { useAppDispatch } from '../../app/hooks';
+import { login } from '../../features/auth/authSlice';
+import "../../css/Login.css";
+import logo from '../../assets/login_logo.png';
 
 const VALID_CREDENTIALS = {
   username: 'admin',

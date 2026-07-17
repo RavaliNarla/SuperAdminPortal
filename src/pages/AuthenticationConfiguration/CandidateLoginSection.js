@@ -11,11 +11,11 @@ import {
 import "../../css/Section.css";
 
 // Dynamic Components
-import UsernameConfig from "../organizations/components/candidate-login/UsernameConfig";
-import EmailConfig from "../organizations/components/candidate-login/EmailConfig";
-import MobileConfig from "../organizations/components/candidate-login/MobileConfig";
-import AadhaarConfig from "../organizations/components/candidate-login/AadhaarConfig";
-import PanConfig from "../organizations/components/candidate-login/PanConfig";
+import UsernameConfig from "./candidate-login/UsernameConfig";
+import EmailConfig from "./candidate-login/EmailConfig";
+import MobileConfig from "./candidate-login/MobileConfig";
+import AadhaarConfig from "./candidate-login/AadhaarConfig";
+import PanConfig from "./candidate-login/PanConfig";
 
 const loginMethods = [
   {

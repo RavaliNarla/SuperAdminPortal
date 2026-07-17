@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
 
-import CandidateLoginSection from "../organizations/CandidateLoginSection";
-import RecruitmentLoginSection from "./components/RecruitmentLoginSection";
+import CandidateLoginSection from "./CandidateLoginSection";
+import RecruitmentLoginSection from "./RecruitmentLoginSection";
 import TwoFactorSection from "./components/TwoFactorSection";
 import OTPSettingsSection from "./components/OTPSettingsSection";
 import PasswordPolicySection from "./components/PasswordPolicySection";
 import SessionPolicySection from "./components/SessionPolicySection";
 import LoginPreview from "./components/LoginPreview";
-import AuthenticationFooter from "./components/AuthenticationFooter";
+import AuthenticationFooter from "./AuthenticationFooter";
 
 const AuthenticationConfiguration = () => {
   const initialState = {

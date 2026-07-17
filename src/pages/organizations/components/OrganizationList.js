@@ -5,7 +5,7 @@ import "../../../css/OrganizationList.css";
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 // import { toggleOrganizationStatus } from "../../features/organizations/orgSlice";
-import { fetchOrganizations } from "../../../features/organizations/organizationThunk";
+import { fetchOrganizations } from "../hooks/organizationThunk";
 
 export default function OrganizationList() {
   const organizations = useAppSelector((state) => state.organizations.items);

@@ -1,11 +1,11 @@
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import AppShell from "./components/layout/AppShell";
-import Login from "./pages/Login";
+import Login from "../src/pages/authentication/Login";
 import OrganizationDetails from "../src/pages/organizations/components/OrganizationDetails";
 import OrganizationForm from "../src/pages/organizations/components/OrganizationForm";
 import OrganizationList from "../src/pages/organizations/components/OrganizationList";
 import { useAppSelector } from "./app/hooks";
-import AuthenticationConfiguration from "../src/pages/organizations/AuthenticationConfiguration";
+import AuthenticationConfiguration from "./pages/AuthenticationConfiguration/AuthenticationConfiguration";
 import EligibilityConfiguration from "./pages/EligibilityConfiguration/EligibilityConfiguration";
 
 import CategoriesAgeRelaxation from "./pages/EligibilityConfiguration/components/CategoriesAgeRelaxation";

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { fetchOrganizations } from "../../../features/organizations/organizationThunk";
+import { fetchOrganizations } from "../../organizations/hooks/organizationThunk";
 
 const useEligibilityHeader = () => {
   const navigate = useNavigate();
