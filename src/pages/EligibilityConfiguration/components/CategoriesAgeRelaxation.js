@@ -4,7 +4,12 @@ import CategoryModal from "./CategoryModal";
 import { useEffect } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { fetchCategoriesAndAgeRelaxations } from "../Thunk/eligibilityThunk";
+
+import {
+  fetchCategoriesAndAgeRelaxations,
+  createCategory,
+  updateCategories,
+} from "../Thunk/eligibilityThunk";
 
 const CategoriesAgeRelaxation = () => {
   const [settings, setSettings] = useState({
@@ -14,11 +19,23 @@ const CategoriesAgeRelaxation = () => {
     maximumRelaxation: 10,
   });
   const [activeTab, setActiveTab] = useState("vertical");
-  const handleToggle = (field) => {
-    setSettings((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
+  const handleToggle = async (field) => {
+    const updatedSettings = {
+      ...settings,
+      [field]: !settings[field],
+    };
+
+    setSettings(updatedSettings);
+
+    await dispatch(
+      updateCategories({
+        organizationId,
+        payload: {
+          settings: updatedSettings,
+          categories,
+        },
+      }),
+    );
   };
 
   const dispatch = useAppDispatch();
@@ -27,18 +44,32 @@ const CategoriesAgeRelaxation = () => {
     (state) => state.eligibility.selectedOrganization,
   );
 
-  const categories = useAppSelector((state) => {
-    const value = state.eligibility.categoriesAndAgeRelaxations;
-    return Array.isArray(value) ? value : [];
-  });
+  const eligibilityResponse = useAppSelector(
+    (state) => state.eligibility.categoriesAndAgeRelaxations,
+  );
 
+  const eligibilityData = Array.isArray(eligibilityResponse)
+    ? eligibilityResponse[0]
+    : eligibilityResponse;
+
+  const categories = eligibilityData?.categories || [];
   const loading = useAppSelector((state) => state.eligibility.loading);
 
   useEffect(() => {
-    if (!organizationId) return;
+    if (!eligibilityData) return;
+    console.log(eligibilityData);
 
-    dispatch(fetchCategoriesAndAgeRelaxations(organizationId));
-  }, [dispatch, organizationId]);
+    if (eligibilityData.settings) {
+      setSettings({
+        applyRelaxation: eligibilityData.settings.applyRelaxation ?? true,
+        reservedVacancyOnly:
+          eligibilityData.settings.reservedVacancyOnly ?? false,
+        allowMultipleRelaxation:
+          eligibilityData.settings.allowMultipleRelaxation ?? true,
+        maximumRelaxation: eligibilityData.settings.maximumRelaxation ?? 10,
+      });
+    }
+  }, [eligibilityData]);
 
   const [showModal, setShowModal] = useState(false);
   //   const [categories, setCategories] = useState([]);
@@ -59,51 +90,74 @@ const CategoriesAgeRelaxation = () => {
 
     return matchesTab && matchesSearch;
   });
-  const handleCreateCategory = () => {
-    // Call Create Category API
-  };
+  const handleCreateCategory = async (categoryPayload) => {
+    let updatedCategories;
 
-  const handleDisable = () => {
-    // Call Disable Category API
-  };
+    if (viewCategory) {
+      updatedCategories = categories.map((item) =>
+        item.id === viewCategory.id
+          ? {
+              ...item,
+              ...categoryPayload,
+              id: viewCategory.id,
+            }
+          : item,
+      );
+    } else {
+      updatedCategories = [...categories, categoryPayload];
+    }
 
-  const confirmDisable = () => {
-    // Call Disable API
+    const payload = {
+      settings,
+      categories: updatedCategories,
+    };
+
+    if (viewCategory) {
+      await dispatch(
+        updateCategories({
+          organizationId,
+          payload,
+        }),
+      );
+    } else {
+      await dispatch(
+        createCategory({
+          organizationId,
+          payload,
+        }),
+      );
+    }
+
+    setShowModal(false);
+    setViewCategory(null);
+    setIsViewMode(false);
+  };
+  const confirmDisable = async () => {
+    const updatedCategories = categories.map((item) =>
+      item.id === selectedCategoryId
+        ? {
+            ...item,
+            status: item.status === "Active" ? "Inactive" : "Active",
+          }
+        : item,
+    );
+
+    await dispatch(
+      updateCategories({
+        organizationId,
+        payload: {
+          settings,
+          categories: updatedCategories,
+        },
+      }),
+    );
+
+    dispatch(fetchCategoriesAndAgeRelaxations(organizationId));
+
     setShowDisableModal(false);
     setSelectedCategoryId(null);
   };
 
-  //   const handleCreateCategory = (category) => {
-  //     setCategories((prev) => [...prev, category]);
-  //   };
-
-  //   const handleDisable = (id) => {
-  //     setCategories((prev) =>
-  //       prev.map((item) =>
-  //         item.id === id
-  //           ? {
-  //               ...item,
-  //               status: item.status === "Active" ? "Inactive" : "Active",
-  //             }
-  //           : item,
-  //       ),
-  //     );
-  //   };
-  //   const confirmDisable = () => {
-  //     setCategories((prev) =>
-  //       prev.map((category) =>
-  //         category.id === selectedCategoryId
-  //           ? {
-  //               ...category,
-  //               status: "Disabled",
-  //             }
-  //           : category,
-  //       ),
-  //     );
-
-  //     setShowDisableModal(false);
-  //     setSelectedCategoryId(null);
-  //   };
   return (
     <div className="category-page">
       {/* ================= Header ================= */}
@@ -115,7 +169,14 @@ const CategoriesAgeRelaxation = () => {
             relaxation rules.
           </p>
         </div>
-        <button className="btn btn-save" onClick={() => setShowModal(true)}>
+        <button
+          className="btn btn-save"
+          onClick={() => {
+            setViewCategory(null);
+            setIsViewMode(false);
+            setShowModal(true);
+          }}
+        >
           <i className="bi bi-plus-lg me-2"></i>
           Add Category
         </button>
@@ -196,6 +257,17 @@ const CategoriesAgeRelaxation = () => {
                     maximumRelaxation: e.target.value,
                   })
                 }
+                onBlur={async () => {
+                  await dispatch(
+                    updateCategories({
+                      organizationId,
+                      payload: {
+                        settings,
+                        categories,
+                      },
+                    }),
+                  );
+                }}
               />
             </div>
           </div>
@@ -281,9 +353,16 @@ const CategoriesAgeRelaxation = () => {
                       </td>
                       <td className="text-center">
                         <div className="d-flex justify-content-center gap-2">
+                          {/* View */}
                           <button
-                            className="btn btn-sm btn-light"
-                            title="View"
+                            type="button"
+                            className="btn btn-light p-0"
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              minWidth: "40px",
+                              minHeight: "40px",
+                            }}
                             onClick={() => {
                               setViewCategory(item);
                               setIsViewMode(true);
@@ -292,26 +371,48 @@ const CategoriesAgeRelaxation = () => {
                           >
                             <i className="bi bi-eye text-primary"></i>
                           </button>
-                          {item.status !== "Disabled" && (
-                            <button
-                              className="btn btn-sm btn-light"
-                              title="Disable"
-                              onClick={() => {
-                                setSelectedCategoryId(item.id);
-                                setShowDisableModal(true);
-                              }}
-                            >
-                              <i className="bi bi-slash-circle text-warning"></i>
-                            </button>
-                          )}
+
+                          {/* Edit */}
                           <button
-                            className="btn btn-sm btn-light"
-                            title="Create Revised Version"
+                            type="button"
+                            className="btn btn-light p-0"
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              minWidth: "40px",
+                              minHeight: "40px",
+                            }}
                             onClick={() => {
+                              setViewCategory(item);
+                              setIsViewMode(false);
                               setShowModal(true);
                             }}
                           >
-                            <i className="bi bi-file-earmark-plus text-success"></i>
+                            <i className="bi bi-pencil-square text-success"></i>
+                          </button>
+
+                          {/* Disable / Enable */}
+                          <button
+                            type="button"
+                            className="btn btn-light p-0"
+                            style={{
+                              width: "40px",
+                              height: "40px",
+                              minWidth: "40px",
+                              minHeight: "40px",
+                            }}
+                            onClick={() => {
+                              setSelectedCategoryId(item.id);
+                              setShowDisableModal(true);
+                            }}
+                          >
+                            <i
+                              className={
+                                item.status === "Active"
+                                  ? "bi bi-slash-circle text-danger"
+                                  : "bi bi-check-circle text-success"
+                              }
+                            />
                           </button>
                         </div>
                       </td>

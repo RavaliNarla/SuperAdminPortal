@@ -83,11 +83,12 @@
 
 .eligibility-tab.active {
 
-    background: #1891d0;
+    /* background: #1891d0; */
 
-    color: #fff;
+    color: #1891d0;
 
-    box-shadow: 0 8px 18px rgba(24, 145, 208, .18);
+  border-bottom: 3px solid #1891d0;
+  box-shadow: 0 8px 18px rgba(24, 145, 208, 0.18);
 }
 
 /* Content */

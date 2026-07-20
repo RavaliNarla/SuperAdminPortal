@@ -15,18 +15,6 @@ const eligibilityApiService = {
     );
   },
 
-  getCategoriesAndAgeRelaxations(organizationId) {
-    return axios.get(
-      `${API_BASE_URL}/eligibilityConfiguration/categories_and_age_relaxations/${organizationId}`,
-      {
-        headers: {
-          Accept: "*/*",
-          "X-Client": "Candidate",
-        },
-      },
-    );
-  },
-
   getInclusions(organizationId) {
     return axios.get(
       `${API_BASE_URL}/eligibilityConfiguration/inclusions/${organizationId}`,
@@ -136,6 +124,46 @@ const eligibilityApiService = {
   updateEducationExperienceValidation(organizationId, payload) {
     return axios.put(
       `${API_BASE_URL}/eligibilityConfiguration/education_and_experience_validation/${organizationId}`,
+      payload,
+      {
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
+
+  getCategoriesAndAgeRelaxations(organizationId) {
+    return axios.get(
+      `${API_BASE_URL}/eligibilityConfiguration/categories_and_age_relaxations/${organizationId}`,
+      {
+        headers: {
+          Accept: "*/*",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
+
+  createCategoriesAndAgeRelaxations(organizationId, payload) {
+    return axios.post(
+      `${API_BASE_URL}/eligibilityConfiguration/categories_and_age_relaxations/${organizationId}`,
+      payload,
+      {
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
+
+  updateCategoriesAndAgeRelaxations(organizationId, payload) {
+    return axios.put(
+      `${API_BASE_URL}/eligibilityConfiguration/categories_and_age_relaxations/${organizationId}`,
       payload,
       {
         headers: {

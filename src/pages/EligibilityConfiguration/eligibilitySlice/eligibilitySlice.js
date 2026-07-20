@@ -11,6 +11,8 @@ import {
   fetchEducationExperienceValidation,
   createEducationExperienceValidation,
   updateEducationExperienceValidation,
+  createCategory,
+  updateCategories,
 } from "../Thunk/eligibilityThunk";
 
 const initialState = {
@@ -209,7 +211,32 @@ const eligibilitySlice = createSlice({
           state.loading = false;
           state.error = action.payload;
         },
-      );
+      )
+      .addCase(createCategory.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(createCategory.fulfilled, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(createCategory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(updateCategories.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(updateCategories.fulfilled, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(updateCategories.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 

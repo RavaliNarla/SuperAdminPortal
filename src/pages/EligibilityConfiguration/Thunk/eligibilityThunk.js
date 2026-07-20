@@ -209,3 +209,41 @@ export const updateEducationExperienceValidation = createAsyncThunk(
     }
   }
 );
+
+export const createCategory = createAsyncThunk(
+  "eligibility/createCategory",
+  async ({ organizationId, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const response =
+        await eligibilityApiService.createCategoriesAndAgeRelaxations(
+          organizationId,
+          payload
+        );
+
+      dispatch(fetchCategoriesAndAgeRelaxations(organizationId));
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+export const updateCategories = createAsyncThunk(
+  "eligibility/updateCategories",
+  async ({ organizationId, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const response =
+        await eligibilityApiService.updateCategoriesAndAgeRelaxations(
+          organizationId,
+          payload
+        );
+
+      dispatch(fetchCategoriesAndAgeRelaxations(organizationId));
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
