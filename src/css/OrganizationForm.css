@@ -703,7 +703,7 @@
 
     height: 46px;
 
-    border-radius: 10px;
+    /* border-radius: 10px; */
 
     border: 1px solid #d7dde8;
 
@@ -877,7 +877,7 @@
 
     border: 1px solid #d7dde8;
 
-    border-radius: 14px;
+    /* border-radius: 14px; */
 
     background: #fff;
 

@@ -80,3 +80,21 @@ export const createInclusion = createAsyncThunk(
     }
   }
 );
+
+export const updateInclusions = createAsyncThunk(
+  "eligibility/updateInclusions",
+  async ({ organizationId, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await eligibilityApiService.updateInclusions(
+        organizationId,
+        payload
+      );
+
+      dispatch(fetchInclusions(organizationId));
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);

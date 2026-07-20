@@ -3,7 +3,11 @@ import "../../../css/Inclusions.css";
 import InclusionModal from "./InclusionModal";
 
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { fetchInclusions, createInclusion } from "../Thunk/eligibilityThunk";
+import {
+  fetchInclusions,
+  createInclusion,
+  updateInclusions,
+} from "../Thunk/eligibilityThunk";
 
 const Inclusions = () => {
   const [search, setSearch] = useState("");
@@ -38,27 +42,77 @@ const Inclusions = () => {
     (item) => (item.name || "").toLowerCase().includes(search.toLowerCase()),
   );
 
-  const handleCreateInclusion = (inclusion) => {
-    dispatch(
-      createInclusion({
+  const handleCreateInclusion = async (newInclusion) => {
+    if (!viewInclusion) {
+      if (inclusions.length === 0) {
+        await dispatch(
+          createInclusion({
+            organizationId,
+            payload: newInclusion,
+          }),
+        );
+      } else {
+        await dispatch(
+          updateInclusions({
+            organizationId,
+            payload: [...inclusions, newInclusion],
+          }),
+        );
+      }
+    } else {
+      const updatedInclusions = inclusions.map((item) =>
+        item.id === viewInclusion.id
+          ? {
+              ...item,
+              ...newInclusion,
+              id: viewInclusion.id,
+            }
+          : item,
+      );
+
+      await dispatch(
+        updateInclusions({
+          organizationId,
+          payload: updatedInclusions,
+        }),
+      );
+    }
+
+    // Reload latest data
+    dispatch(fetchInclusions(organizationId));
+
+    // Close modal
+    setShowModal(false);
+    setViewInclusion(null);
+    setIsViewMode(false);
+  };
+  // const handleCreateInclusion = (inclusion) => {
+  //   dispatch(
+  //     createInclusion({
+  //       organizationId,
+  //       payload: inclusion,
+  //     }),
+  //   );
+  // };
+
+  const confirmDisable = async () => {
+    const updatedInclusions = inclusions.map((item) =>
+      item.id === selectedInclusionId
+        ? {
+            ...item,
+            status: item.status === "Active" ? "Inactive" : "Active",
+          }
+        : item,
+    );
+
+    await dispatch(
+      updateInclusions({
         organizationId,
-        payload: inclusion,
+        payload: updatedInclusions,
       }),
     );
-    // setInclusions((prev) => [...prev, inclusion]);
-  };
 
-  const confirmDisable = () => {
-    // setInclusions((prev) =>
-    //   prev.map((item) =>
-    //     item.id === selectedInclusionId
-    //       ? {
-    //           ...item,
-    //           status: "Disabled",
-    //         }
-    //       : item,
-    //   ),
-    // );
+    dispatch(fetchInclusions(organizationId));
 
     setShowDisableModal(false);
     setSelectedInclusionId(null);
@@ -207,7 +261,13 @@ const Inclusions = () => {
                             setShowDisableModal(true);
                           }}
                         >
-                          <i className="bi bi-trash text-danger"></i>{" "}
+                          <i
+                            className={
+                              item.status === "Active"
+                                ? "bi bi-slash-circle text-danger"
+                                : "bi bi-check-circle text-success"
+                            }
+                          />
                         </button>
                       </div>
                     </td>
@@ -238,15 +298,27 @@ const Inclusions = () => {
         <div className="category-modal-backdrop">
           <div className="category-modal" style={{ maxWidth: "450px" }}>
             <div className="category-modal-header">
-              <h5>Disable Inclusion</h5>
+              <h5>
+                {inclusions.find((x) => x.id === selectedInclusionId)
+                  ?.status === "Active"
+                  ? "Disable Inclusion"
+                  : "Enable Inclusion"}
+              </h5>
             </div>
 
             <div className="category-modal-body">
-              <p>Are you sure you want to disable this inclusion?</p>
-
-              <p className="text-muted mb-0">
-                Disabled inclusions cannot be assigned to new candidates.
+              <p>
+                Are you sure you want to{" "}
+                {inclusions.find((x) => x.id === selectedInclusionId)
+                  ?.status === "Active"
+                  ? "disable"
+                  : "enable"}{" "}
+                this inclusion?
               </p>
+
+              {/* <p className="text-muted mb-0">
+                Disabled inclusions cannot be assigned to new candidates.
+              </p> */}
             </div>
 
             <div className="category-modal-footer">
@@ -260,8 +332,19 @@ const Inclusions = () => {
                 Cancel
               </button>
 
-              <button className="btn btn-danger" onClick={confirmDisable}>
-                Disable
+              <button
+                className={
+                  inclusions.find((x) => x.id === selectedInclusionId)
+                    ?.status === "Active"
+                    ? "btn btn-danger"
+                    : "btn btn-success"
+                }
+                onClick={confirmDisable}
+              >
+                {inclusions.find((x) => x.id === selectedInclusionId)
+                  ?.status === "Active"
+                  ? "Disable"
+                  : "Enable"}
               </button>
             </div>
           </div>
