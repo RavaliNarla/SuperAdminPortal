@@ -1,12 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../../css/Inclusions.css";
 import ExclusionModal from "./ExclusionModal";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import {
+  fetchExclusions,
+  createExclusion,
+  updateExclusions,
+} from "../Thunk/eligibilityThunk";
 
 const Exclusions = () => {
-
   const [search, setSearch] = useState("");
 
-  const [exclusions, setExclusions] = useState([]);
+  const dispatch = useAppDispatch();
+
+  const organizationId = useAppSelector(
+    (state) => state.eligibility.selectedOrganization,
+  );
+
+  const exclusions = useAppSelector(
+    (state) => state.eligibility.exclusions || [],
+  );
+
+  useEffect(() => {
+    if (organizationId) {
+      dispatch(fetchExclusions(organizationId));
+    }
+  }, [dispatch, organizationId]);
 
   const [showModal, setShowModal] = useState(false);
   const [viewExclusion, setViewExclusion] = useState(null);
@@ -16,24 +35,69 @@ const Exclusions = () => {
   const [selectedExclusionId, setSelectedExclusionId] = useState(null);
 
   const filteredData = exclusions.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
+    item.name.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const handleCreateExclusion = (exclusion) => {
-    setExclusions((prev) => [...prev, exclusion]);
-  };
-
-  const confirmDisable = () => {
-    setExclusions((prev) =>
-      prev.map((item) =>
-        item.id === selectedExclusionId
+  const handleCreateExclusion = async (newExclusion) => {
+    if (!viewExclusion) {
+      if (exclusions.length === 0) {
+        await dispatch(
+          createExclusion({
+            organizationId,
+            payload: newExclusion,
+          }),
+        );
+      } else {
+        await dispatch(
+          updateExclusions({
+            organizationId,
+            payload: [...exclusions, newExclusion],
+          }),
+        );
+      }
+    } else {
+      const updatedExclusions = exclusions.map((item) =>
+        item.id === viewExclusion.id
           ? {
               ...item,
-              status: "Disabled",
+              ...newExclusion,
+              id: viewExclusion.id,
             }
-          : item
-      )
+          : item,
+      );
+
+      await dispatch(
+        updateExclusions({
+          organizationId,
+          payload: updatedExclusions,
+        }),
+      );
+    }
+
+    // dispatch(fetchExclusions(organizationId));
+
+    setShowModal(false);
+    setViewExclusion(null);
+    setIsViewMode(false);
+  };
+  const confirmDisable = async () => {
+    const updatedExclusions = exclusions.map((item) =>
+      item.id === selectedExclusionId
+        ? {
+            ...item,
+            status: item.status === "Active" ? "Inactive" : "Active",
+          }
+        : item,
     );
+
+    await dispatch(
+      updateExclusions({
+        organizationId,
+        payload: updatedExclusions,
+      }),
+    );
+
+    dispatch(fetchExclusions(organizationId));
 
     setShowDisableModal(false);
     setSelectedExclusionId(null);
@@ -44,14 +108,8 @@ const Exclusions = () => {
       <span
         className="badge"
         style={{
-          background:
-            type === "Reject Immediately"
-              ? "#FDECEC"
-              : "#FFF3CD",
-          color:
-            type === "Reject Immediately"
-              ? "#C0392B"
-              : "#8A6D3B",
+          background: type === "Reject Immediately" ? "#FDECEC" : "#FFF3CD",
+          color: type === "Reject Immediately" ? "#C0392B" : "#8A6D3B",
           padding: "8px 12px",
           borderRadius: "20px",
           fontWeight: 600,
@@ -64,250 +122,203 @@ const Exclusions = () => {
 
   return (
     <div className="inclusion-page">
+      {/* Header */}
 
-  {/* Header */}
+      <div className="inclusion-header">
+        <div>
+          <h3 className="page-title">Exclusions</h3>
 
-  <div className="inclusion-header">
+          <p className="page-subtitle">
+            Configure exclusion rules like Blacklisted, Medical Unfit, Criminal
+            Cases and other rejection rules.
+          </p>
+        </div>
 
-    <div>
+        <button
+          className="btn btn-save"
+          onClick={() => {
+            setViewExclusion(null);
+            setIsViewMode(false);
+            setShowModal(true);
+          }}
+        >
+          <i className="bi bi-plus-lg me-2"></i>
+          Add Exclusion
+        </button>
+      </div>
 
-      <h3 className="page-title">
-        Exclusions
-      </h3>
+      {/* Info Card */}
 
-      <p className="page-subtitle">
-        Configure exclusion rules like Blacklisted, Medical Unfit,
-        Criminal Cases and other rejection rules.
-      </p>
+      <div className="info-card mb-4">
+        <i className="bi bi-info-circle-fill"></i>
 
-    </div>
+        <span>
+          Exclusion rules are evaluated before eligibility validation. Once
+          published, these rules become version controlled.
+        </span>
+      </div>
 
-    <button
-      className="btn btn-save"
-      onClick={() => {
-        setViewExclusion(null);
-        setIsViewMode(false);
-        setShowModal(true);
-      }}
-    >
-      <i className="bi bi-plus-lg me-2"></i>
-      Add Exclusion
-    </button>
+      {/* Search */}
 
-  </div>
+      <div className="search-wrapper mb-4">
+        <i className="bi bi-search"></i>
 
-  {/* Info Card */}
+        <input
+          type="text"
+          className="form-control search-input"
+          placeholder="Search Exclusion..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
-  <div className="info-card mb-4">
+      {/* Table */}
 
-    <i className="bi bi-info-circle-fill"></i>
+      <div className="table-card">
+        <div className="table-responsive">
+          <table className="table inclusion-table align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Exclusion Name</th>
 
-    <span>
-      Exclusion rules are evaluated before eligibility validation.
-      Once published, these rules become version controlled.
-    </span>
+                <th>Action Type</th>
 
-  </div>
+                <th>Status</th>
 
-  {/* Search */}
-
-  <div className="search-wrapper mb-4">
-
-    <i className="bi bi-search"></i>
-
-    <input
-      type="text"
-      className="form-control search-input"
-      placeholder="Search Exclusion..."
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
-    />
-
-  </div>
-
-  {/* Table */}
-
-  <div className="table-card">
-
-    <div className="table-responsive">
-
-      <table className="table inclusion-table align-middle mb-0">
-
-        <thead>
-
-          <tr>
-
-            <th>Exclusion Name</th>
-
-            <th>Action Type</th>
-
-            <th>Status</th>
-
-            <th className="text-center">
-              Actions
-            </th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          {filteredData.length > 0 ? (
-
-            filteredData.map((item) => (
-
-              <tr key={item.id}>
-
-                <td className="fw-semibold">
-
-                  {item.name}
-
-                </td>
-
-                <td>
-
-                  {getActionBadge(item.actionType)}
-
-                </td>
-
-                <td>
-
-                  <span
-                    className={
-                      item.status === "Active"
-                        ? "status-active"
-                        : "status-disabled"
-                    }
-                  >
-                    {item.status}
-                  </span>
-
-                </td>
-
-                <td>
-
-                  <div className="d-flex justify-content-center gap-2">
-
-                    {/* View */}
-
-                    <button
-                      className="btn btn-sm btn-light"
-                      title="View"
-                      onClick={() => {
-                        setViewExclusion(item);
-                        setIsViewMode(true);
-                        setShowModal(true);
-                      }}
-                    >
-                      <i className="bi bi-eye text-primary"></i>
-                    </button>
-
-                    {/* Disable */}
-
-                    {item.status !== "Disabled" && (
-
-                      <button
-                        className="btn btn-sm btn-light"
-                        title="Disable"
-                        onClick={() => {
-                          setSelectedExclusionId(item.id);
-                          setShowDisableModal(true);
-                        }}
-                      >
-                        <i className="bi bi-slash-circle text-warning"></i>
-                      </button>
-
-                    )}
-
-                    {/* Revised Version */}
-
-                    <button
-                      className="btn btn-sm btn-light"
-                      title="Create Revised Version"
-                      onClick={() => {
-                        setViewExclusion(item);
-                        setIsViewMode(false);
-                        setShowModal(true);
-                      }}
-                    >
-                      <i className="bi bi-file-earmark-plus text-success"></i>
-                    </button>
-
-                  </div>
-
-                </td>
-
+                <th className="text-center">Actions</th>
               </tr>
+            </thead>
 
-            ))
+               <tbody>
+              {filteredData.length > 0 ? (
+                filteredData.map((item) => (
+                  <tr key={item.id}>
+                     <td className="fw-semibold">{item.name}</td>
 
-          ) : (
+                    <td>{getActionBadge(item.actionType)}</td>
 
-            <tr>
+                    <td>
+                      <span
+                        className={
+                          item.status === "Active"
+                            ? "status-active"
+                            : "status-disabled"
+                        }
+                      >
+                        {item.status}
+                      </span>
+                    </td>
 
-              <td
-                colSpan="4"
-                className="text-center py-5"
-              >
+                    <td>
+                      <div className="d-flex justify-content-center gap-2">
+                        <button
+                          type="button"
+                          className="btn btn-light p-0"
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            minWidth: "40px",
+                            minHeight: "40px",
+                          }}
+                          onClick={() => {
+                           setViewExclusion(item);
+                            setIsViewMode(true);
+                            setShowModal(true);
+                          }}
+                        >
+                          <i className="bi bi-eye text-primary"></i>
+                        </button>
 
-                <i
-                  className="bi bi-folder2-open"
-                  style={{
-                    fontSize: 45,
-                    color: "#cbd5e1",
-                  }}
-                ></i>
+                        <button
+                          type="button"
+                          className="btn btn-light p-0"
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            minWidth: "40px",
+                            minHeight: "40px",
+                          }}
+                          onClick={() => {
+                             setViewExclusion(item);
+                            setIsViewMode(false);
+                            setShowModal(true);
+                          }}
+                        >
+                          <i className="bi bi-pencil-square text-success"></i>
+                        </button>
 
-                <h6 className="mt-3">
-                  No Records Found
-                </h6>
+                        <button
+                          type="button"
+                          className="btn btn-light p-0"
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            minWidth: "40px",
+                            minHeight: "40px",
+                          }}
+                          onClick={() => {
+                              setSelectedExclusionId(item.id);
+                            setShowDisableModal(true);
+                          }}
+                        >
+                          <i
+                            className={
+                              item.status === "Active"
+                                ? "bi bi-slash-circle text-danger"
+                                : "bi bi-check-circle text-success"
+                            }
+                          />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center py-5">
+                    <i
+                      className="bi bi-folder2-open"
+                      style={{
+                        fontSize: 45,
+                        color: "#cbd5e1",
+                      }}
+                    ></i>
 
-              </td>
+                    <h6 className="mt-3">No Records Found</h6>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-            </tr>
-
-          )}
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-        {/* Disable Confirmation Modal */}
+      {/* Disable Confirmation Modal */}
 
       {showDisableModal && (
         <div className="category-modal-backdrop">
-
-          <div
-            className="category-modal"
-            style={{ maxWidth: "450px" }}
-          >
-
+          <div className="category-modal" style={{ maxWidth: "450px" }}>
             <div className="category-modal-header">
-
-              <h5>Disable Exclusion</h5>
-
+              <h5>
+                {exclusions.find((x) => x.id === selectedExclusionId)
+                  ?.status === "Active"
+                  ? "Disable Exclusion"
+                  : "Enable Exclusion"}
+              </h5>
             </div>
 
             <div className="category-modal-body">
-
               <p>
-                Are you sure you want to disable this exclusion?
+                Are you sure you want to{" "}
+                {exclusions.find((x) => x.id === selectedExclusionId)
+                  ?.status === "Active"
+                  ? "disable"
+                  : "enable"}{" "}
+                this exclusion?
               </p>
-
-              <p className="text-muted mb-0">
-                Disabled exclusions will no longer be applied for
-                candidate validation.
-              </p>
-
             </div>
 
             <div className="category-modal-footer">
-
               <button
                 className="btn btn-cancel"
                 onClick={() => {
@@ -319,16 +330,21 @@ const Exclusions = () => {
               </button>
 
               <button
-                className="btn btn-danger"
+                className={
+                  exclusions.find((x) => x.id === selectedExclusionId)
+                    ?.status === "Active"
+                    ? "btn btn-danger"
+                    : "btn btn-success"
+                }
                 onClick={confirmDisable}
               >
-                Disable
+                {exclusions.find((x) => x.id === selectedExclusionId)
+                  ?.status === "Active"
+                  ? "Disable"
+                  : "Enable"}
               </button>
-
             </div>
-
           </div>
-
         </div>
       )}
 
@@ -345,7 +361,6 @@ const Exclusions = () => {
         exclusion={viewExclusion}
         isViewMode={isViewMode}
       />
-
     </div>
   );
 };

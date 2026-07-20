@@ -79,7 +79,7 @@ const Inclusions = () => {
     }
 
     // Reload latest data
-    dispatch(fetchInclusions(organizationId));
+    // dispatch(fetchInclusions(organizationId));
 
     // Close modal
     setShowModal(false);

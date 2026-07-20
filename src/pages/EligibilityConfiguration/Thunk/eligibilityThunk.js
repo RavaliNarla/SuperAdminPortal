@@ -98,3 +98,55 @@ export const updateInclusions = createAsyncThunk(
     }
   }
 );
+export const fetchExclusions = createAsyncThunk(
+  "eligibility/fetchExclusions",
+  async (organizationId, { rejectWithValue }) => {
+    try {
+      const response = await eligibilityApiService.getExclusions(
+        organizationId
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
+    }
+  }
+);
+
+export const createExclusion = createAsyncThunk(
+  "eligibility/createExclusion",
+  async ({ organizationId, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await eligibilityApiService.createExclusion(
+        organizationId,
+        payload
+      );
+
+      dispatch(fetchExclusions(organizationId));
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+export const updateExclusions = createAsyncThunk(
+  "eligibility/updateExclusions",
+  async ({ organizationId, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await eligibilityApiService.updateExclusions(
+        organizationId,
+        payload
+      );
+
+      dispatch(fetchExclusions(organizationId));
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);

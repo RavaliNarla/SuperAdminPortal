@@ -1,9 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import {
   fetchVacancyAndMarksReservation,
   fetchCategoriesAndAgeRelaxations,
   fetchInclusions,
   createInclusion,
+  fetchExclusions,
+  createExclusion,
+  updateExclusions,
 } from "../Thunk/eligibilityThunk";
 
 const initialState = {
@@ -14,6 +18,7 @@ const initialState = {
   categoriesAndAgeRelaxations: [],
 
   inclusions: [],
+  exclusions: [],
 
   loading: false,
 
@@ -105,6 +110,50 @@ const eligibilitySlice = createSlice({
       })
 
       .addCase(fetchInclusions.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(fetchExclusions.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(fetchExclusions.fulfilled, (state, action) => {
+        state.loading = false;
+
+        const data = action.payload.data;
+
+        state.exclusions = Array.isArray(data) ? data : data ? [data] : [];
+      })
+
+      .addCase(fetchExclusions.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(createExclusion.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(createExclusion.fulfilled, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(createExclusion.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(updateExclusions.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(updateExclusions.fulfilled, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(updateExclusions.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

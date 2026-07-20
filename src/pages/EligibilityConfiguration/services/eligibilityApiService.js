@@ -66,6 +66,46 @@ const eligibilityApiService = {
       },
     );
   },
+
+  getExclusions(organizationId) {
+    return axios.get(
+      `${API_BASE_URL}/eligibilityConfiguration/exclusions/${organizationId}`,
+      {
+        headers: {
+          Accept: "*/*",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
+
+  createExclusion(organizationId, payload) {
+    return axios.post(
+      `${API_BASE_URL}/eligibilityConfiguration/exclusions/${organizationId}`,
+      payload,
+      {
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
+
+  updateExclusions(organizationId, payload) {
+    return axios.put(
+      `${API_BASE_URL}/eligibilityConfiguration/exclusions/${organizationId}`,
+      payload,
+      {
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
 };
 
 export default eligibilityApiService;

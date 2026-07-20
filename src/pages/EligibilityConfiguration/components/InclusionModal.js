@@ -71,7 +71,7 @@ const InclusionModal = ({
                             {isViewMode
                                 ? "View Inclusion"
                                 : inclusion
-                                    ? "Create Revised Version"
+                                    ? "Edit Inclusion"
                                     : "Create Inclusion"}
                         </h4>
 
