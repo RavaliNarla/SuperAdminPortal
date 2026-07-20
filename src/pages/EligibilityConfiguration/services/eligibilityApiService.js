@@ -106,6 +106,46 @@ const eligibilityApiService = {
       },
     );
   },
+
+  getEducationExperienceValidation(organizationId) {
+    return axios.get(
+      `${API_BASE_URL}/eligibilityConfiguration/education_and_experience_validation/${organizationId}`,
+      {
+        headers: {
+          Accept: "*/*",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
+
+  createEducationExperienceValidation(organizationId, payload) {
+    return axios.post(
+      `${API_BASE_URL}/eligibilityConfiguration/education_and_experience_validation/${organizationId}`,
+      payload,
+      {
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
+
+  updateEducationExperienceValidation(organizationId, payload) {
+    return axios.put(
+      `${API_BASE_URL}/eligibilityConfiguration/education_and_experience_validation/${organizationId}`,
+      payload,
+      {
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
 };
 
 export default eligibilityApiService;

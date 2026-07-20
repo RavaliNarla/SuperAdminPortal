@@ -1,261 +1,211 @@
-import React, { useState } from "react";
-import "../../../css/EducationExperience.css";
+import "../../../css/CategoriesAgeRelaxation.css";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+
+import {
+  fetchEducationExperienceValidation,
+  createEducationExperienceValidation,
+  updateEducationExperienceValidation,
+} from "../Thunk/eligibilityThunk";
 
 const EducationExperience = () => {
+  const dispatch = useAppDispatch();
+
+  const organizationId = useAppSelector(
+    (state) => state.eligibility.selectedOrganization,
+  );
+
+  const validation = useAppSelector(
+    (state) => state.eligibility.educationExperienceValidation,
+  );
+
+  const loading = useAppSelector((state) => state.eligibility.loading);
+
   const [educationEnabled, setEducationEnabled] = useState(false);
   const [experienceEnabled, setExperienceEnabled] = useState(false);
 
-  const [educationPublished, setEducationPublished] = useState(true);
-  const [experiencePublished, setExperiencePublished] = useState(true);
+  // ================= Fetch =================
+  useEffect(() => {
+    if (organizationId) {
+      dispatch(fetchEducationExperienceValidation(organizationId));
+    }
+  }, [dispatch, organizationId]);
+
+  // ================= Populate =================
+  useEffect(() => {
+    if (!validation) return;
+
+    setEducationEnabled(validation.educationValidation ?? false);
+
+    setExperienceEnabled(validation.experienceValidation ?? false);
+  }, [validation]);
+
+  // ================= Cancel =================
+  const handleCancel = () => {
+    if (validation) {
+      setEducationEnabled(validation.educationValidation ?? false);
+
+      setExperienceEnabled(validation.experienceValidation ?? false);
+    } else {
+      setEducationEnabled(false);
+      setExperienceEnabled(false);
+    }
+  };
+
+  // ================= Save =================
+  const handleSave = async () => {
+    const payload = {
+      educationValidation: educationEnabled,
+      experienceValidation: experienceEnabled,
+    };
+
+    try {
+      if (validation) {
+        await dispatch(
+          updateEducationExperienceValidation({
+            organizationId,
+            payload,
+          }),
+        );
+      } else {
+        await dispatch(
+          createEducationExperienceValidation({
+            organizationId,
+            payload,
+          }),
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <div className="education-page">
-
+    <div className="category-page">
       {/* Header */}
-
-      <div className="education-header">
-
+      <div className="category-header">
         <div>
+          <h5 className="section-title">Education & Experience Validation</h5>
 
-          <h3 className="page-title">
-            Education & Experience Validation
-          </h3>
-
-          <p className="page-subtitle">
+          <p className="section-subtitle">
             Configure organization level education and experience validation
-            policies. Every published configuration is version controlled and
-            cannot be modified.
+            policies.
           </p>
-
         </div>
-
       </div>
 
-      {/* Information */}
-
-      <div className="education-info">
-
-        <i className="bi bi-info-circle-fill"></i>
-
-        <div>
-
-          <strong>Version Controlled Configuration</strong>
-
-          <p className="mb-0 mt-1">
-            Only one version can remain active at a time. Creating a new
-            version preserves previous configurations for audit history.
-          </p>
-
-        </div>
-
-      </div>
-
-      {/* ================= Education Validation ================= */}
-
-      <div className="validation-card">
+      {/* Card */}
+      <div className="organization-card">
         <div className="card-body">
+          <div className="row g-4">
+            {/* Education */}
+            <div className="col-lg-6">
+              <div className="setting-item">
+                <div className="d-flex align-items-center">
+                  <div
+                    className="me-3 d-flex align-items-center justify-content-center"
+                    style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 12,
+                      background: "#eef6fc",
+                      color: "#1891d0",
+                      fontSize: 22,
+                    }}
+                  >
+                    <i className="bi bi-mortarboard-fill"></i>
+                  </div>
 
-          <div className="validation-header">
-            <div className="validation-title">
-              <h5>
-                <i className="bi bi-mortarboard-fill me-2 text-primary"></i>
-                Education Validation
-              </h5>
-            </div>
+                  <div>
+                    <h6>Education Validation</h6>
 
-            <span className="version-pill">
-              {educationPublished ? "Version 1" : "Version 2 (Draft)"}
-            </span>
-          </div>
+                    <small>
+                      Enable validation of candidate educational qualifications.
+                    </small>
+                  </div>
+                </div>
 
-          {educationPublished && (
-            <div className="lock-box">
-              <i className="bi bi-lock-fill"></i>
-
-              <div>
-                <strong>Published Version</strong>
-
-                <p className="mb-0">
-                  This configuration is currently published and cannot be edited.
-                  Create a new version whenever changes are required.
-                </p>
+                <div className="form-check form-switch">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={educationEnabled}
+                    onChange={() => setEducationEnabled((prev) => !prev)}
+                  />
+                </div>
               </div>
             </div>
-          )}
 
-          <div className="setting-row">
-            <div>
-              <h6>Enable Education Validation</h6>
+            {/* Experience */}
+            <div className="col-lg-6">
+              <div className="setting-item">
+                <div className="d-flex align-items-center">
+                  <div
+                    className="me-3 d-flex align-items-center justify-content-center"
+                    style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 12,
+                      background: "#eef6fc",
+                      color: "#1891d0",
+                      fontSize: 22,
+                    }}
+                  >
+                    <i className="bi bi-briefcase-fill"></i>
+                  </div>
 
-              <p>
-                Validate educational qualifications during onboarding and
-                document verification.
-              </p>
-            </div>
+                  <div>
+                    <h6>Experience Validation</h6>
 
-            <div className="form-check form-switch">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                checked={educationEnabled}
-                disabled={educationPublished}
-                onChange={() =>
-                  setEducationEnabled(!educationEnabled)
-                }
-              />
-            </div>
-          </div>
+                    <small>
+                      Enable validation of previous employment and work
+                      experience.
+                    </small>
+                  </div>
+                </div>
 
-          <div className="validation-footer">
-
-            {educationPublished ? (
-
-              <button
-                className="btn btn-save"
-                onClick={() => setEducationPublished(false)}
-              >
-                <i className="bi bi-file-earmark-plus me-2"></i>
-                Create New Version
-              </button>
-
-            ) : (
-
-              <div className="d-flex gap-3">
-
-                <button
-                  className="btn btn-save"
-                  onClick={() => setEducationPublished(true)}
-                >
-                  Publish New Version
-                </button>
-
-                <button
-                  className="btn btn-link"
-                  onClick={() => setEducationPublished(true)}
-                >
-                  Cancel
-                </button>
-
+                <div className="form-check form-switch">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={experienceEnabled}
+                    onChange={() => setExperienceEnabled((prev) => !prev)}
+                  />
+                </div>
               </div>
-
-            )}
-
+            </div>
           </div>
 
+          {/* Footer */}
+          <div className="d-flex justify-content-end gap-2 mt-4">
+            <button
+              className="btn btn-cancel"
+              onClick={handleCancel}
+              disabled={loading}
+            >
+              Cancel
+            </button>
+
+            <button
+              className="btn btn-save"
+              onClick={handleSave}
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                  ></span>
+                  Saving...
+                </>
+              ) : (
+                "Save"
+              )}
+            </button>
+          </div>
         </div>
       </div>
-
-      {/* Experience Validation */}
-
-      {/* ================= Experience Validation ================= */}
-
-      <div className="validation-card mt-4">
-        <div className="card-body">
-
-          <div className="validation-header">
-
-            <div className="validation-title">
-              <h5>
-                <i className="bi bi-briefcase-fill me-2 text-success"></i>
-                Experience Validation
-              </h5>
-            </div>
-
-            <span className="version-pill">
-              {experiencePublished ? "Version 1" : "Version 2 (Draft)"}
-            </span>
-
-          </div>
-
-          {experiencePublished && (
-
-            <div className="lock-box">
-
-              <i className="bi bi-lock-fill"></i>
-
-              <div>
-
-                <strong>Published Version</strong>
-
-                <p className="mb-0">
-                  This configuration is currently published and cannot be edited.
-                  Create a new version whenever changes are required.
-                </p>
-
-              </div>
-
-            </div>
-
-          )}
-
-          <div className="setting-row">
-
-            <div>
-
-              <h6>Enable Experience Validation</h6>
-
-              <p>
-                Validate previous employment, work experience and supporting
-                documents before onboarding.
-              </p>
-
-            </div>
-
-            <div className="form-check form-switch">
-
-              <input
-                className="form-check-input"
-                type="checkbox"
-                checked={experienceEnabled}
-                disabled={experiencePublished}
-                onChange={() =>
-                  setExperienceEnabled(!experienceEnabled)
-                }
-              />
-
-            </div>
-
-          </div>
-
-          <div className="validation-footer">
-
-            {experiencePublished ? (
-
-              <button
-                className="btn btn-save"
-                onClick={() => setExperiencePublished(false)}
-              >
-                <i className="bi bi-file-earmark-plus me-2"></i>
-                Create New Version
-              </button>
-
-            ) : (
-
-              <div className="d-flex gap-3">
-
-                <button
-                  className="btn btn-save"
-                  onClick={() => setExperiencePublished(true)}
-                >
-                  Publish New Version
-                </button>
-
-                <button
-                  className="btn btn-link"
-                  onClick={() => setExperiencePublished(true)}
-                >
-                  Cancel
-                </button>
-
-              </div>
-
-            )}
-
-          </div>
-
-        </div>
-      </div>
-
     </div>
   );
 };

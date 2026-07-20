@@ -150,3 +150,62 @@ export const updateExclusions = createAsyncThunk(
     }
   }
 );
+
+export const fetchEducationExperienceValidation = createAsyncThunk(
+  "eligibility/fetchEducationExperienceValidation",
+  async (organizationId, { rejectWithValue }) => {
+    try {
+      const response =
+        await eligibilityApiService.getEducationExperienceValidation(
+          organizationId
+        );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
+    }
+  }
+);
+export const createEducationExperienceValidation = createAsyncThunk(
+  "eligibility/createEducationExperienceValidation",
+  async ({ organizationId, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const response =
+        await eligibilityApiService.createEducationExperienceValidation(
+          organizationId,
+          payload
+        );
+
+      dispatch(fetchEducationExperienceValidation(organizationId));
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
+    }
+  }
+);
+
+export const updateEducationExperienceValidation = createAsyncThunk(
+  "eligibility/updateEducationExperienceValidation",
+  async ({ organizationId, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const response =
+        await eligibilityApiService.updateEducationExperienceValidation(
+          organizationId,
+          payload
+        );
+
+      dispatch(fetchEducationExperienceValidation(organizationId));
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
+    }
+  }
+);

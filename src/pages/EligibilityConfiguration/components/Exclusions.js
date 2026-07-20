@@ -34,9 +34,11 @@ const Exclusions = () => {
   const [showDisableModal, setShowDisableModal] = useState(false);
   const [selectedExclusionId, setSelectedExclusionId] = useState(null);
 
-  const filteredData = exclusions.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase()),
-  );
+const filteredData = exclusions.filter((item) =>
+  (item?.name || "")
+    .toLowerCase()
+    .includes((search || "").toLowerCase())
+);
 
   const handleCreateExclusion = async (newExclusion) => {
     if (!viewExclusion) {

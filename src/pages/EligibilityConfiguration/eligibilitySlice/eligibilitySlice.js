@@ -8,6 +8,9 @@ import {
   fetchExclusions,
   createExclusion,
   updateExclusions,
+  fetchEducationExperienceValidation,
+  createEducationExperienceValidation,
+  updateEducationExperienceValidation,
 } from "../Thunk/eligibilityThunk";
 
 const initialState = {
@@ -19,6 +22,7 @@ const initialState = {
 
   inclusions: [],
   exclusions: [],
+  educationExperienceValidation: null,
 
   loading: false,
 
@@ -156,7 +160,56 @@ const eligibilitySlice = createSlice({
       .addCase(updateExclusions.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+
+      .addCase(fetchEducationExperienceValidation.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(
+        fetchEducationExperienceValidation.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.educationExperienceValidation = action.payload.data;
+        },
+      )
+
+      .addCase(fetchEducationExperienceValidation.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(createEducationExperienceValidation.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(createEducationExperienceValidation.fulfilled, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(
+        createEducationExperienceValidation.rejected,
+        (state, action) => {
+          state.loading = false;
+          state.error = action.payload;
+        },
+      )
+
+      .addCase(updateEducationExperienceValidation.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(updateEducationExperienceValidation.fulfilled, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(
+        updateEducationExperienceValidation.rejected,
+        (state, action) => {
+          state.loading = false;
+          state.error = action.payload;
+        },
+      );
   },
 });
 
