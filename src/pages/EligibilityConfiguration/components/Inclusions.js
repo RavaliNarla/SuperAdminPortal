@@ -2,11 +2,30 @@ import React, { useEffect, useState } from "react";
 import "../../../css/Inclusions.css";
 import InclusionModal from "./InclusionModal";
 
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
+import { fetchInclusions, createInclusion } from "../Thunk/eligibilityThunk";
+
 const Inclusions = () => {
   const [search, setSearch] = useState("");
 
- const [inclusions, setInclusions] = useState([]);
- 
+  //  const [inclusions, setInclusions] = useState([]);
+
+  const dispatch = useAppDispatch();
+
+  const organizationId = useAppSelector(
+    (state) => state.eligibility.selectedOrganization,
+  );
+
+  useEffect(() => {
+    if (organizationId) {
+      dispatch(fetchInclusions(organizationId));
+    }
+  }, [dispatch, organizationId]);
+
+  const inclusions = useAppSelector(
+    (state) => state.eligibility.inclusions || [],
+  );
+  const loading = useAppSelector((state) => state.eligibility.loading);
 
   const [showModal, setShowModal] = useState(false);
   const [viewInclusion, setViewInclusion] = useState(null);
@@ -15,50 +34,48 @@ const Inclusions = () => {
   const [showDisableModal, setShowDisableModal] = useState(false);
   const [selectedInclusionId, setSelectedInclusionId] = useState(null);
 
-  const filteredData = inclusions.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
+  const filteredData = (Array.isArray(inclusions) ? inclusions : []).filter(
+    (item) => (item.name || "").toLowerCase().includes(search.toLowerCase()),
   );
 
   const handleCreateInclusion = (inclusion) => {
-    setInclusions((prev) => [...prev, inclusion]);
+    dispatch(
+      createInclusion({
+        organizationId,
+        payload: inclusion,
+      }),
+    );
+    // setInclusions((prev) => [...prev, inclusion]);
   };
 
   const confirmDisable = () => {
-    setInclusions((prev) =>
-      prev.map((item) =>
-        item.id === selectedInclusionId
-          ? {
-            ...item,
-            status: "Disabled",
-          }
-          : item
-      )
-    );
+    // setInclusions((prev) =>
+    //   prev.map((item) =>
+    //     item.id === selectedInclusionId
+    //       ? {
+    //           ...item,
+    //           status: "Disabled",
+    //         }
+    //       : item,
+    //   ),
+    // );
 
     setShowDisableModal(false);
     setSelectedInclusionId(null);
   };
-  
-  
 
   return (
     <div className="inclusion-page">
-
       {/* Header */}
 
       <div className="inclusion-header">
-
         <div>
-
-          <h3 className="page-title">
-            Inclusions
-          </h3>
+          <h3 className="page-title">Inclusions</h3>
 
           <p className="page-subtitle">
-            Configure inclusion rules like Freedom Fighter, Border Area Candidate
-            and other non-reservation benefits.
+            Configure inclusion rules like Freedom Fighter, Border Area
+            Candidate and other non-reservation benefits.
           </p>
-
         </div>
 
         <button
@@ -72,26 +89,22 @@ const Inclusions = () => {
           <i className="bi bi-plus-lg me-2"></i>
           Add Inclusion
         </button>
-
       </div>
 
       {/* Info Card */}
 
       <div className="info-card mb-4">
-
         <i className="bi bi-info-circle-fill"></i>
 
         <span>
-          No reservation slot consumed — relaxation and/or documents only
-          (e.g. Freedom Fighter). Locked once created.
+          No reservation slot consumed — relaxation and/or documents only (e.g.
+          Freedom Fighter). Locked once created.
         </span>
-
       </div>
 
       {/* Search */}
 
       <div className="search-wrapper mb-4">
-
         <i className="bi bi-search"></i>
 
         <input
@@ -101,61 +114,36 @@ const Inclusions = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-
       </div>
 
       {/* Table */}
 
       <div className="table-card">
-
         <div className="table-responsive">
-
           <table className="table inclusion-table align-middle mb-0">
-
             <thead>
-
               <tr>
-
                 <th>Name</th>
 
                 <th>Age Relaxation</th>
 
                 <th>Status</th>
 
-                <th className="text-center">
-                  Actions
-                </th>
-
+                <th className="text-center">Actions</th>
               </tr>
-
             </thead>
 
             <tbody>
-
               {filteredData.length > 0 ? (
-
                 filteredData.map((item) => (
-
                   <tr key={item.id}>
+                    <td className="fw-semibold">{item.name}</td>
 
-                    <td className="fw-semibold">
-
-                      {item.name}
-
+                    <td>
+                      <span className="age-pill">{item.ageRelaxation}</span>
                     </td>
 
                     <td>
-
-                      <span className="age-pill">
-
-                        {item.ageRelaxation}
-
-                      </span>
-
-                    </td>
-
-                    <td>
-
                       <span
                         className={
                           item.status === "Active"
@@ -165,18 +153,19 @@ const Inclusions = () => {
                       >
                         {item.status}
                       </span>
-
                     </td>
 
                     <td>
-
                       <div className="d-flex justify-content-center gap-2">
-
-                        {/* View */}
-
                         <button
-                          className="btn btn-sm btn-light"
-                          title="View"
+                          type="button"
+                          className="btn btn-light p-0"
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            minWidth: "40px",
+                            minHeight: "40px",
+                          }}
                           onClick={() => {
                             setViewInclusion(item);
                             setIsViewMode(true);
@@ -186,54 +175,47 @@ const Inclusions = () => {
                           <i className="bi bi-eye text-primary"></i>
                         </button>
 
-                        {/* Disable */}
-
-                        {item.status !== "Disabled" && (
-
-                          <button
-                            className="btn btn-sm btn-light"
-                            title="Disable"
-                            onClick={() => {
-                              setSelectedInclusionId(item.id);
-                              setShowDisableModal(true);
-                            }}
-                          >
-                            <i className="bi bi-slash-circle text-warning"></i>
-                          </button>
-
-                        )}
-
-                        {/* Revised Version */}
-
                         <button
-                          className="btn btn-sm btn-light"
-                          title="Create Revised Version"
+                          type="button"
+                          className="btn btn-light p-0"
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            minWidth: "40px",
+                            minHeight: "40px",
+                          }}
                           onClick={() => {
                             setViewInclusion(item);
                             setIsViewMode(false);
                             setShowModal(true);
                           }}
                         >
-                          <i className="bi bi-file-earmark-plus text-success"></i>
+                          <i className="bi bi-pencil-square text-success"></i>
                         </button>
 
+                        <button
+                          type="button"
+                          className="btn btn-light p-0"
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            minWidth: "40px",
+                            minHeight: "40px",
+                          }}
+                          onClick={() => {
+                            setSelectedInclusionId(item.id);
+                            setShowDisableModal(true);
+                          }}
+                        >
+                          <i className="bi bi-trash text-danger"></i>{" "}
+                        </button>
                       </div>
-
                     </td>
-
                   </tr>
-
                 ))
-
               ) : (
-
                 <tr>
-
-                  <td
-                    colSpan="4"
-                    className="text-center py-5"
-                  >
-
+                  <td colSpan="4" className="text-center py-5">
                     <i
                       className="bi bi-folder2-open"
                       style={{
@@ -242,39 +224,25 @@ const Inclusions = () => {
                       }}
                     ></i>
 
-                    <h6 className="mt-3">
-                      No Records Found
-                    </h6>
-
+                    <h6 className="mt-3">No Records Found</h6>
                   </td>
-
                 </tr>
-
               )}
-
             </tbody>
-
           </table>
-
         </div>
-
       </div>
-            {/* Disable Confirmation Modal */}
+      {/* Disable Confirmation Modal */}
 
       {showDisableModal && (
         <div className="category-modal-backdrop">
-          <div
-            className="category-modal"
-            style={{ maxWidth: "450px" }}
-          >
+          <div className="category-modal" style={{ maxWidth: "450px" }}>
             <div className="category-modal-header">
               <h5>Disable Inclusion</h5>
             </div>
 
             <div className="category-modal-body">
-              <p>
-                Are you sure you want to disable this inclusion?
-              </p>
+              <p>Are you sure you want to disable this inclusion?</p>
 
               <p className="text-muted mb-0">
                 Disabled inclusions cannot be assigned to new candidates.
@@ -292,10 +260,7 @@ const Inclusions = () => {
                 Cancel
               </button>
 
-              <button
-                className="btn btn-danger"
-                onClick={confirmDisable}
-              >
+              <button className="btn btn-danger" onClick={confirmDisable}>
                 Disable
               </button>
             </div>

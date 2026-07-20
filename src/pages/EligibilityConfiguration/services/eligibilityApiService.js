@@ -26,6 +26,32 @@ const eligibilityApiService = {
       },
     );
   },
+
+  getInclusions(organizationId) {
+    return axios.get(
+      `${API_BASE_URL}/eligibilityConfiguration/inclusions/${organizationId}`,
+      {
+        headers: {
+          Accept: "*/*",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
+
+createInclusion(organizationId, payload) {
+  return axios.post(
+    `${API_BASE_URL}/eligibilityConfiguration/inclusions/${organizationId}`,
+    payload,
+    {
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+        "X-Client": "Candidate",
+      },
+    }
+  );
+},
 };
 
 export default eligibilityApiService;
