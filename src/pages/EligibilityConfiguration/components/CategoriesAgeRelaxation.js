@@ -83,18 +83,23 @@ const CategoriesAgeRelaxation = () => {
   const [search, setSearch] = useState("");
   const [showDisableModal, setShowDisableModal] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-  const filteredCategories = categories.filter((item) => {
-    const matchesTab =
-      activeTab === "vertical"
-        ? item.type === "Vertical"
-        : item.type === "Horizontal";
+  const filteredCategories = categories
+    .map((item, index) => ({
+      ...item,
+      originalIndex: index,
+    }))
+    .filter((item) => {
+      const matchesTab =
+        activeTab === "vertical"
+          ? item.type === "Vertical"
+          : item.type === "Horizontal";
 
-    const matchesSearch = (item.name || "")
-      .toLowerCase()
-      .includes(search.toLowerCase());
+      const matchesSearch = (item.name || "")
+        .toLowerCase()
+        .includes(search.toLowerCase());
 
-    return matchesTab && matchesSearch;
-  });
+      return matchesTab && matchesSearch;
+    });
 
   const handleCreateCategory = async (categoryPayload) => {
     let updatedCategories = [...categories];
@@ -413,7 +418,7 @@ const CategoriesAgeRelaxation = () => {
                             onClick={() => {
                               setViewCategory({
                                 ...item,
-                                index,
+                                index: item.originalIndex,
                               });
                               setIsViewMode(false);
                               setShowModal(true);
@@ -433,7 +438,7 @@ const CategoriesAgeRelaxation = () => {
                               minHeight: "40px",
                             }}
                             onClick={() => {
-                              setSelectedCategoryId(index);
+                             setSelectedCategoryId(item.originalIndex);
                               setShowDisableModal(true);
                             }}
                           >
