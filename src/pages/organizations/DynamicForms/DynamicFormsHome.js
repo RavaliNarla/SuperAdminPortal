@@ -2,26 +2,18 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAppSelector } from '../../../app/hooks';
 import FormFieldsBuilder from './FormFieldsBuilder';
+import usePortalScreens from './hooks/usePortalScreens';
 
-const PORTALS = [
-  { key: 'recruitment', label: 'Recruitment Portal' },
-  { key: 'candidate', label: 'Candidate Portal' },
-];
+// Fallback labels for known portal keys returned by GET /portalScreens —
+// the API only gives back the raw key (e.g. "recruitment"), not a display label.
+const PORTAL_LABELS = {
+  recruitment: 'Recruitment Portal',
+  candidate: 'Candidate Portal',
+};
 
-const CONFIGURABLE_FORMS = [
-  {
-    key: 'requisition',
-    portal: 'recruitment',
-    title: 'Requisition Form',
-    description: 'Extra fields shown when creating a job requisition in the Recruitment Portal.',
-  },
-  {
-    key: 'jobPosting',
-    portal: 'recruitment',
-    title: 'Job Posting Form',
-    description: 'Extra fields shown when adding a position under a requisition in the Recruitment Portal.',
-  },
-];
+function portalLabel(portalKey) {
+  return PORTAL_LABELS[portalKey] || `${portalKey.charAt(0).toUpperCase()}${portalKey.slice(1)} Portal`;
+}
 
 function formValue(form) {
   return `${form.portal}.${form.key}`;
@@ -32,7 +24,23 @@ export default function DynamicFormsHome() {
   const organization = useAppSelector((state) =>
     state.organizations.items.find((org) => org.id === organizationId)
   );
+  console.log("orga", organization);
   const [selectedFormKey, setSelectedFormKey] = useState('');
+  const { screens, loading: screensLoading, error: screensError } = usePortalScreens();
+
+  const configurableForms = screens.map((screen) => ({
+    id: screen.id,
+    key: screen.screenKey,
+    portal: screen.portal,
+    title: screen.screenName,
+  }));
+
+  const portals = configurableForms.reduce((acc, form) => {
+    if (!acc.some((portal) => portal.key === form.portal)) {
+      acc.push({ key: form.portal, label: portalLabel(form.portal) });
+    }
+    return acc;
+  }, []);
 
   if (!organization) {
     return (
@@ -45,8 +53,10 @@ export default function DynamicFormsHome() {
     );
   }
 
-  const selectedForm = CONFIGURABLE_FORMS.find((form) => formValue(form) === selectedFormKey);
+  const selectedForm = configurableForms.find((form) => formValue(form) === selectedFormKey);
   const organizationKey = organization.code || organization.id;
+  console.log('selectedForm', organization);
+  console.log('DynamicFormsHome: organizationKey', organizationKey, 'selectedFormKey', selectedFormKey);
 
   return (
     <div className="card-bg card-body">
@@ -76,8 +86,9 @@ export default function DynamicFormsHome() {
             onChange={(e) => setSelectedFormKey(e.target.value)}
           >
             <option value="">Choose a form...</option>
-            {PORTALS.map((portal) => {
-              const forms = CONFIGURABLE_FORMS.filter((form) => form.portal === portal.key);
+            {screensLoading && <option disabled>Loading forms…</option>}
+            {portals.map((portal) => {
+              const forms = configurableForms.filter((form) => form.portal === portal.key);
               if (forms.length === 0) return null;
               return (
                 <optgroup key={portal.key} label={portal.label}>
@@ -90,7 +101,10 @@ export default function DynamicFormsHome() {
               );
             })}
           </select>
-          {selectedForm && <p className="text-muted mt-2 mb-0">{selectedForm.description}</p>}
+          {screensError && (
+            <p className="text-danger small mt-2 mb-0">Failed to load forms. Please try again.</p>
+          )}
+          {selectedForm?.description && <p className="text-muted mt-2 mb-0">{selectedForm.description}</p>}
         </div>
       </div>
 
@@ -102,6 +116,7 @@ export default function DynamicFormsHome() {
             organizationKey={organizationKey}
             portal={selectedForm.portal}
             formKey={selectedForm.key}
+            screenId={selectedForm.id}
           />
         </div>
       )}

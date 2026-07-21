@@ -4,6 +4,7 @@ import { fetchFormSchema, saveFormSchema } from '../../../services/formSchemaSer
 const FIELD_TYPES = [
   { label: 'Text', value: 'text' },
   { label: 'Dropdown', value: 'dropdown' },
+  { label: 'Multi-select Dropdown', value: 'multiselect' },
   { label: 'Date', value: 'date' },
   { label: 'Checkbox', value: 'checkbox' },
 ];
@@ -19,13 +20,13 @@ function emptyField(type) {
     field.placeholder = '';
     field.maxLength = 100;
   }
-  if (type === 'dropdown') {
+  if (type === 'dropdown' || type === 'multiselect') {
     field.options = [''];
   }
   return field;
 }
 
-export default function FormFieldsBuilder({ organizationKey, portal, formKey }) {
+export default function FormFieldsBuilder({ organizationKey, portal, formKey, screenId }) {
   const [fields, setFields] = useState([]);
   const [loading, setLoading] = useState(true);
   const [savedAt, setSavedAt] = useState(null);
@@ -34,7 +35,7 @@ export default function FormFieldsBuilder({ organizationKey, portal, formKey }) 
     let cancelled = false;
     setLoading(true);
     setSavedAt(null);
-    fetchFormSchema(organizationKey, portal, formKey).then((schema) => {
+    fetchFormSchema(organizationKey, portal, formKey, screenId).then((schema) => {
       if (cancelled) return;
       setFields(schema?.fields || []);
       setLoading(false);
@@ -43,7 +44,7 @@ export default function FormFieldsBuilder({ organizationKey, portal, formKey }) 
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [organizationKey, portal, formKey]);
+  }, [organizationKey, portal, formKey, screenId]);
 
   const addField = (type) => {
     setFields((prev) => [...prev, emptyField(type)]);
@@ -90,9 +91,7 @@ export default function FormFieldsBuilder({ organizationKey, portal, formKey }) 
 
   const handleSave = async () => {
     const schema = { fields };
-    console.log("organizationKey:", organizationKey, "portal:", portal, "formKey:", formKey);
-    console.log('Saving schema:', schema);
-    await saveFormSchema(organizationKey, portal, formKey, schema);
+    await saveFormSchema(organizationKey, portal, formKey, schema, screenId);
     setSavedAt(new Date());
   };
 
@@ -169,7 +168,7 @@ export default function FormFieldsBuilder({ organizationKey, portal, formKey }) 
             </div>
           )}
 
-          {field.type === 'dropdown' && (
+          {(field.type === 'dropdown' || field.type === 'multiselect') && (
             <div className="mt-3">
               <label className="form-label">Options</label>
               {field.options.map((option, index) => (

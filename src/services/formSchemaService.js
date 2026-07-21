@@ -9,19 +9,29 @@ import formSchemaApiService from './formSchemaApiService';
 // Dynamic Forms UI keeps working end-to-end for local development. Mirrors
 // the fallback pattern in the Recruitment Portal's orgFormSchemaService.js.
 
-export async function fetchFormSchema(organizationKey, portal, formKey) {
+export async function fetchFormSchema(organizationKey, portal, formKey, screenId) {
   try {
-    const schema = await formSchemaApiService.getFormSchema(organizationKey, portal, formKey);
-    if (schema?.fields) return schema;
+    const body = await formSchemaApiService.getFormSchema(organizationKey, screenId);
+    // The backend has been observed returning `fields` as a real array; the
+    // Swagger doc's generic "string" type doesn't match that in practice, but
+    // parse defensively in case some screen/environment does send it as a
+    // JSON-encoded string.
+    const rawFields = body?.data?.fields;
+    const fields = Array.isArray(rawFields)
+      ? rawFields
+      : typeof rawFields === 'string' && rawFields
+        ? JSON.parse(rawFields)
+        : null;
+    if (fields) return { fields };
   } catch {
-    // endpoint not live yet — fall through to mock
+    // endpoint not live yet, or no schema saved for this screen — fall through to mock
   }
   return store.getState().formSchemas.items[organizationKey]?.[portal]?.[formKey] ?? null;
 }
 
-export async function saveFormSchema(organizationKey, portal, formKey, schema) {
+export async function saveFormSchema(organizationKey, portal, formKey, schema, screenId) {
   try {
-    return await formSchemaApiService.saveFormSchema(organizationKey, portal, formKey, schema);
+    return await formSchemaApiService.saveFormSchema(organizationKey, screenId, schema.fields);
   } catch {
     store.dispatch(saveFormSchemaAction({ organizationKey, portal, formKey, schema }));
     return schema;

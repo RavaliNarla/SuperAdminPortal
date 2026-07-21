@@ -4,6 +4,7 @@ export const mapOrganizationList = (organizations = []) => {
   return organizations.map((organization) => ({
     id: organization.id,
     name: organization.name || "",
+    code: organization.code || organization.organizationDetailsJson?.code || "",
     domain: organization.domain || "",
     timeZone: organization.timeZone || "",
     status: organization.status || "Inactive",
