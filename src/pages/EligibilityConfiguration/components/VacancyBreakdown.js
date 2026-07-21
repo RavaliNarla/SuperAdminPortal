@@ -77,16 +77,30 @@ const VacancyBreakdown = () => {
       return;
     }
 
-    const updated = [...categoryCutOffs];
-    updated[index].marks = value;
+    const updated = categoryCutOffs.map((item, i) =>
+      i === index
+        ? {
+            ...item,
+            marks: value,
+          }
+        : item,
+    );
+
     setCategoryCutOffs(updated);
   };
 
-  const handleExamCutOffChange = (index, value) => {
-    const updated = [...examCutOffs];
-    updated[index].marks = value;
-    setExamCutOffs(updated);
-  };
+ const handleExamCutOffChange = (index, value) => {
+  const updated = examCutOffs.map((item, i) =>
+    i === index
+      ? {
+          ...item,
+          marks: value,
+        }
+      : item,
+  );
+
+  setExamCutOffs(updated);
+};
 
   useEffect(() => {
     if (organizationId) {
