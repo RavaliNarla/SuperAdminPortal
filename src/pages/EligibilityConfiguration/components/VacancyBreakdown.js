@@ -1,405 +1,346 @@
 import React, { useState } from "react";
 import "../../../css/VacancyBreakdown.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+
+import {
+  fetchVacancyAndMarksReservation,
+  createVacancyAndMarksReservation,
+  updateVacancyAndMarksReservation,
+} from "../Thunk/eligibilityThunk";
 
 const VacancyBreakdown = () => {
+  const [categoryDistribution, setCategoryDistribution] = useState(true);
+  const [stateDistribution, setStateDistribution] = useState(true);
 
-    const [categoryDistribution, setCategoryDistribution] = useState(true);
-    const [stateDistribution, setStateDistribution] = useState(true);
+  const [examReservation, setExamReservation] = useState(true);
+  const [interviewReservation, setInterviewReservation] = useState(true);
+  const [interviewTotalMarks, setInterviewTotalMarks] = useState("");
 
-    const [examReservation, setExamReservation] = useState(true);
-    const [interviewReservation, setInterviewReservation] = useState(true);
+  const [examCutOffs, setExamCutOffs] = useState([
+    { category: "General", marks: "" },
+    { category: "ST", marks: "" },
+    { category: "OBC", marks: "" },
+    { category: "EWS", marks: "" },
+    { category: "Women", marks: "" },
+    { category: "PWD", marks: "" },
+    { category: "Ex-Servicemen", marks: "" },
+  ]);
 
-    const [examCutOff, setExamCutOff] = useState("40");
+  const [categoryCutOffs, setCategoryCutOffs] = useState([
+    {
+      category: "General",
+      marks: "",
+    },
+    {
+      category: "ST",
+      marks: "",
+    },
+    {
+      category: "OBC",
+      marks: "",
+    },
+    {
+      category: "EWS",
+      marks: "",
+    },
+    {
+      category: "Women",
+      marks: "",
+    },
+    {
+      category: "PWD",
+      marks: "",
+    },
+    {
+      category: "Ex-Servicemen",
+      marks: "",
+    },
+  ]);
 
-    const [categoryCutOffs, setCategoryCutOffs] = useState([
-        {
-            category: "General",
-            marks: "",
-        },
-        {
-            category: "ST",
-            marks: "",
-        },
-        {
-            category: "OBC",
-            marks: "",
-        },
-        {
-            category: "EWS",
-            marks: "",
-        },
-        {
-            category: "Women",
-            marks: "",
-        },
-        {
-            category: "PWD",
-            marks: "",
-        },
-        {
-            category: "Ex-Servicemen",
-            marks: "",
-        },
-    ]);
+  const dispatch = useDispatch();
 
-    const handleCategoryCutOffChange = (
-        index,
-        value
-    ) => {
+  const organizationId = useSelector(
+    (state) => state.eligibility.selectedOrganization,
+  );
 
-        const updated = [...categoryCutOffs];
+  const vacancyReservation = useSelector(
+    (state) => state.eligibility.vacancyReservation,
+  );
 
-        updated[index].marks = value;
+  const loading = useSelector((state) => state.eligibility.loading);
+  const handleCategoryCutOffChange = (index, value) => {
+    if (interviewTotalMarks && Number(value) > Number(interviewTotalMarks)) {
+      alert(
+        `Cut-off marks cannot exceed Total Interview Marks (${interviewTotalMarks})`,
+      );
+      return;
+    }
 
-        setCategoryCutOffs(updated);
+    const updated = [...categoryCutOffs];
+    updated[index].marks = value;
+    setCategoryCutOffs(updated);
+  };
 
+  const handleExamCutOffChange = (index, value) => {
+    const updated = [...examCutOffs];
+    updated[index].marks = value;
+    setExamCutOffs(updated);
+  };
+
+  useEffect(() => {
+    if (organizationId) {
+      dispatch(fetchVacancyAndMarksReservation(organizationId));
+    }
+  }, [dispatch, organizationId]);
+
+  useEffect(() => {
+    if (!vacancyReservation?.data) return;
+
+    const data = vacancyReservation.data;
+
+    setCategoryDistribution(data.categoryDistribution ?? true);
+    setStateDistribution(data.stateDistribution ?? true);
+    setExamReservation(data.examReservation ?? true);
+    setInterviewReservation(data.interviewReservation ?? true);
+    setInterviewTotalMarks(data.interviewTotalMarks ?? "");
+
+    if (Array.isArray(data.examCutOffs)) {
+      setExamCutOffs(data.examCutOffs);
+    }
+
+    if (Array.isArray(data.categoryCutOffs)) {
+      setCategoryCutOffs(data.categoryCutOffs);
+    }
+  }, [vacancyReservation]);
+
+  const handleSave = () => {
+    const payload = {
+      categoryDistribution,
+      stateDistribution,
+      examReservation,
+      interviewReservation,
+      interviewTotalMarks,
+      examCutOffs,
+      categoryCutOffs,
     };
 
-    return (
+    if (vacancyReservation?.data?.id) {
+      dispatch(
+        updateVacancyAndMarksReservation({
+          organizationId,
+          payload,
+        }),
+      );
+    } else {
+      dispatch(
+        createVacancyAndMarksReservation({
+          organizationId,
+          payload,
+        }),
+      );
+    }
+  };
 
-        <div className="vacancy-page">
-                  {/* Header */}
+  return (
+    <div className="vacancy-page">
+      {/* Header */}
 
-        <div className="vacancy-header">
+      <div className="vacancy-header">
+        <div>
+          <h3 className="page-title">Vacancy Breakdown</h3>
+        </div>
+      </div>
 
+      {/* Vacancy Distribution */}
+
+      <div className="card organization-card mb-4">
+        <div className="card-body">
+          <h6
+            className="text-uppercase mb-4"
+            style={{
+              color: "#5b6b82",
+              fontWeight: 600,
+              letterSpacing: ".6px",
+            }}
+          >
+            Vacancy Distribution
+          </h6>
+
+          <div className="setting-item mb-3">
             <div>
+              <h6>Category-wise distribution of vacancies exists</h6>
 
-                <h3 className="page-title">
-                    Vacancy Breakdown
-                </h3>
-
-                <p className="page-subtitle">
-                    Configure vacancy distribution and reservation cut-off
-                    marks for examinations and interviews.
-                </p>
-
+              <small>Enable if vacancies are allocated category wise.</small>
             </div>
 
-        </div>
+            <div className="form-check form-switch">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                checked={categoryDistribution}
+                onChange={() => setCategoryDistribution(!categoryDistribution)}
+              />
+            </div>
+          </div>
 
-        {/* Information */}
+          <div className="setting-item">
+            <div>
+              <h6>State-wise distribution of vacancies exists</h6>
 
-        <div className="info-card mb-4">
-
-            <i className="bi bi-info-circle-fill"></i>
-
-            <span>
-
-                Configure whether vacancy distribution exists by category
-                or state and define reservation cut-off marks.
-
-            </span>
-
-        </div>
-
-        {/* Vacancy Distribution */}
-
-        <div className="card organization-card mb-4">
-
-            <div className="card-body">
-
-                <h6
-                    className="text-uppercase mb-4"
-                    style={{
-                        color: "#5b6b82",
-                        fontWeight: 600,
-                        letterSpacing: ".6px",
-                    }}
-                >
-
-                    Vacancy Distribution
-
-                </h6>
-
-                <div className="setting-item mb-3">
-
-                    <div>
-
-                        <h6>
-
-                            Category-wise distribution of vacancies exists
-
-                        </h6>
-
-                        <small>
-
-                            Enable if vacancies are allocated category wise.
-
-                        </small>
-
-                    </div>
-
-                    <div className="form-check form-switch">
-
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={categoryDistribution}
-                            onChange={() =>
-                                setCategoryDistribution(
-                                    !categoryDistribution
-                                )
-                            }
-                        />
-
-                    </div>
-
-                </div>
-
-                <div className="setting-item">
-
-                    <div>
-
-                        <h6>
-
-                            State-wise distribution of vacancies exists
-
-                        </h6>
-
-                        <small>
-
-                            Enable if vacancies are allocated state wise.
-
-                        </small>
-
-                    </div>
-
-                    <div className="form-check form-switch">
-
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={stateDistribution}
-                            onChange={() =>
-                                setStateDistribution(
-                                    !stateDistribution
-                                )
-                            }
-                        />
-
-                    </div>
-
-                </div>
-
+              <small>Enable if vacancies are allocated state wise.</small>
             </div>
 
+            <div className="form-check form-switch">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                checked={stateDistribution}
+                onChange={() => setStateDistribution(!stateDistribution)}
+              />
+            </div>
+          </div>
         </div>
-                {/* Reservation in Exam & Interview Marks */}
+      </div>
+      {/* Reservation in Exam & Interview Marks */}
 
-        <div className="card organization-card">
+      <div className="card organization-card">
+        <div className="card-body">
+          <h6
+            className="text-uppercase mb-4"
+            style={{
+              color: "#5b6b82",
+              fontWeight: 600,
+              letterSpacing: ".6px",
+            }}
+          >
+            Reservation in Exam & Interview Marks
+          </h6>
 
-            <div className="card-body">
+          {/* Exam Reservation */}
 
-                <h6
-                    className="text-uppercase mb-4"
-                    style={{
-                        color: "#5b6b82",
-                        fontWeight: 600,
-                        letterSpacing: ".6px",
-                    }}
-                >
+          <div className="setting-item">
+            <div>
+              <h6>Allow reservation in exam marks</h6>
 
-                    Reservation in Exam & Interview Marks
+              <small>
+                Enable category-wise reservation while calculating exam cut-off
+                marks.
+              </small>
+            </div>
 
-                </h6>
+            <div className="form-check form-switch">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                checked={examReservation}
+                onChange={() => setExamReservation(!examReservation)}
+              />
+            </div>
+          </div>
 
-                {/* Exam Reservation */}
+          <hr className="my-4" />
 
-                <div className="setting-item">
+          {/* Interview Reservation */}
 
-                    <div>
+          <div className="setting-item">
+            <div>
+              <h6>Allow reservation in interview marks</h6>
 
-                        <h6>
+              <small>
+                Configure interview cut-off marks separately for each
+                reservation category.
+              </small>
+            </div>
 
-                            Allow reservation in exam marks
+            <div className="form-check form-switch">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                checked={interviewReservation}
+                onChange={() => setInterviewReservation(!interviewReservation)}
+              />
+            </div>
+          </div>
 
-                        </h6>
+          <div className="mt-4 ms-5">
+            <div className="row mb-4">
+              <div className="col-md-4">
+                <label className="form-label fw-semibold">
+                  Total Interview Marks
+                </label>
 
-                        <small>
+                <input
+                  type="number"
+                  className="form-control modern-input"
+                  placeholder="Enter Total Marks"
+                  value={interviewTotalMarks}
+                  onChange={(e) => setInterviewTotalMarks(e.target.value)}
+                />
+              </div>
+            </div>
+            {interviewReservation && (
+              <div className="table-responsive">
+                <table className="table category-cutoff-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: "250px" }}>Category</th>
+                      <th style={{ width: "220px" }}>Cut-off Marks</th>
+                    </tr>
+                  </thead>
 
-                            Enable category-wise reservation while calculating
-                            exam cut-off marks.
+                  <tbody>
+                    {categoryCutOffs.map((item, index) => (
+                      <tr key={item.category}>
+                        <td>
+                          <strong>{item.category}</strong>
+                        </td>
 
-                        </small>
-
-                    </div>
-
-                    <div className="form-check form-switch">
-
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={examReservation}
-                            onChange={() =>
-                                setExamReservation(!examReservation)
-                            }
-                        />
-
-                    </div>
-
-                </div>
-
-                {examReservation && (
-
-                    <div
-                        className="mt-3 ms-5"
-                        style={{ maxWidth: "260px" }}
-                    >
-
-                        <label className="form-label">
-
-                            Exam Cut-off Marks
-
-                        </label>
-
-                        <input
+                        <td>
+                          <input
                             type="number"
                             className="form-control modern-input"
-                            value={examCutOff}
+                            placeholder="Enter Marks"
+                            value={item.marks}
                             onChange={(e) =>
-                                setExamCutOff(e.target.value)
+                              handleCategoryCutOffChange(index, e.target.value)
                             }
-                        />
-
-                    </div>
-
-                )}
-
-                <hr className="my-4" />
-
-                {/* Interview Reservation */}
-
-                <div className="setting-item">
-
-                    <div>
-
-                        <h6>
-
-                            Allow reservation in interview marks
-
-                        </h6>
-
-                        <small>
-
-                            Configure interview cut-off marks separately
-                            for each reservation category.
-
-                        </small>
-
-                    </div>
-
-                    <div className="form-check form-switch">
-
-                        <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={interviewReservation}
-                            onChange={() =>
-                                setInterviewReservation(
-                                    !interviewReservation
-                                )
-                            }
-                        />
-
-                    </div>
-
-                </div>
-                                {interviewReservation && (
-
-                    <div className="mt-4 ms-5">
-
-                        <div className="table-responsive">
-
-                            <table className="table category-cutoff-table">
-
-                                <thead>
-
-                                    <tr>
-
-                                        <th style={{ width: "250px" }}>
-                                            Category
-                                        </th>
-
-                                        <th style={{ width: "220px" }}>
-                                            Cut-off Marks
-                                        </th>
-
-                                    </tr>
-
-                                </thead>
-
-                                <tbody>
-
-                                    {categoryCutOffs.map((item, index) => (
-
-                                        <tr key={item.category}>
-
-                                            <td>
-
-                                                <strong>
-                                                    {item.category}
-                                                </strong>
-
-                                            </td>
-
-                                            <td>
-
-                                                <input
-                                                    type="number"
-                                                    className="form-control modern-input"
-                                                    placeholder="Enter Marks"
-                                                    value={item.marks}
-                                                    onChange={(e) =>
-                                                        handleCategoryCutOffChange(
-                                                            index,
-                                                            e.target.value
-                                                        )
-                                                    }
-                                                />
-
-                                            </td>
-
-                                        </tr>
-
-                                    ))}
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-                    </div>
-
-                )}
-
-            </div>
-
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
+      </div>
 
-        {/* Footer */}
+      {/* Footer */}
 
-        <div className="d-flex justify-content-end gap-3 mt-4">
+      <div className="d-flex justify-content-end gap-3 mt-4">
+        <button
+          className="btn btn-cancel"
+          type="button"
+          onClick={() =>
+            dispatch(fetchVacancyAndMarksReservation(organizationId))
+          }
+        >
+          Discard
+        </button>
 
-            <button
-                className="btn btn-cancel"
-                type="button"
-            >
-                Discard
-            </button>
-
-            <button
-                className="btn btn-save"
-                type="button"
-            >
-                Save Settings
-            </button>
-
-        </div>
-
+        <button
+          className="btn btn-save"
+          type="button"
+          onClick={handleSave}
+          disabled={loading}
+        >
+          {loading ? "Saving..." : "Save Settings"}
+        </button>
+      </div>
     </div>
-
-);
+  );
 };
 
 export default VacancyBreakdown;

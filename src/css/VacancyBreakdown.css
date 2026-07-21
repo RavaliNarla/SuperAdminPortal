@@ -1,25 +1,91 @@
+/* ==========================================
+   Interview Category Cut-off Table
+========================================== */
+
 .category-cutoff-table {
-    margin-bottom: 0;
+    width: 100%;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border: 1px solid #edf1f7;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .04);
 }
 
+/* Header */
+
 .category-cutoff-table thead {
-    background: #f8fafc;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef6fc 100%);
 }
 
 .category-cutoff-table th {
-    color: #64748b;
+    padding: 16px 20px;
+    border: none;
+    border-bottom: 1px solid #e7eef7;
+    color: #1891d0;
     font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
-    border-bottom: 1px solid #edf1f7;
-    padding: 14px 16px;
+    letter-spacing: .6px;
 }
 
+/* Body */
+
 .category-cutoff-table td {
+    padding: 18px 20px;
     vertical-align: middle;
-    padding: 14px 16px;
+    border-bottom: 1px solid #edf1f7;
+    background: #fff;
+    transition: all .25s ease;
+}
+
+.category-cutoff-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.category-cutoff-table tbody tr {
+    transition: .25s;
 }
 
 .category-cutoff-table tbody tr:hover {
     background: #f8fbff;
+}
+
+.category-cutoff-table tbody tr:hover td {
+    background: #f8fbff;
+}
+
+/* Category */
+
+.category-cutoff-table td:first-child strong {
+    color: #1f2937;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Input */
+
+.category-cutoff-table .modern-input {
+    height: 42px;
+    border: 1px solid #dbe4ef;
+    border-radius: 10px;
+    transition: .25s;
+    box-shadow: none;
+}
+
+.category-cutoff-table .modern-input:focus {
+    border-color: #1891d0;
+    box-shadow: 0 0 0 .2rem rgba(24, 145, 208, .15);
+}
+
+/* Rounded Header */
+
+.category-cutoff-table thead tr th:first-child {
+    border-top-left-radius: 14px;
+}
+
+.category-cutoff-table thead tr th:last-child {
+    border-top-right-radius: 14px;
 }

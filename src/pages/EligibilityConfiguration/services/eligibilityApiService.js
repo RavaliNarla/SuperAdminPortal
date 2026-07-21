@@ -174,6 +174,46 @@ const eligibilityApiService = {
       },
     );
   },
+
+  getVacancyAndMarksReservation(organizationId) {
+    return axios.get(
+      `${API_BASE_URL}/eligibilityConfiguration/vacancy_and_marks_reservation/${organizationId}`,
+      {
+        headers: {
+          Accept: "*/*",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
+
+  createVacancyAndMarksReservation(organizationId, payload) {
+    return axios.post(
+      `${API_BASE_URL}/eligibilityConfiguration/vacancy_and_marks_reservation/${organizationId}`,
+      payload,
+      {
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
+
+  updateVacancyAndMarksReservation(organizationId, payload) {
+    return axios.put(
+      `${API_BASE_URL}/eligibilityConfiguration/vacancy_and_marks_reservation/${organizationId}`,
+      payload,
+      {
+        headers: {
+          Accept: "*/*",
+          "Content-Type": "application/json",
+          "X-Client": "Candidate",
+        },
+      },
+    );
+  },
 };
 
 export default eligibilityApiService;

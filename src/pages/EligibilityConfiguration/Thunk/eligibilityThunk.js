@@ -247,3 +247,45 @@ export const updateCategories = createAsyncThunk(
     }
   }
 );
+
+export const createVacancyAndMarksReservation = createAsyncThunk(
+  "eligibility/createVacancyAndMarksReservation",
+  async ({ organizationId, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const response =
+        await eligibilityApiService.createVacancyAndMarksReservation(
+          organizationId,
+          payload
+        );
+
+      dispatch(fetchVacancyAndMarksReservation(organizationId));
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
+    }
+  }
+);
+
+export const updateVacancyAndMarksReservation = createAsyncThunk(
+  "eligibility/updateVacancyAndMarksReservation",
+  async ({ organizationId, payload }, { dispatch, rejectWithValue }) => {
+    try {
+      const response =
+        await eligibilityApiService.updateVacancyAndMarksReservation(
+          organizationId,
+          payload
+        );
+
+      dispatch(fetchVacancyAndMarksReservation(organizationId));
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || error.message
+      );
+    }
+  }
+);

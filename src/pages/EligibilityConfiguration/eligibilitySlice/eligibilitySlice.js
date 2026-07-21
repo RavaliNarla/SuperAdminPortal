@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import {
   fetchVacancyAndMarksReservation,
+  createVacancyAndMarksReservation,
+  updateVacancyAndMarksReservation,
   fetchCategoriesAndAgeRelaxations,
   fetchInclusions,
   createInclusion,
@@ -234,6 +236,31 @@ const eligibilitySlice = createSlice({
       })
 
       .addCase(updateCategories.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(createVacancyAndMarksReservation.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(createVacancyAndMarksReservation.fulfilled, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(createVacancyAndMarksReservation.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(updateVacancyAndMarksReservation.pending, (state) => {
+        state.loading = true;
+      })
+
+      .addCase(updateVacancyAndMarksReservation.fulfilled, (state) => {
+        state.loading = false;
+      })
+
+      .addCase(updateVacancyAndMarksReservation.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
