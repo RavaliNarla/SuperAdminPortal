@@ -56,8 +56,13 @@ const CategoriesAgeRelaxation = () => {
   const loading = useAppSelector((state) => state.eligibility.loading);
 
   useEffect(() => {
+    if (organizationId) {
+      dispatch(fetchCategoriesAndAgeRelaxations(organizationId));
+    }
+  }, [dispatch, organizationId]);
+
+  useEffect(() => {
     if (!eligibilityData) return;
-    console.log(eligibilityData);
 
     if (eligibilityData.settings) {
       setSettings({
@@ -90,57 +95,56 @@ const CategoriesAgeRelaxation = () => {
 
     return matchesTab && matchesSearch;
   });
+
   const handleCreateCategory = async (categoryPayload) => {
-    let updatedCategories;
+    let updatedCategories = [...categories];
 
     if (viewCategory) {
-      updatedCategories = categories.map((item) =>
-        item.id === viewCategory.id
-          ? {
-              ...item,
-              ...categoryPayload,
-              id: viewCategory.id,
-            }
-          : item,
-      );
-    } else {
-      updatedCategories = [...categories, categoryPayload];
-    }
+      updatedCategories[viewCategory.index] = {
+        ...updatedCategories[viewCategory.index],
+        ...categoryPayload,
+      };
 
-    const payload = {
-      settings,
-      categories: updatedCategories,
-    };
-
-    if (viewCategory) {
       await dispatch(
         updateCategories({
           organizationId,
-          payload,
+          payload: {
+            settings,
+            categories: updatedCategories,
+          },
         }),
       );
     } else {
+      updatedCategories.push(categoryPayload);
+
       await dispatch(
         createCategory({
           organizationId,
-          payload,
+          payload: {
+            settings,
+            categories: updatedCategories,
+          },
         }),
       );
     }
+
+    dispatch(fetchCategoriesAndAgeRelaxations(organizationId));
 
     setShowModal(false);
     setViewCategory(null);
     setIsViewMode(false);
   };
+
   const confirmDisable = async () => {
-    const updatedCategories = categories.map((item) =>
-      item.id === selectedCategoryId
-        ? {
-            ...item,
-            status: item.status === "Active" ? "Inactive" : "Active",
-          }
-        : item,
-    );
+    const updatedCategories = [...categories];
+
+    updatedCategories[selectedCategoryId] = {
+      ...updatedCategories[selectedCategoryId],
+      status:
+        updatedCategories[selectedCategoryId].status === "Active"
+          ? "Inactive"
+          : "Active",
+    };
 
     await dispatch(
       updateCategories({
@@ -158,6 +162,37 @@ const CategoriesAgeRelaxation = () => {
     setSelectedCategoryId(null);
   };
 
+  //   const handleCreateCategory = (category) => {
+  //     setCategories((prev) => [...prev, category]);
+  //   };
+
+  //   const handleDisable = (id) => {
+  //     setCategories((prev) =>
+  //       prev.map((item) =>
+  //         item.id === id
+  //           ? {
+  //               ...item,
+  //               status: item.status === "Active" ? "Inactive" : "Active",
+  //             }
+  //           : item,
+  //       ),
+  //     );
+  //   };
+  //   const confirmDisable = () => {
+  //     setCategories((prev) =>
+  //       prev.map((category) =>
+  //         category.id === selectedCategoryId
+  //           ? {
+  //               ...category,
+  //               status: "Disabled",
+  //             }
+  //           : category,
+  //       ),
+  //     );
+
+  //     setShowDisableModal(false);
+  //     setSelectedCategoryId(null);
+  //   };
   return (
     <div className="category-page">
       {/* ================= Header ================= */}
@@ -169,14 +204,7 @@ const CategoriesAgeRelaxation = () => {
             relaxation rules.
           </p>
         </div>
-        <button
-          className="btn btn-save"
-          onClick={() => {
-            setViewCategory(null);
-            setIsViewMode(false);
-            setShowModal(true);
-          }}
-        >
+        <button className="btn btn-save" onClick={() => setShowModal(true)}>
           <i className="bi bi-plus-lg me-2"></i>
           Add Category
         </button>
@@ -331,8 +359,8 @@ const CategoriesAgeRelaxation = () => {
               </thead>
               <tbody>
                 {filteredCategories.length > 0 ? (
-                  filteredCategories.map((item) => (
-                    <tr key={item.id}>
+                  filteredCategories.map((item, index) => (
+                    <tr key={index}>
                       <td>
                         <div className="fw-semibold">{item.name}</div>
                       </td>
@@ -383,7 +411,10 @@ const CategoriesAgeRelaxation = () => {
                               minHeight: "40px",
                             }}
                             onClick={() => {
-                              setViewCategory(item);
+                              setViewCategory({
+                                ...item,
+                                index,
+                              });
                               setIsViewMode(false);
                               setShowModal(true);
                             }}
@@ -402,7 +433,7 @@ const CategoriesAgeRelaxation = () => {
                               minHeight: "40px",
                             }}
                             onClick={() => {
-                              setSelectedCategoryId(item.id);
+                              setSelectedCategoryId(index);
                               setShowDisableModal(true);
                             }}
                           >
