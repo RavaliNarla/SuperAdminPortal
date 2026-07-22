@@ -1,44 +1,42 @@
 /* ==========================================
-   Interview Category Cut-off Table
+   Premium Interview Cut-off Table
 ========================================== */
 
 .category-cutoff-table {
     width: 100%;
-    margin: 0;
     border-collapse: separate;
     border-spacing: 0;
-    background: #fff;
-    border: 1px solid #edf1f7;
-    border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(15, 23, 42, .04);
+    background: #fff;
+    border: 1px solid #e6eef8;
+    border-radius: 18px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, .06);
 }
 
 /* Header */
 
 .category-cutoff-table thead {
-    background: linear-gradient(180deg, #f8fbff 0%, #eef6fc 100%);
+    background: linear-gradient(135deg, #1891d0 0%, #35b3f3 100%);
 }
 
 .category-cutoff-table th {
-    padding: 16px 20px;
-    border: none;
-    border-bottom: 1px solid #e7eef7;
-    color: #1891d0;
+    padding: 18px 24px;
+    color: #fff;
     font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .6px;
+    letter-spacing: .8px;
+    border: none;
 }
 
 /* Body */
 
 .category-cutoff-table td {
-    padding: 18px 20px;
+    padding: 18px 24px;
+    border-bottom: 1px solid #edf2f8;
     vertical-align: middle;
-    border-bottom: 1px solid #edf1f7;
     background: #fff;
-    transition: all .25s ease;
+    transition: .25s ease;
 }
 
 .category-cutoff-table tbody tr:last-child td {
@@ -46,46 +44,87 @@
 }
 
 .category-cutoff-table tbody tr {
-    transition: .25s;
-}
-
-.category-cutoff-table tbody tr:hover {
-    background: #f8fbff;
+    transition: all .25s;
 }
 
 .category-cutoff-table tbody tr:hover td {
-    background: #f8fbff;
+    background: #f7fbff;
 }
 
-/* Category */
+/* Zebra */
 
-.category-cutoff-table td:first-child strong {
-    color: #1f2937;
-    font-size: 14px;
+.category-cutoff-table tbody tr:nth-child(even) td {
+    background: #fcfdff;
+}
+
+/* Category Cell */
+
+.category-cutoff-table td:first-child {
     font-weight: 600;
+    color: #1e293b;
+}
+
+/* Category Badge */
+
+.category-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+}
+
+.category-name::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: #1891d0;
+    border-radius: 50%;
 }
 
 /* Input */
 
 .category-cutoff-table .modern-input {
-    height: 42px;
-    border: 1px solid #dbe4ef;
-    border-radius: 10px;
+    width: 170px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid #d7e3ef;
+    background: #fbfdff;
     transition: .25s;
-    box-shadow: none;
+    font-weight: 600;
+    text-align: center;
+}
+
+.category-cutoff-table .modern-input:hover {
+    border-color: #1891d0;
 }
 
 .category-cutoff-table .modern-input:focus {
     border-color: #1891d0;
-    box-shadow: 0 0 0 .2rem rgba(24, 145, 208, .15);
+    background: #fff;
+    box-shadow: 0 0 0 .2rem rgba(24,145,208,.15);
 }
 
 /* Rounded Header */
 
 .category-cutoff-table thead tr th:first-child {
-    border-top-left-radius: 14px;
+    border-top-left-radius: 18px;
 }
 
 .category-cutoff-table thead tr th:last-child {
-    border-top-right-radius: 14px;
+    border-top-right-radius: 18px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+.category-cutoff-table th,
+.category-cutoff-table td{
+    padding:14px;
+}
+
+.category-cutoff-table .modern-input{
+    width:100%;
+}
+
 }
