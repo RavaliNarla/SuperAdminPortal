@@ -63,11 +63,11 @@ function App() {
           <Route path="exclusions" element={<Exclusions />} />
           <Route path="vacancy-breakdown" element={<VacancyBreakdown />} />
         </Route>
-        <Route path="/validation-workflow" element={<ValidationWorkflow />} />
-          <Route
+        {/* <Route path="/validation-workflow" element={<ValidationWorkflow />} /> */}
+          {/* <Route
             path="/eligibility-overview"
             element={<EligibilityOverview />}
-        />
+        /> */}
 
 
         <Route

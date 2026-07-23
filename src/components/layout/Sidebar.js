@@ -40,21 +40,21 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
       icon: "bi-gear",
       path: "/site-configuration",
     },
-    {
-      name: "Overview",
-      icon: "bi bi-speedometer2",
-      path: "/eligibility-overview",
-    },
+    // {
+    //   name: "Overview",
+    //   icon: "bi bi-speedometer2",
+    //   path: "/eligibility-overview",
+    // },
     {
       name: "Eligibility Configuration",
       icon: "bi bi-card-checklist",
        path: "/eligibility-configuration/categories",
     },
-    {
-      name: "Validation Workflow",
-      icon: "bi bi-bar-chart-line",
-      path: "/validation-workflow",
-    },
+    // {
+    //   name: "Validation Workflow",
+    //   icon: "bi bi-bar-chart-line",
+    //   path: "/validation-workflow",
+    // },
   ];
 
   return (
