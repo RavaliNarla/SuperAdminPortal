@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "../../../css/CategoryModal.css";
+import FieldListEditor from "../../organizations/DynamicForms/FieldListEditor";
+
+const INCLUSION_FIELD_TYPES = [
+    { label: "Text", value: "text" },
+    { label: "Date", value: "date" },
+    { label: "File Upload", value: "file" },
+    { label: "Dropdown", value: "dropdown" },
+];
 
 const InclusionModal = ({
     show,
@@ -11,8 +19,8 @@ const InclusionModal = ({
     const [formData, setFormData] = useState({
         name: "",
         ageRelaxation: "",
-        documents: "",
         description: "",
+        fields: [],
     });
 
     useEffect(() => {
@@ -21,15 +29,15 @@ const InclusionModal = ({
                 name: inclusion.name || "",
                 ageRelaxation:
                     inclusion.ageRelaxation?.replace(" Years", "") || "",
-                documents: inclusion.documents || "",
                 description: inclusion.description || "",
+                fields: inclusion.fields || [],
             });
         } else {
             setFormData({
                 name: "",
                 ageRelaxation: "",
-                documents: "",
                 description: "",
+                fields: [],
             });
         }
     }, [inclusion, show]);
@@ -48,8 +56,8 @@ const InclusionModal = ({
             id: Date.now(),
             name: formData.name,
             ageRelaxation: `${formData.ageRelaxation} Years`,
-            documents: formData.documents,
             description: formData.description,
+            fields: formData.fields,
             status: "Active",
         };
 
@@ -143,24 +151,6 @@ const InclusionModal = ({
                     <div className="mb-3">
 
                         <label className="form-label">
-                            Required Documents
-                        </label>
-
-                        <input
-                            className="form-control modern-input"
-                            value={formData.documents}
-                            placeholder="Enter Required Documents"
-                            disabled={isViewMode}
-                            onChange={(e) =>
-                                handleChange("documents", e.target.value)
-                            }
-                        />
-
-                    </div>
-
-                    <div>
-
-                        <label className="form-label">
                             Description
                         </label>
 
@@ -175,6 +165,26 @@ const InclusionModal = ({
                             }
                         />
 
+                    </div>
+
+                    {/* Fields to collect from the candidate when they claim this inclusion.
+                        Reuses the same field-list editor as Dynamic Forms screens
+                        (FormFieldsBuilder.js) instead of a separate implementation. */}
+                    <div>
+                        <label className="form-label">
+                            Fields to Collect from Candidate
+                        </label>
+                        <p className="text-muted small mb-2">
+                            Shown only in the Candidate Portal, only after a candidate checks this
+                            inclusion on their application. The Recruiter Portal never sees these.
+                        </p>
+
+                        <FieldListEditor
+                            fields={formData.fields}
+                            onChange={(fields) => setFormData((prev) => ({ ...prev, fields }))}
+                            fieldTypes={INCLUSION_FIELD_TYPES}
+                            disabled={isViewMode}
+                        />
                     </div>
 
                 </div>
