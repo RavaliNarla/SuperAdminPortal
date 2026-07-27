@@ -9,10 +9,12 @@ import PasswordPolicySection from "./components/PasswordPolicySection";
 import SessionPolicySection from "./components/SessionPolicySection";
 import LoginPreview from "./components/LoginPreview";
 import AuthenticationFooter from "./AuthenticationFooter";
+import "../../css/AuthenticationConfiguration.css";
 
 const AuthenticationConfiguration = () => {
   const initialState = {
     portal: "",
+
     candidateLogin: {
       username: true,
       email: false,
@@ -112,60 +114,77 @@ const AuthenticationConfiguration = () => {
   };
 
   return (
-    <Container fluid className="py-4">
-      <Row>
-        <Col lg={8}>
-          <Card className="auth-config-card">
-            <Card.Header>
-              <h4>Authentication Configuration</h4>
-            </Card.Header>
-
-            <Card.Body>
-              <div className="portal-selection-card mb-4">
-
-                <div className="portal-selection-header">
-
-                  <div>
-
-                    <h5>Select Portal</h5>
-
-                    <p>
-                      Choose which portal you want to configure.
-                    </p>
-
+    <Container fluid className="authentication-page py-4 px-lg-4 px-3">
+      <Row className="g-4">
+        {/* Left Section */}
+        <Col xl={8} lg={8}>
+          <Card className="auth-config-card shadow-sm border-0">
+            <Card.Header className="authentication-header border-0">
+              <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+                {/* Left Side */}
+                <div className="d-flex align-items-center gap-3">
+                  <div className="header-icon">
+                    <i className="bi bi-shield-lock-fill"></i>
                   </div>
 
+                  <div>
+                    <h2 className="authentication-title mb-1">
+                      Authentication Configuration
+                    </h2>
+
+                    <p className="authentication-subtitle mb-0">
+                      Configure login methods, security policies, password
+                      policies, two-factor authentication, OTP settings, and
+                      session management for your portals.
+                    </p>
+                  </div>
                 </div>
 
-                <Form.Select
-                  className="portal-select"
-                  value={config.portal}
-                  onChange={(e) =>
-                    setConfig({
-                      ...config,
-                      portal: e.target.value,
-                    })
-                  }
-                >
-                  <option value="">
-                    Select Portal
-                  </option>
-
-                  <option value="candidate">
-                    Candidate Portal
-                  </option>
-
-                  <option value="recruitment">
-                    Recruitment Portal
-                  </option>
-
-                  <option value="both">
-                    Candidate + Recruitment
-                  </option>
-
-                </Form.Select>
-
+              
               </div>
+            </Card.Header>
+
+            <Card.Body className="p-4">
+              {/* Portal Selection */}
+
+              <Card className="border-0 shadow-sm mb-4">
+                <Card.Body>
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                      <h5 className="fw-bold mb-1">Select Portal</h5>
+
+                      <small className="text-muted">
+                        Choose the portal whose authentication settings you want
+                        to configure.
+                      </small>
+                    </div>
+                  </div>
+
+                  <Form.Group>
+                    <Form.Label className="fw-semibold">Portal</Form.Label>
+
+                    <Form.Select
+                      className="portal-select"
+                      value={config.portal}
+                      onChange={(e) =>
+                        setConfig({
+                          ...config,
+                          portal: e.target.value,
+                        })
+                      }
+                    >
+                      <option value="">Select Portal</option>
+
+                      <option value="candidate">Candidate Portal</option>
+
+                      <option value="recruitment">Recruitment Portal</option>
+
+                      <option value="both">Candidate + Recruitment</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Card.Body>
+              </Card>
+
               {(config.portal === "candidate" || config.portal === "both") && (
                 <CandidateLoginSection
                   data={config.candidateLogin}
@@ -175,7 +194,8 @@ const AuthenticationConfiguration = () => {
                 />
               )}
 
-              {(config.portal === "recruitment" || config.portal === "both") && (
+              {(config.portal === "recruitment" ||
+                config.portal === "both") && (
                 <RecruitmentLoginSection
                   data={config.recruitmentLogin}
                   onChange={(field, value) =>
@@ -183,6 +203,7 @@ const AuthenticationConfiguration = () => {
                   }
                 />
               )}
+
               <TwoFactorSection
                 data={config.twoFactor}
                 onChange={(field, value) =>
@@ -192,9 +213,7 @@ const AuthenticationConfiguration = () => {
 
               <OTPSettingsSection
                 data={config.otp}
-                onChange={(field, value) =>
-                  handleChange("otp", field, value)
-                }
+                onChange={(field, value) => handleChange("otp", field, value)}
               />
 
               <PasswordPolicySection
@@ -210,12 +229,13 @@ const AuthenticationConfiguration = () => {
                   handleChange("session", field, value)
                 }
               />
-
             </Card.Body>
           </Card>
         </Col>
 
-        <Col lg={4} className="d-none d-lg-block">
+        {/* Right Preview */}
+
+        <Col xl={4} lg={4} className="d-none d-lg-block">
           <div className="login-preview-wrapper">
             <LoginPreview config={config} />
           </div>

@@ -1,0 +1,104 @@
+/* ===================================================
+   Authentication Header
+=================================================== */
+
+.authentication-header{
+    background:#ffffff;
+    padding:24px 30px;
+    border-bottom:1px solid #edf2f7;
+}
+
+.header-icon{
+    width:60px;
+    height:60px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#1891d0,#0d6efd);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    box-shadow:0 10px 25px rgba(24,145,208,.25);
+}
+
+.authentication-title{
+    font-size:28px;
+    font-weight:700;
+    color:#0f172a;
+    margin:0;
+}
+
+.authentication-subtitle{
+    font-size:15px;
+    color:#64748b;
+    max-width:650px;
+    line-height:1.6;
+}
+
+.authentication-status{
+    display:flex;
+    align-items:center;
+}
+
+.status-badge{
+    background:#e8f8ee;
+    color:#16a34a;
+    padding:12px 18px;
+    border-radius:30px;
+    font-size:14px;
+    font-weight:600;
+    white-space:nowrap;
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media (max-width:991px){
+
+.authentication-header{
+    padding:20px;
+}
+
+.authentication-title{
+    font-size:24px;
+}
+
+.authentication-subtitle{
+    font-size:14px;
+}
+
+.authentication-status{
+    width:100%;
+}
+
+.status-badge{
+    width:100%;
+    justify-content:center;
+    display:flex;
+}
+
+}
+
+@media (max-width:576px){
+
+.header-icon{
+    width:50px;
+    height:50px;
+    font-size:22px;
+    border-radius:12px;
+}
+
+.authentication-title{
+    font-size:20px;
+}
+
+.authentication-subtitle{
+    font-size:13px;
+}
+
+.authentication-header{
+    padding:18px;
+}
+
+}
