@@ -16,6 +16,8 @@ import VacancyBreakdown from "./pages/EligibilityConfiguration/components/Vacanc
 import ValidationWorkflow from "./pages/ValidationWorkflow/ValidationWorkflow";
 import DynamicFormsHome from "./pages/organizations/DynamicForms/DynamicFormsHome";
 import EligibilityOverview from "./pages/EligibilityOverview/Overview";
+import DashboardList from "../src/pages/dashboard/dashboardOverview";
+
 
 function ProtectedLayout() {
   const loggedIn = useAppSelector((state) => state.auth.loggedIn);
@@ -47,7 +49,10 @@ function App() {
           path="/organizations/:organizationId"
           element={<OrganizationDetails />}
         />
-
+        <Route
+          path="/dashboard"
+          element={<DashboardList />}
+        />
         {/* Eligibility Configuration */}
         <Route
           path="/eligibility-configuration"
@@ -64,11 +69,10 @@ function App() {
           <Route path="vacancy-breakdown" element={<VacancyBreakdown />} />
         </Route>
         {/* <Route path="/validation-workflow" element={<ValidationWorkflow />} /> */}
-          {/* <Route
+        {/* <Route
             path="/eligibility-overview"
             element={<EligibilityOverview />}
         /> */}
-
 
         <Route
           path="/organizations/:organizationId/dynamic-forms"
@@ -79,7 +83,6 @@ function App() {
           element={<AuthenticationConfiguration />}
         />
       </Route>
-      
     </Routes>
   );
 }

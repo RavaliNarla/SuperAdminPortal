@@ -19,7 +19,7 @@ const EmailConfig = ({ data, onChange }) => {
           Email Login Configuration
       ========================================================== */}
 
-      <div className="candidate-config-card">
+      <div className="candidate-config-card mt-4">
 
         <div className="candidate-config-header">
 

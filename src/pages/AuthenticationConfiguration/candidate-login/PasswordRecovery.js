@@ -1,368 +1,368 @@
-// src/pages/organizations/components/candidate-login/PasswordRecovery.js
+// // src/pages/organizations/components/candidate-login/PasswordRecovery.js
 
-import React from "react";
-import { Row, Col, Form } from "react-bootstrap";
-import {
-  FiMail,
-  FiSmartphone,
-  FiHelpCircle,
-  FiRefreshCw,
-  FiClock,
-  FiKey,
-} from "react-icons/fi";
+// import React from "react";
+// import { Row, Col, Form } from "react-bootstrap";
+// import {
+//   FiMail,
+//   FiSmartphone,
+//   FiHelpCircle,
+//   FiRefreshCw,
+//   FiClock,
+//   FiKey,
+// } from "react-icons/fi";
 
-const PasswordRecovery = ({ data, onChange }) => {
-  return (
-    <>
+// const PasswordRecovery = ({ data, onChange }) => {
+//   return (
+//     <>
 
-      {/* ==========================================================
-          Password Recovery
-      ========================================================== */}
+//       {/* ==========================================================
+//           Password Recovery
+//       ========================================================== */}
 
-      <h5 className="candidate-section-title mt-5">
-        Password Recovery
-      </h5>
+//       <h5 className="candidate-section-title mt-5">
+//         Password Recovery
+//       </h5>
 
-      <Row className="g-3">
+//       <Row className="g-3">
 
-        {/* Email OTP */}
+//         {/* Email OTP */}
 
-        <Col lg={6}>
+//         <Col lg={6}>
 
-          <div className="candidate-option-card">
+//           <div className="candidate-option-card">
 
-            <div className="candidate-option-left">
+//             <div className="candidate-option-left">
 
-              <div className="candidate-option-icon">
-                <FiMail />
-              </div>
+//               <div className="candidate-option-icon">
+//                 <FiMail />
+//               </div>
 
-              <div>
+//               <div>
 
-                <h6>Email OTP Recovery</h6>
+//                 <h6>Email OTP Recovery</h6>
 
-                <small>
-                  Recover password using registered email OTP.
-                </small>
+//                 <small>
+//                   Recover password using registered email OTP.
+//                 </small>
 
-              </div>
+//               </div>
 
-            </div>
+//             </div>
 
-            <Form.Check
-              type="switch"
-              checked={data.recoveryEmailOtp || false}
-              onChange={(e) =>
-                onChange(
-                  "recoveryEmailOtp",
-                  e.target.checked
-                )
-              }
-            />
+//             <Form.Check
+//               type="switch"
+//               checked={data.recoveryEmailOtp || false}
+//               onChange={(e) =>
+//                 onChange(
+//                   "recoveryEmailOtp",
+//                   e.target.checked
+//                 )
+//               }
+//             />
 
-          </div>
+//           </div>
 
-        </Col>
+//         </Col>
 
-        {/* Mobile OTP */}
+//         {/* Mobile OTP */}
 
-        <Col lg={6}>
+//         <Col lg={6}>
 
-          <div className="candidate-option-card">
+//           <div className="candidate-option-card">
 
-            <div className="candidate-option-left">
+//             <div className="candidate-option-left">
 
-              <div className="candidate-option-icon">
-                <FiSmartphone />
-              </div>
+//               <div className="candidate-option-icon">
+//                 <FiSmartphone />
+//               </div>
 
-              <div>
+//               <div>
 
-                <h6>Mobile OTP Recovery</h6>
+//                 <h6>Mobile OTP Recovery</h6>
 
-                <small>
-                  Recover password using registered mobile OTP.
-                </small>
+//                 <small>
+//                   Recover password using registered mobile OTP.
+//                 </small>
 
-              </div>
+//               </div>
 
-            </div>
+//             </div>
 
-            <Form.Check
-              type="switch"
-              checked={data.recoveryMobileOtp || false}
-              onChange={(e) =>
-                onChange(
-                  "recoveryMobileOtp",
-                  e.target.checked
-                )
-              }
-            />
+//             <Form.Check
+//               type="switch"
+//               checked={data.recoveryMobileOtp || false}
+//               onChange={(e) =>
+//                 onChange(
+//                   "recoveryMobileOtp",
+//                   e.target.checked
+//                 )
+//               }
+//             />
 
-          </div>
+//           </div>
 
-        </Col>
+//         </Col>
 
-        {/* Security Questions */}
+//         {/* Security Questions */}
 
-        <Col lg={6}>
+//         <Col lg={6}>
 
-          <div className="candidate-option-card">
+//           <div className="candidate-option-card">
 
-            <div className="candidate-option-left">
+//             <div className="candidate-option-left">
 
-              <div className="candidate-option-icon">
-                <FiHelpCircle />
-              </div>
+//               <div className="candidate-option-icon">
+//                 <FiHelpCircle />
+//               </div>
 
-              <div>
+//               <div>
 
-                <h6>Security Questions</h6>
+//                 <h6>Security Questions</h6>
 
-                <small>
-                  Allow recovery using security questions.
-                </small>
+//                 <small>
+//                   Allow recovery using security questions.
+//                 </small>
 
-              </div>
+//               </div>
 
-            </div>
+//             </div>
 
-            <Form.Check
-              type="switch"
-              checked={data.securityQuestions || false}
-              onChange={(e) =>
-                onChange(
-                  "securityQuestions",
-                  e.target.checked
-                )
-              }
-            />
+//             <Form.Check
+//               type="switch"
+//               checked={data.securityQuestions || false}
+//               onChange={(e) =>
+//                 onChange(
+//                   "securityQuestions",
+//                   e.target.checked
+//                 )
+//               }
+//             />
 
-          </div>
+//           </div>
 
-        </Col>
+//         </Col>
 
-        {/* Recovery Link */}
+//         {/* Recovery Link */}
 
-        <Col lg={6}>
+//         <Col lg={6}>
 
-          <div className="candidate-option-card">
+//           <div className="candidate-option-card">
 
-            <div className="candidate-option-left">
+//             <div className="candidate-option-left">
 
-              <div className="candidate-option-icon">
-                <FiRefreshCw />
-              </div>
+//               <div className="candidate-option-icon">
+//                 <FiRefreshCw />
+//               </div>
 
-              <div>
+//               <div>
 
-                <h6>Password Reset Link</h6>
+//                 <h6>Password Reset Link</h6>
 
-                <small>
-                  Send password reset link to registered email.
-                </small>
+//                 <small>
+//                   Send password reset link to registered email.
+//                 </small>
 
-              </div>
+//               </div>
 
-            </div>
+//             </div>
 
-            <Form.Check
-              type="switch"
-              checked={data.resetLink || false}
-              onChange={(e) =>
-                onChange(
-                  "resetLink",
-                  e.target.checked
-                )
-              }
-            />
+//             <Form.Check
+//               type="switch"
+//               checked={data.resetLink || false}
+//               onChange={(e) =>
+//                 onChange(
+//                   "resetLink",
+//                   e.target.checked
+//                 )
+//               }
+//             />
 
-          </div>
+//           </div>
 
-        </Col>
+//         </Col>
 
-      </Row>
+//       </Row>
 
-      {/* ==========================================================
-          Recovery Policy
-      ========================================================== */}
+//       {/* ==========================================================
+//           Recovery Policy
+//       ========================================================== */}
 
-      <h5 className="candidate-section-title mt-5">
-        Recovery Policy
-      </h5>
+//       <h5 className="candidate-section-title mt-5">
+//         Recovery Policy
+//       </h5>
 
-      <Row className="g-3">
+//       <Row className="g-3">
 
-        {/* OTP Expiry */}
+//         {/* OTP Expiry */}
 
-        <Col lg={4}>
+//         <Col lg={4}>
 
-          <Form.Group>
+//           <Form.Group>
 
-            <Form.Label>
+//             <Form.Label>
 
-              OTP Expiry (Minutes)
+//               OTP Expiry (Minutes)
 
-            </Form.Label>
+//             </Form.Label>
 
-            <Form.Control
-              type="number"
-              min="1"
-              value={data.recoveryOtpExpiry || 5}
-              onChange={(e) =>
-                onChange(
-                  "recoveryOtpExpiry",
-                  e.target.value
-                )
-              }
-            />
+//             <Form.Control
+//               type="number"
+//               min="1"
+//               value={data.recoveryOtpExpiry || 5}
+//               onChange={(e) =>
+//                 onChange(
+//                   "recoveryOtpExpiry",
+//                   e.target.value
+//                 )
+//               }
+//             />
 
-          </Form.Group>
+//           </Form.Group>
 
-        </Col>
+//         </Col>
 
-        {/* Max Attempts */}
+//         {/* Max Attempts */}
 
-        <Col lg={4}>
+//         <Col lg={4}>
 
-          <Form.Group>
+//           <Form.Group>
 
-            <Form.Label>
+//             <Form.Label>
 
-              Maximum Attempts
+//               Maximum Attempts
 
-            </Form.Label>
+//             </Form.Label>
 
-            <Form.Control
-              type="number"
-              min="1"
-              value={data.recoveryAttempts || 3}
-              onChange={(e) =>
-                onChange(
-                  "recoveryAttempts",
-                  e.target.value
-                )
-              }
-            />
+//             <Form.Control
+//               type="number"
+//               min="1"
+//               value={data.recoveryAttempts || 3}
+//               onChange={(e) =>
+//                 onChange(
+//                   "recoveryAttempts",
+//                   e.target.value
+//                 )
+//               }
+//             />
 
-          </Form.Group>
+//           </Form.Group>
 
-        </Col>
+//         </Col>
 
-        {/* Cooldown */}
+//         {/* Cooldown */}
 
-        <Col lg={4}>
+//         <Col lg={4}>
 
-          <Form.Group>
+//           <Form.Group>
 
-            <Form.Label>
+//             <Form.Label>
 
-              Retry After (Minutes)
+//               Retry After (Minutes)
 
-            </Form.Label>
+//             </Form.Label>
 
-            <Form.Control
-              type="number"
-              min="1"
-              value={data.recoveryCooldown || 15}
-              onChange={(e) =>
-                onChange(
-                  "recoveryCooldown",
-                  e.target.value
-                )
-              }
-            />
+//             <Form.Control
+//               type="number"
+//               min="1"
+//               value={data.recoveryCooldown || 15}
+//               onChange={(e) =>
+//                 onChange(
+//                   "recoveryCooldown",
+//                   e.target.value
+//                 )
+//               }
+//             />
 
-          </Form.Group>
+//           </Form.Group>
 
-        </Col>
+//         </Col>
 
-      </Row>
+//       </Row>
 
-      <Row className="g-3 mt-3">
+//       <Row className="g-3 mt-3">
 
-        {/* Auto Lock */}
+//         {/* Auto Lock */}
 
-        <Col lg={6}>
+//         <Col lg={6}>
 
-          <div className="candidate-option-card">
+//           <div className="candidate-option-card">
 
-            <div className="candidate-option-left">
+//             <div className="candidate-option-left">
 
-              <div className="candidate-option-icon">
-                <FiClock />
-              </div>
+//               <div className="candidate-option-icon">
+//                 <FiClock />
+//               </div>
 
-              <div>
+//               <div>
 
-                <h6>Lock Recovery After Failed Attempts</h6>
+//                 <h6>Lock Recovery After Failed Attempts</h6>
 
-                <small>
-                  Temporarily block recovery after multiple failures.
-                </small>
+//                 <small>
+//                   Temporarily block recovery after multiple failures.
+//                 </small>
 
-              </div>
+//               </div>
 
-            </div>
+//             </div>
 
-            <Form.Check
-              type="switch"
-              checked={data.lockRecovery || false}
-              onChange={(e) =>
-                onChange(
-                  "lockRecovery",
-                  e.target.checked
-                )
-              }
-            />
+//             <Form.Check
+//               type="switch"
+//               checked={data.lockRecovery || false}
+//               onChange={(e) =>
+//                 onChange(
+//                   "lockRecovery",
+//                   e.target.checked
+//                 )
+//               }
+//             />
 
-          </div>
+//           </div>
 
-        </Col>
+//         </Col>
 
-        {/* Force Password Change */}
+//         {/* Force Password Change */}
 
-        <Col lg={6}>
+//         <Col lg={6}>
 
-          <div className="candidate-option-card">
+//           <div className="candidate-option-card">
 
-            <div className="candidate-option-left">
+//             <div className="candidate-option-left">
 
-              <div className="candidate-option-icon">
-                <FiKey />
-              </div>
+//               <div className="candidate-option-icon">
+//                 <FiKey />
+//               </div>
 
-              <div>
+//               <div>
 
-                <h6>Force Password Change</h6>
+//                 <h6>Force Password Change</h6>
 
-                <small>
-                  Require a new password immediately after recovery.
-                </small>
+//                 <small>
+//                   Require a new password immediately after recovery.
+//                 </small>
 
-              </div>
+//               </div>
 
-            </div>
+//             </div>
 
-            <Form.Check
-              type="switch"
-              checked={data.forcePasswordAfterRecovery || false}
-              onChange={(e) =>
-                onChange(
-                  "forcePasswordAfterRecovery",
-                  e.target.checked
-                )
-              }
-            />
+//             <Form.Check
+//               type="switch"
+//               checked={data.forcePasswordAfterRecovery || false}
+//               onChange={(e) =>
+//                 onChange(
+//                   "forcePasswordAfterRecovery",
+//                   e.target.checked
+//                 )
+//               }
+//             />
 
-          </div>
+//           </div>
 
-        </Col>
+//         </Col>
 
-      </Row>
+//       </Row>
 
-    </>
-  );
-};
+//     </>
+//   );
+// };
 
-export default PasswordRecovery;
+// export default PasswordRecovery;

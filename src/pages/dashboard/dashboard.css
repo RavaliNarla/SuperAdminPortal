@@ -1,0 +1,369 @@
+/* ==========================================
+   Dashboard Page
+========================================== */
+
+.dashboard-page {
+    padding: 30px;
+    background: #f5f7fb;
+    min-height: 100vh;
+}
+
+/* ==========================================
+   Header
+========================================== */
+
+.dashboard-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.dashboard-subtitle {
+    color: #6b7280;
+    font-size: 15px;
+    margin: 0;
+}
+
+/* ==========================================
+   Statistics Cards
+========================================== */
+
+.stats-card {
+    border: none;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    transition: .3s ease;
+    overflow: hidden;
+}
+
+.stats-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 35px rgba(0,0,0,.12);
+}
+
+.stats-card .card-body {
+    padding: 22px;
+}
+
+.stats-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.stats-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 26px;
+}
+
+.stats-value {
+    font-size: 34px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 6px;
+}
+
+.stats-title {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 5px;
+}
+
+/* ==========================================
+   Dashboard Cards
+========================================== */
+
+.dashboard-card {
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.06);
+    overflow: hidden;
+    background: #fff;
+}
+
+.dashboard-card .card-header {
+    background: #fff;
+    border-bottom: 1px solid #eef1f5;
+    padding: 18px 22px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.dashboard-card .card-body {
+    padding: 20px;
+}
+
+/* ==========================================
+   Tables
+========================================== */
+
+.table {
+    margin-bottom: 0;
+}
+
+.table thead th {
+    background: #f8fafc;
+    color: #374151;
+    border: none;
+    font-weight: 600;
+}
+
+.table tbody td {
+    border-color: #eef2f7;
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background: #f8fbff;
+}
+
+/* ==========================================
+   Activity List
+========================================== */
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 0;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #eef4ff;
+    color: #0d6efd;
+    font-size: 20px;
+}
+
+.activity-title {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 3px;
+}
+
+.activity-time {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+/* ==========================================
+   Quick Action Buttons
+========================================== */
+
+.quick-btn {
+    width: 100%;
+    border: none;
+    border-radius: 14px;
+    background: #ffffff;
+    padding: 18px;
+    box-shadow: 0 5px 18px rgba(0,0,0,.05);
+    transition: .3s;
+    font-weight: 600;
+    color: #374151;
+}
+
+.quick-btn:hover {
+    background: #0d6efd;
+    color: #fff;
+    transform: translateY(-4px);
+}
+
+/* ==========================================
+   Progress Bars
+========================================== */
+
+.progress {
+    height: 10px;
+    border-radius: 10px;
+    background: #edf2f7;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+/* ==========================================
+   Badges
+========================================== */
+
+.badge {
+    font-size: 12px;
+    padding: 7px 12px;
+    border-radius: 8px;
+}
+
+/* ==========================================
+   Recharts
+========================================== */
+
+.recharts-wrapper {
+    font-size: 13px;
+}
+
+.recharts-default-tooltip {
+    border-radius: 10px !important;
+    border: none !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,.12);
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width:991px) {
+
+    .dashboard-page {
+        padding: 20px;
+    }
+
+    .dashboard-title {
+        font-size: 26px;
+    }
+
+    .stats-value {
+        font-size: 28px;
+    }
+
+}
+
+@media (max-width:768px) {
+
+    .dashboard-page {
+        padding: 15px;
+    }
+
+    .stats-card .card-body {
+        padding: 18px;
+    }
+
+    .stats-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+    }
+
+    .dashboard-card .card-body {
+        padding: 15px;
+    }
+
+}
+
+.overview-card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+
+.metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.metric-row:last-child {
+    border-bottom: none;
+}
+
+.metric-badge {
+    min-width: 50px;
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.metric-badge.primary { background: #2563eb; }
+.metric-badge.success { background: #16a34a; }
+.metric-badge.warning { background: #f59e0b; }
+.metric-badge.danger  { background: #dc2626; }
+
+.employee-overview-card {
+    border: none;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+}
+
+.employee-total-card {
+    background: linear-gradient(135deg,#2563eb,#3b82f6);
+    color: #fff;
+    border-radius: 16px;
+    padding: 25px;
+    text-align: center;
+}
+
+.employee-total-card h6 {
+    margin-bottom: 10px;
+    font-size: 15px;
+    opacity: .9;
+}
+
+.employee-total-card h2 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.employee-total-card p {
+    opacity: .85;
+    font-size: 14px;
+}
+
+.employee-metric-card {
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+    color: #fff;
+    transition: .3s;
+}
+
+.employee-metric-card:hover {
+    transform: translateY(-4px);
+}
+
+.employee-metric-card h3 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.employee-metric-card span {
+    font-size: 14px;
+}
+
+.active-card {
+    background: linear-gradient(135deg,#16a34a,#22c55e);
+}
+
+.leave-card {
+    background: linear-gradient(135deg,#d97706,#f59e0b);
+}
+
+.resigned-card {
+    background: linear-gradient(135deg,#dc2626,#ef4444);
+}
+
+.new-card {
+    background: linear-gradient(135deg,#7c3aed,#8b5cf6);
+}

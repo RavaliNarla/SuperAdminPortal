@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
 
 import CandidateLoginSection from "./CandidateLoginSection";
@@ -10,8 +10,15 @@ import SessionPolicySection from "./components/SessionPolicySection";
 import LoginPreview from "./components/LoginPreview";
 import AuthenticationFooter from "./AuthenticationFooter";
 import "../../css/AuthenticationConfiguration.css";
+import { useParams, Link } from "react-router-dom";
+import authenticationApiService from "../AuthenticationConfiguration/services/authServices";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 const AuthenticationConfiguration = () => {
+  const organizationId = useAppSelector(
+    (state) => state.eligibility.selectedOrganization,
+  );
+  console.log("Organization ID:", organizationId);
   const initialState = {
     portal: "",
 
@@ -85,7 +92,31 @@ const AuthenticationConfiguration = () => {
   };
 
   const [config, setConfig] = useState(initialState);
+  useEffect(() => {
+    if (organizationId) {
+      fetchAuthenticationConfiguration();
+    }
+  }, [organizationId]);
 
+  const fetchAuthenticationConfiguration = async () => {
+    try {
+      const response =
+        await authenticationApiService.getAuthenticationConfiguration(
+          organizationId,
+        );
+
+      console.log("GET Response:", response.data);
+
+      const apiData = response?.data?.data?.authenticationJson || {};
+
+      setConfig({
+        ...initialState,
+        ...apiData,
+      });
+    } catch (error) {
+      console.error("GET Error:", error);
+    }
+  };
   const handleChange = (section, field, value) => {
     setConfig((prev) => ({
       ...prev,
@@ -96,10 +127,48 @@ const AuthenticationConfiguration = () => {
     }));
   };
 
-  const handleSave = () => {
-    console.log(config);
-    alert("Configuration Saved Successfully");
+  const handleSave = async () => {
+    try {
+      console.log("Saving Configuration", organizationId, config);
+
+      const response =
+        await authenticationApiService.updateAuthenticationConfiguration(
+          organizationId,
+          config,
+        );
+
+      console.log("POST Response:", response.data);
+
+      // Reload configuration after saving
+      await fetchAuthenticationConfiguration();
+
+      alert("Configuration Saved Successfully");
+    } catch (error) {
+      console.error("Save Error:", error);
+
+      alert(error.response?.data?.message || "Failed to save configuration.");
+    }
   };
+
+  // const handleSave = async () => {
+  //   try {
+  //     console.log("Saving Configuration", organizationId, config);
+
+  //     const response =
+  //       await authenticationApiService.saveAuthenticationConfiguration(
+  //         organizationId,
+  //         config,
+  //       );
+
+  //     console.log(response.data);
+
+  //     alert("Configuration Saved Successfully");
+  //   } catch (error) {
+  //     console.error(error);
+
+  //     alert(error.response?.data?.message || "Failed to save configuration.");
+  //   }
+  // };
 
   const handleReset = () => {
     setConfig(initialState);
@@ -139,8 +208,6 @@ const AuthenticationConfiguration = () => {
                     </p>
                   </div>
                 </div>
-
-              
               </div>
             </Card.Header>
 

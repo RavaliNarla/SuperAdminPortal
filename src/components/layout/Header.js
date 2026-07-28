@@ -23,7 +23,8 @@ export default function Header({ setSidebarOpen }) {
   const showEligibilityHeader =
     location.pathname.startsWith("/eligibility-overview") ||
     location.pathname.startsWith("/eligibility-configuration") ||
-    location.pathname.startsWith("/validation-workflow");
+    location.pathname.startsWith("/validation-workflow") ||
+    location.pathname.startsWith("/authentication-configuration");
 
   useEffect(() => {
     const handleClickOutside = (event) => {

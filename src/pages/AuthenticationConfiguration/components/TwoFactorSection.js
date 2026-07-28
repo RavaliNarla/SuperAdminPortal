@@ -5,21 +5,17 @@ import {
   FiSmartphone,
   FiClock,
   FiRepeat,
-  FiMonitor
+  FiMonitor,
 } from "react-icons/fi";
 
-import "../../../css/Section.css";
+import "../../../css/TwoFactorSection.css";
 
-const TwoFactorSection = ({ data, onChange }) => {
+const TwoFactorSection = ({ data, onChange, twoFactorMethods = [] }) => {
   return (
     <div className="organization-card mb-4">
-
       <div className="card-body">
-
         <div className="section-header mb-4">
-
           <div>
-
             <h5 className="section-title">
               <FiShield className="me-2" />
               Two-Factor Authentication
@@ -28,45 +24,32 @@ const TwoFactorSection = ({ data, onChange }) => {
             <p className="section-subtitle">
               Configure additional security for organization users.
             </p>
-
           </div>
-
         </div>
 
         {/* Enable */}
 
         <div className="twofa-enable-card mb-4">
-
           <div>
-
-            <h6 className="mb-1">
-              Enable Two-Factor Authentication
-            </h6>
+            <h6 className="mb-1">Enable Two-Factor Authentication</h6>
 
             <small className="text-muted">
               Require an additional verification step during login.
             </small>
-
           </div>
 
           <Form.Check
             type="switch"
-            checked={data.enabled}
-            onChange={(e) =>
-              onChange("enabled", e.target.checked)
-            }
+            checked={data?.enabled || false}
+            onChange={(e) => onChange("enabled", e.target.checked)}
           />
-
         </div>
 
-        {data.enabled && (
-
+        {data?.enabled && (
           <Row className="g-4">
-
-            {/* Method */}
+            {/* Authentication Method */}
 
             <Col lg={6}>
-
               <label className="form-label">
                 <FiSmartphone className="me-2" />
                 Authentication Method
@@ -74,39 +57,25 @@ const TwoFactorSection = ({ data, onChange }) => {
 
               <Form.Select
                 className="modern-input"
-                value={data.type}
-                onChange={(e) =>
-                  onChange("type", e.target.value)
-                }
+                value={data?.type || ""}
+                onChange={(e) => onChange("type", e.target.value)}
               >
-                <option value="">
-                  Select Method
-                </option>
+                <option value="">Select Method</option>
 
-                <option value="OTP_SMS">
-                  OTP via SMS
-                </option>
-
-                <option value="OTP_EMAIL">
-                  OTP via Email
-                </option>
-
-                <option value="SMS_EMAIL">
-                  SMS + Email OTP
-                </option>
-
-                <option value="AUTHENTICATOR">
-                  Authenticator App
-                </option>
-
+                {twoFactorMethods.map((method) => (
+                  <option
+                    key={method.id || method.value}
+                    value={method.id || method.value}
+                  >
+                    {method.name || method.label}
+                  </option>
+                ))}
               </Form.Select>
-
             </Col>
 
-            {/* Expiry */}
+            {/* OTP Expiry */}
 
             <Col lg={6}>
-
               <label className="form-label">
                 <FiClock className="me-2" />
                 OTP Expiry (Minutes)
@@ -115,20 +84,16 @@ const TwoFactorSection = ({ data, onChange }) => {
               <Form.Control
                 type="number"
                 className="modern-input"
-                min="1"
-                max="30"
-                value={data.expiry || 5}
-                onChange={(e) =>
-                  onChange("expiry", e.target.value)
-                }
+                min={1}
+                max={30}
+                value={data?.expiry ?? ""}
+                onChange={(e) => onChange("expiry", Number(e.target.value))}
               />
-
             </Col>
 
-            {/* Resend */}
+            {/* Resend Count */}
 
             <Col lg={6}>
-
               <label className="form-label">
                 <FiRepeat className="me-2" />
                 Maximum Resend Count
@@ -137,23 +102,18 @@ const TwoFactorSection = ({ data, onChange }) => {
               <Form.Control
                 type="number"
                 className="modern-input"
-                min="1"
-                max="10"
-                value={data.resendCount || 3}
+                min={1}
+                max={10}
+                value={data?.resendCount ?? ""}
                 onChange={(e) =>
-                  onChange(
-                    "resendCount",
-                    e.target.value
-                  )
+                  onChange("resendCount", Number(e.target.value))
                 }
               />
-
             </Col>
 
             {/* Cooldown */}
 
             <Col lg={6}>
-
               <label className="form-label">
                 <FiClock className="me-2" />
                 Resend Cooldown (Seconds)
@@ -162,23 +122,17 @@ const TwoFactorSection = ({ data, onChange }) => {
               <Form.Control
                 type="number"
                 className="modern-input"
-                min="0"
-                value={data.cooldown || 30}
-                onChange={(e) =>
-                  onChange("cooldown", e.target.value)
-                }
+                min={0}
+                value={data?.cooldown ?? ""}
+                onChange={(e) => onChange("cooldown", Number(e.target.value))}
               />
-
             </Col>
 
-            {/* Remember */}
+            {/* Remember Device */}
 
             <Col lg={12}>
-
               <div className="remember-device-card">
-
                 <div>
-
                   <h6>
                     <FiMonitor className="me-2" />
                     Remember Trusted Device
@@ -187,32 +141,18 @@ const TwoFactorSection = ({ data, onChange }) => {
                   <small>
                     Skip OTP verification for previously trusted devices.
                   </small>
-
                 </div>
 
                 <Form.Check
                   type="switch"
-                  checked={
-                    data.rememberDevice || false
-                  }
-                  onChange={(e) =>
-                    onChange(
-                      "rememberDevice",
-                      e.target.checked
-                    )
-                  }
+                  checked={data?.rememberDevice || false}
+                  onChange={(e) => onChange("rememberDevice", e.target.checked)}
                 />
-
               </div>
-
             </Col>
-
           </Row>
-
         )}
-
       </div>
-
     </div>
   );
 };

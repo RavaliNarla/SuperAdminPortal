@@ -1,0 +1,222 @@
+/* ==========================================
+   Two Factor Authentication Section
+========================================== */
+
+.organization-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.organization-card .card-body {
+  padding: 24px;
+}
+
+/* ==========================================
+   Section Header
+========================================== */
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 6px;
+}
+
+.section-title svg {
+  color: #1891d0;
+  font-size: 22px;
+}
+
+.section-subtitle {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* ==========================================
+   Enable Card
+========================================== */
+
+.twofa-enable-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.twofa-enable-card:hover {
+  border-color: #1891d0;
+  box-shadow: 0 10px 24px rgba(24, 145, 208, 0.1);
+  transform: translateY(-2px);
+}
+
+.twofa-enable-card h6 {
+  margin: 0 0 5px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.twofa-enable-card small {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* ==========================================
+   Labels
+========================================== */
+
+.organization-card .form-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.organization-card .form-label svg {
+  color: #1891d0;
+}
+
+/* ==========================================
+   Inputs
+========================================== */
+
+.modern-input {
+  height: 48px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: none;
+}
+
+.modern-input:focus {
+  border-color: #1891d0;
+  box-shadow: 0 0 0 0.2rem rgba(24, 145, 208, 0.15);
+}
+
+/* ==========================================
+   Remember Device Card
+========================================== */
+
+.remember-device-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 20px;
+  margin-top: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.remember-device-card:hover {
+  border-color: #1891d0;
+  box-shadow: 0 10px 24px rgba(24, 145, 208, 0.1);
+  transform: translateY(-2px);
+}
+
+.remember-device-card h6 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 5px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.remember-device-card h6 svg {
+  color: #1891d0;
+}
+
+.remember-device-card small {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* ==========================================
+   Switch
+========================================== */
+
+.form-check-input {
+  width: 46px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: #1891d0;
+  border-color: #1891d0;
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(24, 145, 208, 0.2);
+}
+
+/* ==========================================
+   Animation
+========================================== */
+
+.organization-card,
+.twofa-enable-card,
+.remember-device-card,
+.modern-input {
+  transition: all 0.3s ease;
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width: 992px) {
+  .organization-card .card-body {
+    padding: 20px;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .twofa-enable-card,
+  .remember-device-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-check {
+    margin-top: 12px;
+  }
+
+  .section-title {
+    font-size: 18px;
+  }
+
+  .modern-input {
+    height: 44px;
+  }
+}
