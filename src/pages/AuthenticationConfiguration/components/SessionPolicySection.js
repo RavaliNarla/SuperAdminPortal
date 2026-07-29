@@ -2,13 +2,7 @@
 
 import React from "react";
 import { Row, Col, Form } from "react-bootstrap";
-import {
-  FiClock,
-  FiMonitor,
-  FiUsers,
-  FiLogOut,
-  FiCheckCircle,
-} from "react-icons/fi";
+import { FiClock, FiMonitor, FiUsers } from "react-icons/fi";
 
 import "../../../css/Section.css";
 
@@ -56,23 +50,6 @@ const SessionPolicySection = ({ data, onChange }) => {
 
           <Col lg={4}>
             <label className="form-label">
-              <FiClock className="me-2" />
-              Absolute Timeout (Minutes)
-            </label>
-
-            <Form.Control
-              className="modern-input"
-              type="number"
-              min="1"
-              value={data.absoluteTimeout || ""}
-              onChange={(e) =>
-                onChange("absoluteTimeout", e.target.value)
-              }
-            />
-          </Col>
-
-          <Col lg={4}>
-            <label className="form-label">
               <FiUsers className="me-2" />
               Concurrent Sessions
             </label>
@@ -89,65 +66,6 @@ const SessionPolicySection = ({ data, onChange }) => {
           </Col>
 
         </Row>
-
-        {/* Switch Cards */}
-
-        <div className="row g-3 mt-3">
-
-          <div className="col-lg-6">
-            <div className="setting-switch-card">
-
-              <div>
-                <h6>
-                  <FiCheckCircle className="me-2" />
-                  Remember Me
-                </h6>
-
-                <small>
-                  Allow users to stay signed in across browser sessions.
-                </small>
-              </div>
-
-              <Form.Check
-                type="switch"
-                checked={data.rememberMe || false}
-                onChange={(e) =>
-                  onChange("rememberMe", e.target.checked)
-                }
-              />
-
-            </div>
-          </div>
-
-          <div className="col-lg-6">
-            <div className="setting-switch-card">
-
-              <div>
-                <h6>
-                  <FiLogOut className="me-2" />
-                  Logout on Browser Close
-                </h6>
-
-                <small>
-                  Automatically sign users out when the browser is closed.
-                </small>
-              </div>
-
-              <Form.Check
-                type="switch"
-                checked={data.browserCloseLogout || false}
-                onChange={(e) =>
-                  onChange(
-                    "browserCloseLogout",
-                    e.target.checked
-                  )
-                }
-              />
-
-            </div>
-          </div>
-
-        </div>
 
       </div>
     </div>

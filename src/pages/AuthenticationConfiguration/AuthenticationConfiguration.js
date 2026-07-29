@@ -4,7 +4,7 @@ import { Container, Row, Col, Card, Form } from "react-bootstrap";
 import CandidateLoginSection from "./CandidateLoginSection";
 import RecruitmentLoginSection from "./RecruitmentLoginSection";
 import TwoFactorSection from "./components/TwoFactorSection";
-import OTPSettingsSection from "./components/OTPSettingsSection";
+// import OTPSettingsSection from "./components/OTPSettingsSection"; // commented out for now, see render call below
 import PasswordPolicySection from "./components/PasswordPolicySection";
 import SessionPolicySection from "./components/SessionPolicySection";
 import LoginPreview from "./components/LoginPreview";
@@ -23,44 +23,28 @@ const AuthenticationConfiguration = () => {
     portal: "",
 
     candidateLogin: {
-      username: true,
-      email: false,
-      mobile: false,
-      aadhaar: false,
-      pan: false,
-      defaultLoginMethod: "",
-      enableForgotPassword: true,
+      methods: { EMAIL_PASSWORD: true },
       allowRegistration: true,
       enableCaptcha: true,
+      verifyEmail: true,
     },
 
     recruitmentLogin: {
-      employeeId: true,
-      username: true,
-      email: false,
-      adLogin: false,
-      sso: false,
-      defaultLoginMethod: "",
-      enableForgotPassword: true,
+      methods: { ENTRA_ID: false, EMAIL_PASSWORD: true },
       enableCaptcha: true,
-      forcePasswordChange: false,
     },
 
     twoFactor: {
       enabled: false,
-      type: "",
-      expiry: 5,
-      resendCount: 3,
-      cooldown: 30,
-      rememberDevice: false,
+      methods: { EMAIL_OTP: true, SMS_OTP: false },
     },
 
     otp: {
       method: "SMS",
+      otpLength: 6,
       expiry: 5,
       resendCount: 3,
-      cooldown: 30,
-      loginOtp: true,
+      retryCount: 3,
       passwordResetOtp: true,
       maskMobile: true,
       maskEmail: true,
@@ -79,15 +63,11 @@ const AuthenticationConfiguration = () => {
       historyCount: 5,
       lockAttempts: 5,
       unlockDuration: 30,
-      forceChangeOnFirstLogin: false,
     },
 
     session: {
       idleTimeout: 15,
-      absoluteTimeout: 60,
       concurrentSessions: 1,
-      rememberMe: false,
-      browserCloseLogout: true,
     },
   };
 
@@ -97,6 +77,21 @@ const AuthenticationConfiguration = () => {
       fetchAuthenticationConfiguration();
     }
   }, [organizationId]);
+
+  // Merges a fetched section over its default so a config saved before a
+  // field existed (e.g. otpLength/retryCount, or the method toggles) can't
+  // wipe that field back to blank/undefined — a plain shallow spread at the
+  // top level would replace the whole section object wholesale instead of
+  // filling in just what's missing. Also deep-merges `methods` sub-objects
+  // specifically, since a fetched section only partially covering methods
+  // would otherwise leave every method disabled.
+  const mergeSection = (defaultsSection, fetchedSection) => ({
+    ...defaultsSection,
+    ...fetchedSection,
+    ...(defaultsSection?.methods && {
+      methods: { ...defaultsSection.methods, ...fetchedSection?.methods },
+    }),
+  });
 
   const fetchAuthenticationConfiguration = async () => {
     try {
@@ -112,6 +107,18 @@ const AuthenticationConfiguration = () => {
       setConfig({
         ...initialState,
         ...apiData,
+        candidateLogin: mergeSection(
+          initialState.candidateLogin,
+          apiData.candidateLogin,
+        ),
+        recruitmentLogin: mergeSection(
+          initialState.recruitmentLogin,
+          apiData.recruitmentLogin,
+        ),
+        twoFactor: mergeSection(initialState.twoFactor, apiData.twoFactor),
+        otp: mergeSection(initialState.otp, apiData.otp),
+        password: mergeSection(initialState.password, apiData.password),
+        session: mergeSection(initialState.session, apiData.session),
       });
     } catch (error) {
       console.error("GET Error:", error);
@@ -278,10 +285,13 @@ const AuthenticationConfiguration = () => {
                 }
               />
 
-              <OTPSettingsSection
+              {/* OTP Settings — commented out for now, pending decision on
+                  the Email OTP / SMS OTP "both enabled" semantics (2FA
+                  section) before re-enabling. */}
+              {/* <OTPSettingsSection
                 data={config.otp}
                 onChange={(field, value) => handleChange("otp", field, value)}
-              />
+              /> */}
 
               <PasswordPolicySection
                 data={config.password}

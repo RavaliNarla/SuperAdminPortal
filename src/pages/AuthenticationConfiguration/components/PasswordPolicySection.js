@@ -9,8 +9,7 @@ import {
   FiHash,
   FiClock,
   FiRefreshCw,
-  FiAlertTriangle,
-  FiUserCheck,
+  // FiAlertTriangle, // only used by the commented-out Account Lock Attempts field below
 } from "react-icons/fi";
 
 import "../../../css/Section.css";
@@ -241,7 +240,9 @@ const PasswordPolicySection = ({ data, onChange }) => {
             />
           </Col>
 
-          <Col lg={4}>
+          {/* Password History Count, Account Lock Attempts, and Account
+              Unlock Time — commented out for now. */}
+          {/* <Col lg={4}>
             <label className="form-label">
               <FiRefreshCw className="me-2" />
               Password History Count
@@ -291,41 +292,8 @@ const PasswordPolicySection = ({ data, onChange }) => {
                 onChange("unlockDuration", e.target.value)
               }
             />
-          </Col>
+          </Col> */}
         </Row>
-
-        {/* Force Password Change */}
-
-        <div className="row g-3 mt-3">
-          <div className="col-lg-6">
-            <div className="password-switch-card">
-              <div>
-                <h6>
-                  <FiUserCheck className="me-2" />
-                  Force Password Change on First Login
-                </h6>
-
-                <small>
-                  Users must change their password when they log in for
-                  the first time.
-                </small>
-              </div>
-
-              <Form.Check
-                type="switch"
-                checked={
-                  data.forceChangeOnFirstLogin || false
-                }
-                onChange={(e) =>
-                  onChange(
-                    "forceChangeOnFirstLogin",
-                    e.target.checked
-                  )
-                }
-              />
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

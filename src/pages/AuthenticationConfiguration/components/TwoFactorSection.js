@@ -1,16 +1,33 @@
 import React from "react";
 import { Row, Col, Form } from "react-bootstrap";
-import {
-  FiShield,
-  FiSmartphone,
-  FiClock,
-  FiRepeat,
-  FiMonitor,
-} from "react-icons/fi";
+import { FiShield, FiMail, FiSmartphone } from "react-icons/fi";
 
 import "../../../css/TwoFactorSection.css";
 
-const TwoFactorSection = ({ data, onChange, twoFactorMethods = [] }) => {
+// 2FA Methods — Email OTP and SMS OTP only for now (Google Authenticator/TOTP
+// removed by deliberate product decision).
+const twoFactorMethods = [
+  {
+    value: "EMAIL_OTP",
+    label: "Email OTP",
+    icon: <FiMail />,
+    description: "Send a one-time code to the user's email",
+  },
+  {
+    value: "SMS_OTP",
+    label: "SMS OTP",
+    icon: <FiSmartphone />,
+    description: "Send a one-time code to the user's mobile",
+  },
+];
+
+const TwoFactorSection = ({ data, onChange }) => {
+  const methods = data?.methods || {};
+
+  const toggleMethod = (value, checked) => {
+    onChange("methods", { ...methods, [value]: checked });
+  };
+
   return (
     <div className="organization-card mb-4">
       <div className="card-body">
@@ -46,111 +63,42 @@ const TwoFactorSection = ({ data, onChange, twoFactorMethods = [] }) => {
         </div>
 
         {data?.enabled && (
-          <Row className="g-4">
-            {/* Authentication Method */}
+          <>
+            {/* Methods */}
 
-            <Col lg={6}>
-              <label className="form-label">
-                <FiSmartphone className="me-2" />
-                Authentication Method
-              </label>
+            <Row className="g-3 mb-4">
+              {twoFactorMethods.map((item) => (
+                <Col lg={4} md={6} key={item.value}>
+                  <div className="setting-card h-100">
+                    <div className="setting-card-content">
+                      <div className="setting-icon">{item.icon}</div>
 
-              <Form.Select
-                className="modern-input"
-                value={data?.type || ""}
-                onChange={(e) => onChange("type", e.target.value)}
-              >
-                <option value="">Select Method</option>
+                      <div>
+                        <h6>{item.label}</h6>
 
-                {twoFactorMethods.map((method) => (
-                  <option
-                    key={method.id || method.value}
-                    value={method.id || method.value}
-                  >
-                    {method.name || method.label}
-                  </option>
-                ))}
-              </Form.Select>
-            </Col>
+                        <p>{item.description}</p>
+                      </div>
+                    </div>
 
-            {/* OTP Expiry */}
+                    <Form.Check
+                      className="setting-switch"
+                      type="switch"
+                      checked={!!methods[item.value]}
+                      onChange={(e) =>
+                        toggleMethod(item.value, e.target.checked)
+                      }
+                    />
+                  </div>
+                </Col>
+              ))}
+            </Row>
 
-            <Col lg={6}>
-              <label className="form-label">
-                <FiClock className="me-2" />
-                OTP Expiry (Minutes)
-              </label>
-
-              <Form.Control
-                type="number"
-                className="modern-input"
-                min={1}
-                max={30}
-                value={data?.expiry ?? ""}
-                onChange={(e) => onChange("expiry", Number(e.target.value))}
-              />
-            </Col>
-
-            {/* Resend Count */}
-
-            <Col lg={6}>
-              <label className="form-label">
-                <FiRepeat className="me-2" />
-                Maximum Resend Count
-              </label>
-
-              <Form.Control
-                type="number"
-                className="modern-input"
-                min={1}
-                max={10}
-                value={data?.resendCount ?? ""}
-                onChange={(e) =>
-                  onChange("resendCount", Number(e.target.value))
-                }
-              />
-            </Col>
-
-            {/* Cooldown */}
-
-            <Col lg={6}>
-              <label className="form-label">
-                <FiClock className="me-2" />
-                Resend Cooldown (Seconds)
-              </label>
-
-              <Form.Control
-                type="number"
-                className="modern-input"
-                min={0}
-                value={data?.cooldown ?? ""}
-                onChange={(e) => onChange("cooldown", Number(e.target.value))}
-              />
-            </Col>
-
-            {/* Remember Device */}
-
-            <Col lg={12}>
-              <div className="remember-device-card">
-                <div>
-                  <h6>
-                    <FiMonitor className="me-2" />
-                    Remember Trusted Device
-                  </h6>
-
-                  <small>
-                    Skip OTP verification for previously trusted devices.
-                  </small>
-                </div>
-
-                <Form.Check
-                  type="switch"
-                  checked={data?.rememberDevice || false}
-                  onChange={(e) => onChange("rememberDevice", e.target.checked)}
-                />
-              </div>
-            </Col>
-          </Row>
+            <p className="text-muted small mb-0">
+              OTP expiry and resend limits for 2FA codes are governed by the
+              OTP Settings section below, so the same policy applies to every
+              OTP sent — login, password reset, and 2FA alike.
+            </p>
+          </>
         )}
       </div>
     </div>

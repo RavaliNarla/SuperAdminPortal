@@ -1,165 +1,46 @@
 import React from "react";
 import { Card, Badge, Form, Button, Row, Col } from "react-bootstrap";
 import {
-  FiUser,
   FiMail,
-  FiSmartphone,
-  FiCreditCard,
   FiShield,
   FiLock,
   FiCheckCircle,
 } from "react-icons/fi";
 
+// Preview order when more than one method is enabled at once — there's no
+// separate "default method" concept anymore, so the preview just shows the
+// first enabled method in this fixed priority order.
+const RECRUITMENT_METHOD_ORDER = ["EMAIL_PASSWORD", "ENTRA_ID"];
+const TWO_FACTOR_METHOD_ORDER = ["EMAIL_OTP", "SMS_OTP"];
+
 const LoginPreview = ({ config }) => {
   // -----------------------------
-  // Candidate Login Method
+  // Candidate Login Method — Email + Password only, for now
   // -----------------------------
   const getCandidateMethod = () => {
-    switch (config.candidateLogin.defaultLoginMethod) {
-      case "USERNAME":
-        return {
-          label: "Username",
-          icon: <FiUser />,
-          placeholder: "Enter Username",
-          secondField: {
-            label: "Password",
-            type: "password",
-            icon: <FiLock />,
-            placeholder: "Enter Password",
-          },
-        };
-
-      case "EMAIL":
-        return {
-          label: "Email Address",
-          icon: <FiMail />,
-          placeholder: "Enter Email Address",
-          secondField: {
-            label: "Password",
-            type: "password",
-            icon: <FiLock />,
-            placeholder: "Enter Password",
-          },
-        };
-
-      case "MOBILE": {
-        const loginType = config.candidateLogin.mobileLoginType || "OTP";
-
-        return {
-          label: "Mobile Number",
-          icon: <FiSmartphone />,
-          placeholder: "Enter Mobile Number",
-
-          secondField:
-            loginType === "PASSWORD"
-              ? {
-                  label: "Password",
-                  type: "password",
-                  icon: <FiLock />,
-                  placeholder: "Enter Password",
-                }
-              : loginType === "OTP_PASSWORD"
-                ? {
-                    label: "OTP + Password",
-                    type: "text",
-                    icon: <FiSmartphone />,
-                    placeholder: "Enter OTP & Password",
-                  }
-                : {
-                    label: "OTP",
-                    type: "text",
-                    icon: <FiSmartphone />,
-                    placeholder: "Enter OTP",
-                  },
-        };
-      }
-
-      case "AADHAAR":
-        return {
-          label: "Aadhaar Number",
-          icon: <FiCreditCard />,
-          placeholder: "Enter Aadhaar Number",
-          secondField: {
-            label: "OTP",
-            type: "text",
-            icon: <FiSmartphone />,
-            placeholder: "Enter OTP",
-          },
-        };
-
-      case "PAN":
-        return {
-          label: "PAN Number",
-          icon: <FiCreditCard />,
-          placeholder: "Enter PAN Number",
-          secondField: {
-            label: "Password",
-            type: "password",
-            icon: <FiLock />,
-            placeholder: "Enter Password",
-          },
-        };
-
-      default:
-        return {
-          label: "Username",
-          icon: <FiUser />,
-          placeholder: "Enter Username",
-          secondField: {
-            label: "Password",
-            type: "password",
-            icon: <FiLock />,
-            placeholder: "Enter Password",
-          },
-        };
-    }
+    return {
+      label: "Email Address",
+      icon: <FiMail />,
+      placeholder: "Enter Email Address",
+      secondField: {
+        label: "Password",
+        type: "password",
+        icon: <FiLock />,
+        placeholder: "Enter Password",
+      },
+    };
   };
 
   // -----------------------------
   // Recruitment Login Method
   // -----------------------------
   const getRecruitmentMethod = () => {
-    switch (config.recruitmentLogin.defaultLoginMethod) {
-      case "EMAIL":
-        return {
-          label: "Email",
-          icon: <FiMail />,
-          placeholder: "Enter Email",
-          secondField: {
-            label: "Password",
-            type: "password",
-            icon: <FiLock />,
-            placeholder: "Enter Password",
-          },
-        };
+    const activeMethod = RECRUITMENT_METHOD_ORDER.find(
+      (key) => config.recruitmentLogin.methods?.[key],
+    );
 
-      case "USERNAME":
-        return {
-          label: "Username",
-          icon: <FiUser />,
-          placeholder: "Enter Username",
-          secondField: {
-            label: "Password",
-            type: "password",
-            icon: <FiLock />,
-            placeholder: "Enter Password",
-          },
-        };
-
-      case "MOBILE":
-        return {
-          label: "Mobile Number",
-          icon: <FiSmartphone />,
-          placeholder: "Enter Mobile Number",
-          secondField: {
-            label: "OTP",
-            type: "text",
-            icon: <FiSmartphone />,
-            placeholder: "Enter OTP",
-          },
-        };
-
-      case "AD":
+    switch (activeMethod) {
+      case "ENTRA_ID":
         return {
           label: "Microsoft Entra ID",
           icon: <FiShield />,
@@ -167,19 +48,12 @@ const LoginPreview = ({ config }) => {
           secondField: null,
         };
 
-      case "SSO":
-        return {
-          label: "Single Sign-On",
-          icon: <FiShield />,
-          placeholder: "SSO Login",
-          secondField: null,
-        };
-
+      case "EMAIL_PASSWORD":
       default:
         return {
-          label: "Employee ID",
-          icon: <FiUser />,
-          placeholder: "Enter Employee ID",
+          label: "Email",
+          icon: <FiMail />,
+          placeholder: "Enter Email",
           secondField: {
             label: "Password",
             type: "password",
@@ -194,15 +68,15 @@ const LoginPreview = ({ config }) => {
   const recruitment = getRecruitmentMethod();
 
   const get2FAMethod = () => {
-    switch (config.twoFactor.type) {
-      case "OTP_EMAIL":
+    const activeMethod = TWO_FACTOR_METHOD_ORDER.find(
+      (key) => config.twoFactor.methods?.[key],
+    );
+
+    switch (activeMethod) {
+      case "EMAIL_OTP":
         return "Email OTP";
-      case "OTP_SMS":
+      case "SMS_OTP":
         return "SMS OTP";
-      case "SMS_EMAIL":
-        return "SMS + Email OTP";
-      case "AUTHENTICATOR":
-        return "Google Authenticator";
       default:
         return "Not Configured";
     }
@@ -287,7 +161,7 @@ const LoginPreview = ({ config }) => {
                   <span>Remember Me</span>
                 </label>
 
-                {config.candidateLogin.enableForgotPassword && (
+                {config.candidateLogin.methods?.EMAIL_PASSWORD && (
                   <span className="preview-link">Forgot Password?</span>
                 )}
               </div>
@@ -371,10 +245,6 @@ const LoginPreview = ({ config }) => {
 
                   <span>Remember Me</span>
                 </label>
-
-                {config.recruitmentLogin.enableForgotPassword && (
-                  <span className="preview-link">Forgot Password?</span>
-                )}
               </div>
 
               {/* CAPTCHA */}
@@ -400,27 +270,6 @@ const LoginPreview = ({ config }) => {
                   <Col xs={12}>
                     <div className="preview-setting-item">
                       <div>
-                        <strong>Forgot Password</strong>
-                        <small>Password recovery is enabled.</small>
-                      </div>
-
-                      <Badge
-                        bg={
-                          config.recruitmentLogin.enableForgotPassword
-                            ? "success"
-                            : "secondary"
-                        }
-                      >
-                        {config.recruitmentLogin.enableForgotPassword
-                          ? "Enabled"
-                          : "Disabled"}
-                      </Badge>
-                    </div>
-                  </Col>
-
-                  <Col xs={12}>
-                    <div className="preview-setting-item">
-                      <div>
                         <strong>CAPTCHA</strong>
                         <small>Bot protection for login.</small>
                       </div>
@@ -433,29 +282,6 @@ const LoginPreview = ({ config }) => {
                         }
                       >
                         {config.recruitmentLogin.enableCaptcha
-                          ? "Enabled"
-                          : "Disabled"}
-                      </Badge>
-                    </div>
-                  </Col>
-
-                  <Col xs={12}>
-                    <div className="preview-setting-item">
-                      <div>
-                        <strong>Force Password Change</strong>
-                        <small>
-                          Require password update after first login.
-                        </small>
-                      </div>
-
-                      <Badge
-                        bg={
-                          config.recruitmentLogin.forcePasswordChange
-                            ? "success"
-                            : "secondary"
-                        }
-                      >
-                        {config.recruitmentLogin.forcePasswordChange
                           ? "Enabled"
                           : "Disabled"}
                       </Badge>
@@ -496,21 +322,15 @@ const LoginPreview = ({ config }) => {
               readOnly
             />
 
-            {config.twoFactor.expiry && (
+            {config.otp.expiry && (
               <small className="text-muted d-block mt-2">
-                OTP Expiry : {config.twoFactor.expiry} Minutes
+                OTP Expiry : {config.otp.expiry} Minutes
               </small>
             )}
 
-            {config.twoFactor.resendCount && (
+            {config.otp.resendCount && (
               <small className="text-muted d-block">
-                Resend Attempts : {config.twoFactor.resendCount}
-              </small>
-            )}
-
-            {config.twoFactor.cooldown && (
-              <small className="text-muted d-block">
-                Cooldown : {config.twoFactor.cooldown} Seconds
+                Resend Attempts : {config.otp.resendCount}
               </small>
             )}
           </Form.Group>

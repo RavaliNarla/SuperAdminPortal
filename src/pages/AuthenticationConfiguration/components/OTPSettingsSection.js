@@ -4,10 +4,11 @@ import {
   FiMessageSquare,
   FiClock,
   FiRepeat,
-  FiLogIn,
   FiRefreshCw,
   FiSmartphone,
-  FiMail
+  FiMail,
+  FiHash,
+  FiAlertTriangle,
 } from "react-icons/fi";
 import "../../../css/Section.css";
 
@@ -67,6 +68,26 @@ const OTPSettingsSection = ({ data, onChange }) => {
             </Form.Select>
           </Col>
 
+          {/* OTP Length */}
+
+          <Col lg={6}>
+            <label className="form-label">
+              <FiHash className="me-2" />
+              OTP Length
+            </label>
+
+            <Form.Control
+              type="number"
+              className="modern-input"
+              min="4"
+              max="8"
+              value={data.otpLength || ""}
+              onChange={(e) =>
+                onChange("otpLength", e.target.value)
+              }
+            />
+          </Col>
+
           {/* Expiry */}
 
           <Col lg={6}>
@@ -107,21 +128,22 @@ const OTPSettingsSection = ({ data, onChange }) => {
             />
           </Col>
 
-          {/* Cooldown */}
+          {/* Retry Count */}
 
           <Col lg={6}>
             <label className="form-label">
-              <FiClock className="me-2" />
-              Resend Cooldown (Seconds)
+              <FiAlertTriangle className="me-2" />
+              OTP Retry Count
             </label>
 
             <Form.Control
               type="number"
               className="modern-input"
-              min="0"
-              value={data.cooldown || ""}
+              min="1"
+              max="10"
+              value={data.retryCount || ""}
               onChange={(e) =>
-                onChange("cooldown", e.target.value)
+                onChange("retryCount", e.target.value)
               }
             />
           </Col>
@@ -131,38 +153,6 @@ const OTPSettingsSection = ({ data, onChange }) => {
         {/* Switch Cards */}
 
         <div className="row g-3 mt-2">
-
-          <div className="col-lg-6">
-
-            <div className="setting-switch-card">
-
-              <div>
-
-                <h6>
-                  <FiLogIn className="me-2" />
-                  Login OTP
-                </h6>
-
-                <small>
-                  Require OTP verification during user login.
-                </small>
-
-              </div>
-
-              <Form.Check
-                type="switch"
-                checked={data.loginOtp || false}
-                onChange={(e) =>
-                  onChange(
-                    "loginOtp",
-                    e.target.checked
-                  )
-                }
-              />
-
-            </div>
-
-          </div>
 
           <div className="col-lg-6">
 
