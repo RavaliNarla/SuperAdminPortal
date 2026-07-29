@@ -322,7 +322,10 @@ const LoginPreview = ({ config }) => {
               readOnly
             />
 
-            {config.otp.expiry && (
+            {/* OTP Expiry / Resend Attempts display commented out along with
+                OTP Settings (AuthenticationConfiguration.js) — no live UI
+                edits these values right now. */}
+            {/* {config.otp.expiry && (
               <small className="text-muted d-block mt-2">
                 OTP Expiry : {config.otp.expiry} Minutes
               </small>
@@ -332,7 +335,7 @@ const LoginPreview = ({ config }) => {
               <small className="text-muted d-block">
                 Resend Attempts : {config.otp.resendCount}
               </small>
-            )}
+            )} */}
           </Form.Group>
         )}
       </Card.Body>

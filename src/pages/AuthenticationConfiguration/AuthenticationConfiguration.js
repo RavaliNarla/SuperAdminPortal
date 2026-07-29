@@ -134,14 +134,57 @@ const AuthenticationConfiguration = () => {
     }));
   };
 
+  // Allowlist of exactly the fields with a live UI control right now. A
+  // denylist isn't safe here: mergeSection (fetchAuthenticationConfiguration)
+  // deliberately spreads the entire fetched section forward so newly-added
+  // defaults don't get wiped, but that also means any stale/legacy field
+  // (or outright corrupted data) sitting in a previously-saved config rides
+  // along in `config` state indefinitely and would otherwise get resaved
+  // forever. Only emitting these exact known-good keys guarantees old
+  // removed fields — and anything unexpected — never make it back into the
+  // saved JSON, no matter what junk is present in state.
+  const buildSavePayload = (fullConfig) => ({
+    portal: fullConfig.portal,
+    candidateLogin: {
+      methods: fullConfig.candidateLogin.methods,
+      allowRegistration: fullConfig.candidateLogin.allowRegistration,
+      enableCaptcha: fullConfig.candidateLogin.enableCaptcha,
+      verifyEmail: fullConfig.candidateLogin.verifyEmail,
+    },
+    recruitmentLogin: {
+      methods: fullConfig.recruitmentLogin.methods,
+      enableCaptcha: fullConfig.recruitmentLogin.enableCaptcha,
+    },
+    twoFactor: {
+      enabled: fullConfig.twoFactor.enabled,
+      methods: fullConfig.twoFactor.methods,
+    },
+    password: {
+      minLength: fullConfig.password.minLength,
+      maxLength: fullConfig.password.maxLength,
+      uppercase: fullConfig.password.uppercase,
+      lowercase: fullConfig.password.lowercase,
+      number: fullConfig.password.number,
+      specialCharacter: fullConfig.password.specialCharacter,
+      enableExpiry: fullConfig.password.enableExpiry,
+      enableHistory: fullConfig.password.enableHistory,
+      expiryDays: fullConfig.password.expiryDays,
+    },
+    session: {
+      idleTimeout: fullConfig.session.idleTimeout,
+      concurrentSessions: fullConfig.session.concurrentSessions,
+    },
+  });
+
   const handleSave = async () => {
     try {
-      console.log("Saving Configuration", organizationId, config);
+      const payload = buildSavePayload(config);
+      console.log("Saving Configuration", organizationId, payload);
 
       const response =
         await authenticationApiService.updateAuthenticationConfiguration(
           organizationId,
-          config,
+          payload,
         );
 
       console.log("POST Response:", response.data);
