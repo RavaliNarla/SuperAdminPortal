@@ -25,8 +25,12 @@ gated to SuperAdmin only.
 ```sql
 -- Dev-maintained catalog of screens that exist per portal.
 -- A row is added by a developer when a screen ships, not by an admin.
+-- `id` is a UUID (not an auto-increment int) — it's the value the frontend
+-- resolves once via GET /portalScreens and then passes as the `screen`
+-- query param to the form-schemas endpoint below, e.g.
+-- "91a893d9-7538-432a-8fc2-2bda3182bee4".
 CREATE TABLE portal_screens (
-    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     portal      VARCHAR(20)  NOT NULL,   -- 'recruitment' | 'candidate'
     screen_key  VARCHAR(50)  NOT NULL,   -- 'requisition' | 'jobPosting'
     screen_name VARCHAR(200) NOT NULL,   -- 'Requisition Form' | 'Job Posting Form'
@@ -41,9 +45,9 @@ INSERT INTO portal_screens (portal, screen_key, screen_name) VALUES
 -- These fields are appended to the screen's existing static fields — no title/heading
 -- of their own, since they're not a separate sub-form.
 CREATE TABLE organization_form_schemas (
-    id                BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    organization_key  VARCHAR(100) NOT NULL,   -- organization's code, e.g. "bob"
-    screen_id         BIGINT NOT NULL REFERENCES portal_screens(id),
+    id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organization_key  VARCHAR(100) NOT NULL,   -- organization's code, e.g. "HSBC"
+    screen_id         UUID NOT NULL REFERENCES portal_screens(id),
     fields            JSONB NOT NULL DEFAULT '[]',
     created_at        TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at        TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -66,67 +70,109 @@ have neither) and new types may be added later. Example element:
 }
 ```
 
+**`fields[].id` is generated client-side**, not by the backend — `FieldListEditor.js`'s
+`emptyField()` calls `crypto.randomUUID()` the moment an admin clicks "+ Field", and that id
+never changes afterward (editing label/required/options/etc. never touches it; the only way
+to get a new id for a "field" is to remove it and add a fresh one). The backend's job is to
+store whatever `id` arrives verbatim inside the JSONB array — **never generate, reassign, or
+dedupe it server-side** — because downstream consumers (Recruitment Portal's
+`orgDynamicFieldValues`, Candidate Portal's per-inclusion claim values) use this id as the
+persistent key for *values entered against this field*, on records that live in entirely
+different tables/services the form-schema backend has no visibility into. Regenerating an id
+server-side would silently orphan any values already stored under the old one.
+
 ## Endpoints
 
-### `GET /organizations/{organizationKey}/{portal}/form-schema/{formKey}`
+> This section reflects the **actual live contract** (verified against Swagger and real
+> responses), which differs from an earlier draft of this doc: `screen` is a UUID passed as a
+> query param, resolved by the client from `GET /portalScreens` — it's not a `{portal}/{formKey}`
+> path segment, and there's no separate lookup-by-key on this endpoint itself.
 
-Returns the saved schema, or 404 if none has been configured yet — both consuming apps
-already treat "not found" as "use defaults / render nothing extra."
+### `GET /portalScreens`
 
-Response:
+Returns the full dev-maintained catalog (all rows of `portal_screens`). Every caller — the
+SuperAdmin editor and every consuming portal — resolves the `screenId` it needs by fetching
+this list and filtering client-side for `{ portal, screenKey: formKey, isActive: true }`.
+
+### `GET /organizations/{organizationCode}/form-schemas?screen={screenId}`
+
+Returns the saved schema for that org+screen, or a response with empty/absent `fields` if none
+has been configured yet — consuming apps treat that as "use defaults / render nothing extra."
+
+Response (real shape, wraps the row in a standard envelope):
 ```json
-{ "fields": [ /* ... */ ] }
+{
+  "success": true,
+  "message": "Organization form schema updated successfully",
+  "data": {
+    "id": "b3c52d5e-5626-4bd7-9cb8-30a86a150ce6",
+    "organizationCode": "HSBC",
+    "screenId": "91a893d9-7538-432a-8fc2-2bda3182bee4",
+    "fields": [ /* ... */ ],
+    "isActive": true,
+    "createdBy": "...", "modifiedBy": "...",
+    "createdDate": "...", "modifiedDate": "..."
+  }
+}
 ```
+`data.fields` has been observed as a real JSON array in practice (not a JSON-encoded string) —
+both `formSchemaService.js` (SuperAdminPortal) and `orgFormSchemaService.js` (Recruitment
+Portal) parse it defensively either way, so either representation is safe to send.
 
 - Called by: SuperAdminPortal (to load the editor) and every consuming portal at runtime
-  (Recruitment Portal's `orgFormSchemaService.js` today).
+  (Recruitment Portal's `orgFormSchemaService.js` today; Candidate Portal reads the analogous
+  `"candidate"`-portal screens the same way via `useOrgScreenSchema`).
 - Auth: normal authenticated access — read-only, no admin gate needed.
 
-### `PUT /organizations/{organizationKey}/{portal}/form-schema/{formKey}`
+### `PUT /organizations/{organizationCode}/form-schemas?screen={screenId}`
 
 Full-replace upsert (the editor always sends the complete field list, never a partial patch).
+`fields[].id` values are opaque, client-generated (see above) — persist them exactly as sent.
 
-Request body:
-```json
-{ "fields": [ /* ... */ ] }
-```
+Request body: the `fields` array itself (JSON-encoded).
 
 - Called by: SuperAdminPortal only.
 - **Auth: must be restricted to SuperAdmin role.** This endpoint rewrites what fields render
   on a live production screen for an organization.
-- Ignore any `formId` field if the client sends one — it's a display string the frontend
-  builds for itself (`form-${portal}-${formKey}-${organizationKey}`), not a key to persist.
+- No optimistic-concurrency check today — it's last-write-wins if two admins save the same
+  org+screen concurrently. Worth flagging to backend if that needs a version/etag guard later.
 
 ### Handler logic
 
 ```
-handle request(organizationKey, portal, formKey):
-    screen = SELECT * FROM portal_screens WHERE portal = :portal AND screen_key = :formKey
-    if screen is null: return 400 (unknown portal/formKey combination)
+handle request(organizationCode, screenId):
+    screen = SELECT * FROM portal_screens WHERE id = :screenId
+    if screen is null: return 400 (unknown screenId)
 
     # GET:
-    row = SELECT fields FROM organization_form_schemas
-          WHERE organization_key = :organizationKey AND screen_id = screen.id
-    return row or 404
+    row = SELECT * FROM organization_form_schemas
+          WHERE organization_key = :organizationCode AND screen_id = :screenId
+    return { success: true, data: row } (row.fields defaults to [] if no row exists yet)
 
     # PUT (SuperAdmin only):
-    validate body.fields: each has type in {text, dropdown, date, checkbox}, non-empty label;
-        text requires numeric maxLength; dropdown requires non-empty options array
+    validate body fields: each has an `id` (string, pass through as-is) and type in
+        {text, dropdown, multiselect, date, checkbox}, non-empty label;
+        text requires numeric maxLength; dropdown/multiselect require non-empty options array
     UPSERT organization_form_schemas (organization_key, screen_id, fields)
         ON CONFLICT (organization_key, screen_id) DO UPDATE ...
-    return { fields }
+    return { success: true, message: "...", data: row }
 ```
 
-## Adding a new screen later (e.g. Candidate Portal)
+## Adding a new screen (e.g. Candidate Portal)
+
+Candidate Portal has already done this for its "basic details"/"education details" candidate
+screens (via `useOrgScreenSchema`), so the steps below are the established, repeated pattern —
+not a hypothetical:
 
 1. Developer builds the render code on the consuming portal (a page + `DynamicFieldRenderer`
-   equivalent) and adds the fetch call using the same `GET` endpoint shape with `portal:
-   "candidate"`.
+   equivalent) and resolves its `screenId` via `GET /portalScreens`, filtering for
+   `{ portal: "candidate", screenKey: "<screenKey>" }`, then calls the same
+   `GET .../form-schemas?screen={screenId}` endpoint.
 2. Developer inserts a row into `portal_screens` for `('candidate', '<screenKey>',
    '<Screen Name>')`.
 3. Add the matching entry to `CONFIGURABLE_FORMS` in `DynamicFormsHome.js` so SuperAdmin can
    select it in the editor.
 
 No schema/table changes needed for step 3 — the existing `organization_form_schemas` table
-and both endpoints already work for any `(portal, formKey)` pair once `portal_screens` and
+and both endpoints already work for any `(portal, screenKey)` pair once `portal_screens` and
 the frontend catalog know about it.
