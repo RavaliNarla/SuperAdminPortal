@@ -78,18 +78,47 @@ const AuthenticationConfiguration = () => {
     }
   }, [organizationId]);
 
+  // The saved JSON stores method flags flattened (no nested `methods` key)
+  // and camelCased (e.g. "emailOtp"), while internal state keeps them as a
+  // nested `methods` object keyed by the UPPER_SNAKE_CASE constants used
+  // throughout the UI (e.g. EMAIL_OTP) — these two convert between the two.
+  const toCamelCase = (key) =>
+    key.toLowerCase().replace(/_([a-z])/g, (_, c) => c.toUpperCase());
+
+  const camelCaseKeys = (obj = {}) =>
+    Object.fromEntries(
+      Object.entries(obj).map(([key, value]) => [toCamelCase(key), value]),
+    );
+
+  // Reconstructs the nested `methods` object from the flattened camelCase
+  // keys the saved JSON actually stores them under, only picking up keys
+  // that are actually present so partial/old data can't wipe a default.
+  const extractMethods = (fetchedSection, methodKeys) => {
+    const result = {};
+    methodKeys.forEach((key) => {
+      const camelKey = toCamelCase(key);
+      if (fetchedSection?.[camelKey] !== undefined) {
+        result[key] = fetchedSection[camelKey];
+      }
+    });
+    return result;
+  };
+
   // Merges a fetched section over its default so a config saved before a
-  // field existed (e.g. otpLength/retryCount, or the method toggles) can't
-  // wipe that field back to blank/undefined — a plain shallow spread at the
-  // top level would replace the whole section object wholesale instead of
-  // filling in just what's missing. Also deep-merges `methods` sub-objects
-  // specifically, since a fetched section only partially covering methods
-  // would otherwise leave every method disabled.
-  const mergeSection = (defaultsSection, fetchedSection) => ({
+  // field existed (e.g. otpLength/retryCount) can't wipe that field back to
+  // blank/undefined — a plain shallow spread at the top level would replace
+  // the whole section object wholesale instead of filling in just what's
+  // missing. When `methodKeys` is passed, also reconstructs `methods` from
+  // the flattened/camelCased fields, since a fetched section only partially
+  // covering methods would otherwise leave every method disabled.
+  const mergeSection = (defaultsSection, fetchedSection, methodKeys) => ({
     ...defaultsSection,
     ...fetchedSection,
-    ...(defaultsSection?.methods && {
-      methods: { ...defaultsSection.methods, ...fetchedSection?.methods },
+    ...(methodKeys && {
+      methods: {
+        ...defaultsSection.methods,
+        ...extractMethods(fetchedSection, methodKeys),
+      },
     }),
   });
 
@@ -110,12 +139,16 @@ const AuthenticationConfiguration = () => {
         candidateLogin: mergeSection(
           initialState.candidateLogin,
           apiData.candidateLogin,
+          ["EMAIL_PASSWORD"],
         ),
         recruitmentLogin: mergeSection(
           initialState.recruitmentLogin,
           apiData.recruitmentLogin,
         ),
-        twoFactor: mergeSection(initialState.twoFactor, apiData.twoFactor),
+        twoFactor: mergeSection(initialState.twoFactor, apiData.twoFactor, [
+          "EMAIL_OTP",
+          "SMS_OTP",
+        ]),
         otp: mergeSection(initialState.otp, apiData.otp),
         password: mergeSection(initialState.password, apiData.password),
         session: mergeSection(initialState.session, apiData.session),
@@ -146,18 +179,28 @@ const AuthenticationConfiguration = () => {
   const buildSavePayload = (fullConfig) => ({
     portal: fullConfig.portal,
     candidateLogin: {
-      methods: fullConfig.candidateLogin.methods,
+      ...camelCaseKeys(fullConfig.candidateLogin.methods),
       allowRegistration: fullConfig.candidateLogin.allowRegistration,
       enableCaptcha: fullConfig.candidateLogin.enableCaptcha,
       verifyEmail: fullConfig.candidateLogin.verifyEmail,
     },
     recruitmentLogin: {
-      methods: fullConfig.recruitmentLogin.methods,
       enableCaptcha: fullConfig.recruitmentLogin.enableCaptcha,
+      // Static values below — no live UI control for these anymore, kept
+      // in the saved JSON by explicit request rather than derived from
+      // editable state.
+      sso: false,
+      email: false,
+      adLogin: false,
+      username: true,
+      employeeId: true,
+      defaultLoginMethod: "EMAIL",
+      forcePasswordChange: false,
+      enableForgotPassword: false,
     },
     twoFactor: {
       enabled: fullConfig.twoFactor.enabled,
-      methods: fullConfig.twoFactor.methods,
+      ...camelCaseKeys(fullConfig.twoFactor.methods),
     },
     password: {
       minLength: fullConfig.password.minLength,
