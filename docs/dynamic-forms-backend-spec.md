@@ -158,6 +158,32 @@ handle request(organizationCode, screenId):
     return { success: true, message: "...", data: row }
 ```
 
+## Section title (client-side convention, no schema change)
+
+Each screen's field list can carry an optional heading ("Section Title" in
+`FormFieldsBuilder.js`), shown above the fields on the consuming portal
+(Recruitment Portal's `DynamicFieldRenderer`, Candidate Portal's
+`DynamicFormRenderer`). There's no `title` column on
+`organization_form_schemas` — adding one would require changing the PUT body
+shape for every screen that uses this endpoint, which is riskier than it's
+worth for one label. Instead, the title is stored as a reserved entry inside
+the `fields` array itself:
+
+```json
+{ "id": "__section_title__", "type": "text", "label": "<the title text>", "required": false }
+```
+
+This passes the existing field validation verbatim (non-empty label, allowed
+type), so it round-trips through `fields JSONB` with **no backend change
+required**. Every reader (`FormFieldsBuilder.js`, Recruitment Portal's
+`orgFormSchemaService.js`, Candidate Portal's `useOrgScreenSchema.js`) filters
+this entry out of the editable/rendered field list by its reserved id and
+surfaces it separately as `schema.title`. When no title is set, the entry is
+omitted from the array entirely (not sent as an empty label). If a real
+`title` column is ever added server-side, this convention can be retired in
+favor of it — the three call sites above are the only places that would need
+to change.
+
 ## Adding a new screen (e.g. Candidate Portal)
 
 Candidate Portal has already done this for its "basic details"/"education details" candidate

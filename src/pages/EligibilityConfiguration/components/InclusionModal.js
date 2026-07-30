@@ -20,6 +20,7 @@ const InclusionModal = ({
         name: "",
         ageRelaxation: "",
         description: "",
+        sectionTitle: "",
         fields: [],
     });
 
@@ -30,6 +31,7 @@ const InclusionModal = ({
                 ageRelaxation:
                     inclusion.ageRelaxation?.replace(" Years", "") || "",
                 description: inclusion.description || "",
+                sectionTitle: inclusion.sectionTitle || "",
                 fields: inclusion.fields || [],
             });
         } else {
@@ -37,6 +39,7 @@ const InclusionModal = ({
                 name: "",
                 ageRelaxation: "",
                 description: "",
+                sectionTitle: "",
                 fields: [],
             });
         }
@@ -57,6 +60,7 @@ const InclusionModal = ({
             name: formData.name,
             ageRelaxation: `${formData.ageRelaxation} Years`,
             description: formData.description,
+            sectionTitle: formData.sectionTitle,
             fields: formData.fields,
             status: "Active",
         };
@@ -164,6 +168,29 @@ const InclusionModal = ({
                                 handleChange("description", e.target.value)
                             }
                         />
+
+                    </div>
+
+                    <div className="mb-3">
+
+                        <label className="form-label">
+                            Section Title
+                        </label>
+
+                        <input
+                            className="form-control modern-input"
+                            value={formData.sectionTitle}
+                            placeholder="e.g. Freedom Fighter — Supporting Details"
+                            disabled={isViewMode}
+                            onChange={(e) =>
+                                handleChange("sectionTitle", e.target.value)
+                            }
+                        />
+
+                        <p className="text-muted small mb-0 mt-1">
+                            Shown as a heading above the fields below, once a candidate checks this
+                            inclusion on their application. Falls back to the Inclusion Name if left blank.
+                        </p>
 
                     </div>
 
