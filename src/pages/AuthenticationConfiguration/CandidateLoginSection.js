@@ -1,148 +1,52 @@
 import React from "react";
 import { Row, Col, Form } from "react-bootstrap";
-import {
-  FiLogIn,
-  FiUser,
-  FiMail,
-  FiShield,
-  FiUsers,
-} from "react-icons/fi";
+import { FiLogIn, FiMail, FiUsers } from "react-icons/fi";
 
 import "../../css/Section.css";
 
-// Candidate Portal Authentication — Email + Password only for now
-// (narrower than the roadmap's Email+Password/Mobile OTP/Email OTP trio,
-// by deliberate product decision). It's the sole method, so it's shown as a
-// fixed label rather than a toggle — there's no meaningful "off" state when
-// disabling it would mean no one could log in at all.
-const CandidateLoginSection = ({ data, onChange }) => {
+const CandidateLoginSection = () => {
   return (
-    <div className="candidate-login-card mb-4">
+    <div className="recruitment-login-card mb-4">
       <div className="card-body">
         {/* Header */}
-
-        <div className="candidate-header">
+        <div className="recruitment-login-header">
           <div>
-            <h4>
+            <h5 className="recruitment-login-title">
               <FiLogIn className="me-2" />
               Candidate Portal Authentication
-            </h4>
+            </h5>
 
-            <p>
-              Configure candidate login methods, registration, verification and
-              password recovery options.
+            <p className="recruitment-login-subtitle">
+              Configure authentication methods for candidate portal users.
             </p>
           </div>
         </div>
 
-        {/* Login Methods */}
-
+        {/* Login Method */}
         <h6 className="section-sub-heading mb-3">
           <FiUsers className="me-2" />
-          Login Methods
+          Login Method
         </h6>
 
         <Row className="g-3">
-          <Col lg={4} md={6}>
-            <div className="setting-card h-100">
-              <div className="setting-card-content">
-                <div className="setting-icon">
+          <Col lg={6} md={6}>
+            <div className="recruitment-method-card">
+              <div className="recruitment-method-left">
+                <div className="recruitment-method-icon">
                   <FiMail />
                 </div>
 
                 <div>
                   <h6>Email + Password</h6>
-
-                  <p>Login using Email Address and Password</p>
-                </div>
-              </div>
-            </div>
-          </Col>
-        </Row>
-
-        {/* Security Settings */}
-
-        <h6 className="section-sub-heading mt-5 mb-3">
-          <FiShield className="me-2" />
-          Security Settings
-        </h6>
-
-        <Row className="g-3">
-          <Col lg={6}>
-            <div className="setting-card">
-              <div className="setting-card-content">
-                <div className="setting-icon">
-                  <FiShield />
-                </div>
-
-                <div>
-                  <h6>Enable CAPTCHA</h6>
-
-                  <p>
-                    Protect the candidate login page from automated bot attacks.
-                  </p>
+                  <small>Login using Email Address and Password</small>
                 </div>
               </div>
 
               <Form.Check
                 className="setting-switch"
                 type="switch"
-                checked={data.enableCaptcha || false}
-                onChange={(e) => onChange("enableCaptcha", e.target.checked)}
-              />
-            </div>
-          </Col>
-
-          <Col lg={6}>
-            <div className="setting-card">
-              <div className="setting-card-content">
-                <div className="setting-icon">
-                  <FiUser />
-                </div>
-
-                <div>
-                  <h6>Allow Candidate Registration</h6>
-
-                  <p>
-                    Allow new candidates to register themselves through the
-                    portal.
-                  </p>
-                </div>
-              </div>
-
-              <Form.Check
-                className="setting-switch"
-                type="switch"
-                checked={data.allowRegistration || false}
-                onChange={(e) =>
-                  onChange("allowRegistration", e.target.checked)
-                }
-              />
-            </div>
-          </Col>
-
-          <Col lg={6}>
-            <div className="setting-card">
-              <div className="setting-card-content">
-                <div className="setting-icon">
-                  <FiShield />
-                </div>
-
-                <div>
-                  <h6>Verify Email During Registration</h6>
-
-                  <p>
-                    Send an email verification link before activating candidate
-                    accounts.
-                  </p>
-                </div>
-              </div>
-
-              <Form.Check
-                className="setting-switch"
-                type="switch"
-                checked={data.verifyEmail || false}
-                onChange={(e) => onChange("verifyEmail", e.target.checked)}
+                checked={true}
+                disabled
               />
             </div>
           </Col>

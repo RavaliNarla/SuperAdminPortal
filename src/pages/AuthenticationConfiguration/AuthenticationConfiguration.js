@@ -18,25 +18,30 @@ const AuthenticationConfiguration = () => {
   const organizationId = useAppSelector(
     (state) => state.eligibility.selectedOrganization,
   );
-  console.log("Organization ID:", organizationId);
+  const organizations = useAppSelector((state) => state.organizations.items);
+
+  const selectedOrganization = organizations.find(
+    (org) => String(org.id) === String(organizationId),
+  );
   const initialState = {
     portal: "",
 
     candidateLogin: {
-      methods: { EMAIL_PASSWORD: true },
-      allowRegistration: true,
-      enableCaptcha: true,
-      verifyEmail: true,
+      EMAIL_PASSWORD: true,
+      defaultLoginMethod: "EMAIL_PASSWORD",
     },
 
     recruitmentLogin: {
-      methods: { ENTRA_ID: false, EMAIL_PASSWORD: true },
+      ENTRA_ID: false,
+      EMAIL_PASSWORD: true,
       enableCaptcha: true,
+      defaultLoginMethod: "EMAIL_PASSWORD",
     },
 
     twoFactor: {
       enabled: false,
-      methods: { EMAIL_OTP: true, SMS_OTP: false },
+      EMAIL_OTP: false,
+      SMS_OTP: false,
     },
 
     otp: {
@@ -129,7 +134,7 @@ const AuthenticationConfiguration = () => {
           organizationId,
         );
 
-      console.log("GET Response:", response.data);
+      // console.log("GET Response:", response.data);
 
       const apiData = response?.data?.data?.authenticationJson || {};
 
@@ -167,40 +172,22 @@ const AuthenticationConfiguration = () => {
     }));
   };
 
-  // Allowlist of exactly the fields with a live UI control right now. A
-  // denylist isn't safe here: mergeSection (fetchAuthenticationConfiguration)
-  // deliberately spreads the entire fetched section forward so newly-added
-  // defaults don't get wiped, but that also means any stale/legacy field
-  // (or outright corrupted data) sitting in a previously-saved config rides
-  // along in `config` state indefinitely and would otherwise get resaved
-  // forever. Only emitting these exact known-good keys guarantees old
-  // removed fields — and anything unexpected — never make it back into the
-  // saved JSON, no matter what junk is present in state.
   const buildSavePayload = (fullConfig) => ({
+    orgCode: selectedOrganization?.orgCode || "",
     portal: fullConfig.portal,
     candidateLogin: {
-      ...camelCaseKeys(fullConfig.candidateLogin.methods),
-      allowRegistration: fullConfig.candidateLogin.allowRegistration,
-      enableCaptcha: fullConfig.candidateLogin.enableCaptcha,
-      verifyEmail: fullConfig.candidateLogin.verifyEmail,
+      EMAIL_PASSWORD: fullConfig.candidateLogin.EMAIL_PASSWORD,
+      defaultLoginMethod: fullConfig.candidateLogin.defaultLoginMethod,
     },
     recruitmentLogin: {
-      enableCaptcha: fullConfig.recruitmentLogin.enableCaptcha,
-      // Static values below — no live UI control for these anymore, kept
-      // in the saved JSON by explicit request rather than derived from
-      // editable state.
-      sso: false,
-      email: false,
-      adLogin: false,
-      username: true,
-      employeeId: true,
-      defaultLoginMethod: "EMAIL",
-      forcePasswordChange: false,
-      enableForgotPassword: false,
+      ENTRA_ID: fullConfig.recruitmentLogin.ENTRA_ID,
+      EMAIL_PASSWORD: fullConfig.recruitmentLogin.EMAIL_PASSWORD,
+      defaultLoginMethod: fullConfig.recruitmentLogin.defaultLoginMethod,
     },
     twoFactor: {
       enabled: fullConfig.twoFactor.enabled,
-      ...camelCaseKeys(fullConfig.twoFactor.methods),
+      EMAIL_OTP: fullConfig.twoFactor.EMAIL_OTP,
+      SMS_OTP: fullConfig.twoFactor.SMS_OTP,
     },
     password: {
       minLength: fullConfig.password.minLength,
@@ -222,7 +209,7 @@ const AuthenticationConfiguration = () => {
   const handleSave = async () => {
     try {
       const payload = buildSavePayload(config);
-      console.log("Saving Configuration", organizationId, payload);
+      // console.log("Saving Configuration", organizationId, payload);
 
       const response =
         await authenticationApiService.updateAuthenticationConfiguration(
