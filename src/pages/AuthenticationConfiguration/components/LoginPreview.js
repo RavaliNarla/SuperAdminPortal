@@ -1,22 +1,10 @@
 import React from "react";
 import { Card, Badge, Form, Button, Row, Col } from "react-bootstrap";
-import {
-  FiMail,
-  FiShield,
-  FiLock,
-  FiCheckCircle,
-} from "react-icons/fi";
-
-// Preview order when more than one method is enabled at once — there's no
-// separate "default method" concept anymore, so the preview just shows the
-// first enabled method in this fixed priority order.
+import { FiMail, FiShield, FiLock, FiCheckCircle } from "react-icons/fi";
 const RECRUITMENT_METHOD_ORDER = ["EMAIL_PASSWORD", "ENTRA_ID"];
 const TWO_FACTOR_METHOD_ORDER = ["EMAIL_OTP", "SMS_OTP"];
 
 const LoginPreview = ({ config }) => {
-  // -----------------------------
-  // Candidate Login Method — Email + Password only, for now
-  // -----------------------------
   const getCandidateMethod = () => {
     return {
       label: "Email Address",
@@ -30,15 +18,10 @@ const LoginPreview = ({ config }) => {
       },
     };
   };
-
-  // -----------------------------
-  // Recruitment Login Method
-  // -----------------------------
   const getRecruitmentMethod = () => {
     const activeMethod = RECRUITMENT_METHOD_ORDER.find(
-      (key) => config.recruitmentLogin.methods?.[key],
+      (key) => config.recruitmentLogin?.[key],
     );
-
     switch (activeMethod) {
       case "ENTRA_ID":
         return {
@@ -47,7 +30,6 @@ const LoginPreview = ({ config }) => {
           placeholder: "Login with Microsoft",
           secondField: null,
         };
-
       case "EMAIL_PASSWORD":
       default:
         return {
@@ -63,13 +45,15 @@ const LoginPreview = ({ config }) => {
         };
     }
   };
-
   const candidate = getCandidateMethod();
   const recruitment = getRecruitmentMethod();
-
+  const activeTwoFactor =
+    config.portal === "candidate"
+      ? config.candidateTwoFactor
+      : config.recruitmentTwoFactor;
   const get2FAMethod = () => {
     const activeMethod = TWO_FACTOR_METHOD_ORDER.find(
-      (key) => config.twoFactor.methods?.[key],
+      (key) => activeTwoFactor?.[key],
     );
 
     switch (activeMethod) {
@@ -100,9 +84,6 @@ const LoginPreview = ({ config }) => {
                   : "Candidate + Recruitment"}
           </Badge>
         </div>
-        {/* ============================
-            Candidate Portal
-        ============================= */}
 
         {(config.portal === "candidate" || config.portal === "both") && (
           <Card className="preview-portal-card mb-4">
@@ -161,7 +142,7 @@ const LoginPreview = ({ config }) => {
                   <span>Remember Me</span>
                 </label>
 
-                {config.candidateLogin.methods?.EMAIL_PASSWORD && (
+               {config.candidateLogin?.EMAIL_PASSWORD && (
                   <span className="preview-link">Forgot Password?</span>
                 )}
               </div>
@@ -296,9 +277,9 @@ const LoginPreview = ({ config }) => {
                       </div>
 
                       <Badge
-                        bg={config.twoFactor.enabled ? "success" : "secondary"}
+                        bg={activeTwoFactor?.enabled ? "success" : "secondary"}
                       >
-                        {config.twoFactor.enabled ? "Enabled" : "Disabled"}
+                        {activeTwoFactor?.enabled ? "Enabled" : "Disabled"}
                       </Badge>
                     </div>
                   </Col>
@@ -308,11 +289,7 @@ const LoginPreview = ({ config }) => {
           </Card>
         )}
 
-        {/* ===========================
-            Two Factor Authentication
-        =========================== */}
-
-        {config.twoFactor.enabled && (
+        {activeTwoFactor?.enabled && (
           <Form.Group className="mt-4">
             <Form.Label>2FA Method</Form.Label>
 
@@ -321,21 +298,6 @@ const LoginPreview = ({ config }) => {
               value={get2FAMethod()}
               readOnly
             />
-
-            {/* OTP Expiry / Resend Attempts display commented out along with
-                OTP Settings (AuthenticationConfiguration.js) — no live UI
-                edits these values right now. */}
-            {/* {config.otp.expiry && (
-              <small className="text-muted d-block mt-2">
-                OTP Expiry : {config.otp.expiry} Minutes
-              </small>
-            )}
-
-            {config.otp.resendCount && (
-              <small className="text-muted d-block">
-                Resend Attempts : {config.otp.resendCount}
-              </small>
-            )} */}
           </Form.Group>
         )}
       </Card.Body>

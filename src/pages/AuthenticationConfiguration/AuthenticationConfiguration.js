@@ -10,7 +10,6 @@ import SessionPolicySection from "./components/SessionPolicySection";
 import LoginPreview from "./components/LoginPreview";
 import AuthenticationFooter from "./AuthenticationFooter";
 import "../../css/AuthenticationConfiguration.css";
-import { useParams, Link } from "react-router-dom";
 import authenticationApiService from "../AuthenticationConfiguration/services/authServices";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
@@ -24,7 +23,7 @@ const AuthenticationConfiguration = () => {
     (org) => String(org.id) === String(organizationId),
   );
   const initialState = {
-    portal: "",
+    portal: "candidate",
 
     candidateLogin: {
       EMAIL_PASSWORD: true,
@@ -38,24 +37,19 @@ const AuthenticationConfiguration = () => {
       defaultLoginMethod: "EMAIL_PASSWORD",
     },
 
-    twoFactor: {
+    candidateTwoFactor: {
       enabled: false,
       EMAIL_OTP: false,
       SMS_OTP: false,
     },
 
-    otp: {
-      method: "SMS",
-      otpLength: 6,
-      expiry: 5,
-      resendCount: 3,
-      retryCount: 3,
-      passwordResetOtp: true,
-      maskMobile: true,
-      maskEmail: true,
+    recruitmentTwoFactor: {
+      enabled: false,
+      EMAIL_OTP: false,
+      SMS_OTP: false,
     },
 
-    password: {
+    candidatePassword: {
       minLength: 8,
       maxLength: 20,
       uppercase: true,
@@ -70,7 +64,27 @@ const AuthenticationConfiguration = () => {
       unlockDuration: 30,
     },
 
-    session: {
+    recruitmentPassword: {
+      minLength: 8,
+      maxLength: 20,
+      uppercase: true,
+      lowercase: true,
+      number: true,
+      specialCharacter: true,
+      enableExpiry: true,
+      enableHistory: true,
+      expiryDays: 90,
+      historyCount: 5,
+      lockAttempts: 5,
+      unlockDuration: 30,
+    },
+
+    candidateSession: {
+      idleTimeout: 15,
+      concurrentSessions: 1,
+    },
+
+    recruitmentSession: {
       idleTimeout: 15,
       concurrentSessions: 1,
     },
@@ -83,10 +97,6 @@ const AuthenticationConfiguration = () => {
     }
   }, [organizationId]);
 
-  // The saved JSON stores method flags flattened (no nested `methods` key)
-  // and camelCased (e.g. "emailOtp"), while internal state keeps them as a
-  // nested `methods` object keyed by the UPPER_SNAKE_CASE constants used
-  // throughout the UI (e.g. EMAIL_OTP) — these two convert between the two.
   const toCamelCase = (key) =>
     key.toLowerCase().replace(/_([a-z])/g, (_, c) => c.toUpperCase());
 
@@ -95,9 +105,6 @@ const AuthenticationConfiguration = () => {
       Object.entries(obj).map(([key, value]) => [toCamelCase(key), value]),
     );
 
-  // Reconstructs the nested `methods` object from the flattened camelCase
-  // keys the saved JSON actually stores them under, only picking up keys
-  // that are actually present so partial/old data can't wipe a default.
   const extractMethods = (fetchedSection, methodKeys) => {
     const result = {};
     methodKeys.forEach((key) => {
@@ -109,13 +116,6 @@ const AuthenticationConfiguration = () => {
     return result;
   };
 
-  // Merges a fetched section over its default so a config saved before a
-  // field existed (e.g. otpLength/retryCount) can't wipe that field back to
-  // blank/undefined — a plain shallow spread at the top level would replace
-  // the whole section object wholesale instead of filling in just what's
-  // missing. When `methodKeys` is passed, also reconstructs `methods` from
-  // the flattened/camelCased fields, since a fetched section only partially
-  // covering methods would otherwise leave every method disabled.
   const mergeSection = (defaultsSection, fetchedSection, methodKeys) => ({
     ...defaultsSection,
     ...fetchedSection,
@@ -143,20 +143,47 @@ const AuthenticationConfiguration = () => {
         ...apiData,
         candidateLogin: mergeSection(
           initialState.candidateLogin,
-          apiData.candidateLogin,
+          apiData.candidatePortal?.login,
           ["EMAIL_PASSWORD"],
         ),
+
         recruitmentLogin: mergeSection(
           initialState.recruitmentLogin,
-          apiData.recruitmentLogin,
+          apiData.recruitmentPortal?.login,
+          ["EMAIL_PASSWORD", "ENTRA_ID"],
         ),
-        twoFactor: mergeSection(initialState.twoFactor, apiData.twoFactor, [
-          "EMAIL_OTP",
-          "SMS_OTP",
-        ]),
-        otp: mergeSection(initialState.otp, apiData.otp),
-        password: mergeSection(initialState.password, apiData.password),
-        session: mergeSection(initialState.session, apiData.session),
+
+        candidateTwoFactor: mergeSection(
+          initialState.candidateTwoFactor,
+          apiData.candidatePortal?.twoFactor,
+          ["EMAIL_OTP", "SMS_OTP"],
+        ),
+
+        recruitmentTwoFactor: mergeSection(
+          initialState.recruitmentTwoFactor,
+          apiData.recruitmentPortal?.twoFactor,
+          ["EMAIL_OTP", "SMS_OTP"],
+        ),
+
+        candidatePassword: mergeSection(
+          initialState.candidatePassword,
+          apiData.candidatePortal?.password,
+        ),
+
+        recruitmentPassword: mergeSection(
+          initialState.recruitmentPassword,
+          apiData.recruitmentPortal?.password,
+        ),
+
+        candidateSession: mergeSection(
+          initialState.candidateSession,
+          apiData.candidatePortal?.session,
+        ),
+
+        recruitmentSession: mergeSection(
+          initialState.recruitmentSession,
+          apiData.recruitmentPortal?.session,
+        ),
       });
     } catch (error) {
       console.error("GET Error:", error);
@@ -174,37 +201,96 @@ const AuthenticationConfiguration = () => {
 
   const buildSavePayload = (fullConfig) => ({
     orgCode: selectedOrganization?.orgCode || "",
-    portal: fullConfig.portal,
-    candidateLogin: {
-      EMAIL_PASSWORD: fullConfig.candidateLogin.EMAIL_PASSWORD,
-      defaultLoginMethod: fullConfig.candidateLogin.defaultLoginMethod,
+
+    candidatePortal: {
+      login: {
+        EMAIL_PASSWORD: fullConfig.candidateLogin.EMAIL_PASSWORD,
+        defaultLoginMethod: fullConfig.candidateLogin.defaultLoginMethod,
+      },
+
+      twoFactor: {
+        enabled: fullConfig.candidateTwoFactor.enabled,
+        EMAIL_OTP: fullConfig.candidateTwoFactor.EMAIL_OTP,
+        SMS_OTP: fullConfig.candidateTwoFactor.SMS_OTP,
+      },
+
+      password: fullConfig.candidatePassword,
+
+      session: fullConfig.candidateSession,
     },
-    recruitmentLogin: {
-      ENTRA_ID: fullConfig.recruitmentLogin.ENTRA_ID,
-      EMAIL_PASSWORD: fullConfig.recruitmentLogin.EMAIL_PASSWORD,
-      defaultLoginMethod: fullConfig.recruitmentLogin.defaultLoginMethod,
-    },
-    twoFactor: {
-      enabled: fullConfig.twoFactor.enabled,
-      EMAIL_OTP: fullConfig.twoFactor.EMAIL_OTP,
-      SMS_OTP: fullConfig.twoFactor.SMS_OTP,
-    },
-    password: {
-      minLength: fullConfig.password.minLength,
-      maxLength: fullConfig.password.maxLength,
-      uppercase: fullConfig.password.uppercase,
-      lowercase: fullConfig.password.lowercase,
-      number: fullConfig.password.number,
-      specialCharacter: fullConfig.password.specialCharacter,
-      enableExpiry: fullConfig.password.enableExpiry,
-      enableHistory: fullConfig.password.enableHistory,
-      expiryDays: fullConfig.password.expiryDays,
-    },
-    session: {
-      idleTimeout: fullConfig.session.idleTimeout,
-      concurrentSessions: fullConfig.session.concurrentSessions,
+
+    recruitmentPortal: {
+      login: {
+        ENTRA_ID: fullConfig.recruitmentLogin.ENTRA_ID,
+        EMAIL_PASSWORD: fullConfig.recruitmentLogin.EMAIL_PASSWORD,
+        enableCaptcha: fullConfig.recruitmentLogin.enableCaptcha,
+        defaultLoginMethod: fullConfig.recruitmentLogin.defaultLoginMethod,
+      },
+
+      twoFactor: {
+        enabled: fullConfig.recruitmentTwoFactor.enabled,
+        EMAIL_OTP: fullConfig.recruitmentTwoFactor.EMAIL_OTP,
+        SMS_OTP: fullConfig.recruitmentTwoFactor.SMS_OTP,
+      },
+
+      password: fullConfig.recruitmentPassword,
+
+      session: fullConfig.recruitmentSession,
     },
   });
+
+  // const buildSavePayload = (fullConfig) => {
+  //   const payload = {
+  //     orgCode: selectedOrganization?.orgCode || "",
+  //     portal: fullConfig.portal,
+  //   };
+
+  //   if (fullConfig.portal === "candidate") {
+  //     payload.candidateLogin = {
+  //       EMAIL_PASSWORD: fullConfig.candidateLogin.EMAIL_PASSWORD,
+  //       defaultLoginMethod: fullConfig.candidateLogin.defaultLoginMethod,
+  //     };
+
+  //     payload.candidateTwoFactor = {
+  //       enabled: fullConfig.candidateTwoFactor.enabled,
+  //       EMAIL_OTP: fullConfig.candidateTwoFactor.EMAIL_OTP,
+  //       SMS_OTP: fullConfig.candidateTwoFactor.SMS_OTP,
+  //     };
+  //   }
+
+  //   if (fullConfig.portal === "recruitment") {
+  //     payload.recruitmentLogin = {
+  //       ENTRA_ID: fullConfig.recruitmentLogin.ENTRA_ID,
+  //       EMAIL_PASSWORD: fullConfig.recruitmentLogin.EMAIL_PASSWORD,
+  //       defaultLoginMethod: fullConfig.recruitmentLogin.defaultLoginMethod,
+  //     };
+
+  //     payload.recruitmentTwoFactor = {
+  //       enabled: fullConfig.recruitmentTwoFactor.enabled,
+  //       EMAIL_OTP: fullConfig.recruitmentTwoFactor.EMAIL_OTP,
+  //       SMS_OTP: fullConfig.recruitmentTwoFactor.SMS_OTP,
+  //     };
+  //   }
+
+  //   payload.password = {
+  //     minLength: fullConfig.password.minLength,
+  //     maxLength: fullConfig.password.maxLength,
+  //     uppercase: fullConfig.password.uppercase,
+  //     lowercase: fullConfig.password.lowercase,
+  //     number: fullConfig.password.number,
+  //     specialCharacter: fullConfig.password.specialCharacter,
+  //     enableExpiry: fullConfig.password.enableExpiry,
+  //     enableHistory: fullConfig.password.enableHistory,
+  //     expiryDays: fullConfig.password.expiryDays,
+  //   };
+
+  //   payload.session = {
+  //     idleTimeout: fullConfig.session.idleTimeout,
+  //     concurrentSessions: fullConfig.session.concurrentSessions,
+  //   };
+
+  //   return payload;
+  // };
 
   const handleSave = async () => {
     try {
@@ -296,43 +382,51 @@ const AuthenticationConfiguration = () => {
 
               <Card className="border-0 shadow-sm mb-4">
                 <Card.Body>
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <div>
-                      <h5 className="fw-bold mb-1">Select Portal</h5>
+                  <div className="mb-3">
+                    <h5 className="fw-bold mb-1">Select Portal</h5>
 
-                      <small className="text-muted">
-                        Choose the portal whose authentication settings you want
-                        to configure.
-                      </small>
-                    </div>
+                    <small className="text-muted">
+                      Choose the portal whose authentication settings you want
+                      to configure.
+                    </small>
                   </div>
 
-                  <Form.Group>
-                    <Form.Label className="fw-semibold">Portal</Form.Label>
-
-                    <Form.Select
-                      className="portal-select"
-                      value={config.portal}
-                      onChange={(e) =>
+                  <div className="portal-tabs">
+                    <button
+                      type="button"
+                      className={`portal-tab ${
+                        config.portal === "candidate" ? "active" : ""
+                      }`}
+                      onClick={() =>
                         setConfig({
                           ...config,
-                          portal: e.target.value,
+                          portal: "candidate",
                         })
                       }
                     >
-                      <option value="">Select Portal</option>
+                      <i className="bi bi-person-circle me-2"></i>
+                      Candidate Portal
+                    </button>
 
-                      <option value="candidate">Candidate Portal</option>
-
-                      <option value="recruitment">Recruitment Portal</option>
-
-                      <option value="both">Candidate + Recruitment</option>
-                    </Form.Select>
-                  </Form.Group>
+                    <button
+                      type="button"
+                      className={`portal-tab ${
+                        config.portal === "recruitment" ? "active" : ""
+                      }`}
+                      onClick={() =>
+                        setConfig({
+                          ...config,
+                          portal: "recruitment",
+                        })
+                      }
+                    >
+                      <i className="bi bi-briefcase-fill me-2"></i>
+                      Recruiter Portal
+                    </button>
+                  </div>
                 </Card.Body>
               </Card>
-
-              {(config.portal === "candidate" || config.portal === "both") && (
+              {config.portal === "candidate" && (
                 <CandidateLoginSection
                   data={config.candidateLogin}
                   onChange={(field, value) =>
@@ -341,8 +435,7 @@ const AuthenticationConfiguration = () => {
                 />
               )}
 
-              {(config.portal === "recruitment" ||
-                config.portal === "both") && (
+              {config.portal === "recruitment" && (
                 <RecruitmentLoginSection
                   data={config.recruitmentLogin}
                   onChange={(field, value) =>
@@ -351,32 +444,56 @@ const AuthenticationConfiguration = () => {
                 />
               )}
 
-              <TwoFactorSection
-                data={config.twoFactor}
-                onChange={(field, value) =>
-                  handleChange("twoFactor", field, value)
-                }
-              />
+              {config.portal === "candidate" && (
+                <TwoFactorSection
+                  title="Candidate Two-Factor Authentication"
+                  data={config.candidateTwoFactor}
+                  onChange={(field, value) =>
+                    handleChange("candidateTwoFactor", field, value)
+                  }
+                />
+              )}
 
-              {/* OTP Settings — commented out for now, pending decision on
-                  the Email OTP / SMS OTP "both enabled" semantics (2FA
-                  section) before re-enabling. */}
-              {/* <OTPSettingsSection
-                data={config.otp}
-                onChange={(field, value) => handleChange("otp", field, value)}
-              /> */}
+              {config.portal === "recruitment" && (
+                <TwoFactorSection
+                  title="Recruitment Two-Factor Authentication"
+                  data={config.recruitmentTwoFactor}
+                  onChange={(field, value) =>
+                    handleChange("recruitmentTwoFactor", field, value)
+                  }
+                />
+              )}
 
               <PasswordPolicySection
-                data={config.password}
+                data={
+                  config.portal === "candidate"
+                    ? config.candidatePassword
+                    : config.recruitmentPassword
+                }
                 onChange={(field, value) =>
-                  handleChange("password", field, value)
+                  handleChange(
+                    config.portal === "candidate"
+                      ? "candidatePassword"
+                      : "recruitmentPassword",
+                    field,
+                    value,
+                  )
                 }
               />
-
               <SessionPolicySection
-                data={config.session}
+                data={
+                  config.portal === "candidate"
+                    ? config.candidateSession
+                    : config.recruitmentSession
+                }
                 onChange={(field, value) =>
-                  handleChange("session", field, value)
+                  handleChange(
+                    config.portal === "candidate"
+                      ? "candidateSession"
+                      : "recruitmentSession",
+                    field,
+                    value,
+                  )
                 }
               />
             </Card.Body>

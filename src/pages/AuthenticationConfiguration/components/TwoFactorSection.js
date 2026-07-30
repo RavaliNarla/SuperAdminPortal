@@ -1,114 +1,92 @@
 import React from "react";
-import { Row, Col, Form } from "react-bootstrap";
-import { FiShield, FiMail, FiSmartphone } from "react-icons/fi";
+import { Card, Form, Row, Col } from "react-bootstrap";
+import { FiShield } from "react-icons/fi";
 
-import "../../../css/TwoFactorSection.css";
-
-const twoFactorMethods = [
-  {
-    value: "EMAIL_OTP",
-    label: "Email OTP",
-    icon: <FiMail />,
-    description: "Send a one-time code to the user's email.",
-  },
-  {
-    value: "SMS_OTP",
-    label: "SMS OTP",
-    icon: <FiSmartphone />,
-    description: "Send a one-time code to the user's mobile.",
-  },
-];
-
-const TwoFactorSection = ({ data, onChange }) => {
-  const toggleMethod = (value, checked) => {
-    onChange(value, checked);
-  };
-
+const TwoFactorSection = ({
+  title = "Two-Factor Authentication",
+  data,
+  onChange,
+}) => {
   return (
-    <div className="recruitment-login-card mb-4">
-      <div className="card-body">
-        {/* Header */}
-        <div className="recruitment-login-header">
-          <div>
-            <h5 className="recruitment-login-title">
-              <FiShield className="me-2" />
-              Two-Factor Authentication
-            </h5>
+    <Card className="border-0 shadow-sm mt-4">
+      <Card.Header className="bg-white border-0">
+        <div className="d-flex align-items-center">
+          <div className="header-icon me-3">
+            <FiShield />
+          </div>
 
-            <p className="recruitment-login-subtitle">
-              Configure additional security for organization users.
-            </p>
+          <div>
+            <h5 className="fw-bold mb-1">{title}</h5>
+
+            <small className="text-muted">
+              Configure additional security for user login.
+            </small>
           </div>
         </div>
+      </Card.Header>
 
-        {/* Enable 2FA */}
-        <div className="recruitment-method-card mb-4">
-          <div className="recruitment-method-left">
-            <div className="recruitment-method-icon">
-              <FiShield />
-            </div>
-
-            <div>
-              <h6>Enable Two-Factor Authentication</h6>
-              <small>
-                Require an additional verification step during login.
-              </small>
-            </div>
-          </div>
-
+      <Card.Body>
+        {/* Enable Two Factor */}
+        <Form.Group className="mb-4">
           <Form.Check
-            className="setting-switch"
             type="switch"
-            checked={!!data?.enabled}
+            id={`${title}-enabled`}
+            label="Enable Two-Factor Authentication"
+            checked={data.enabled}
             onChange={(e) => onChange("enabled", e.target.checked)}
           />
-        </div>
+        </Form.Group>
 
-        {data?.enabled && (
+        {data.enabled && (
           <>
-            <h6 className="section-sub-heading mb-3">
-              <FiShield className="me-2" />
-              Authentication Methods
-            </h6>
+            <h6 className="fw-semibold mb-3">Verification Methods</h6>
 
             <Row className="g-3">
-              {twoFactorMethods.map((item) => (
-                <Col lg={6} md={6} key={item.value}>
-                  <div className="recruitment-method-card h-100">
-                    <div className="recruitment-method-left">
-                      <div className="recruitment-method-icon">{item.icon}</div>
-
-                      <div>
-                        <h6>{item.label}</h6>
-                        <small>{item.description}</small>
-                      </div>
-                    </div>
-
+              <Col md={6}>
+                <Card className="setting-card h-100">
+                  <Card.Body>
                     <Form.Check
-                      className="setting-switch"
                       type="switch"
-                      checked={!!data?.[item.value]}
-                      onChange={(e) =>
-                        toggleMethod(item.value, e.target.checked)
-                      }
+                      id={`${title}-email`}
+                      label="Email OTP"
+                      checked={data.EMAIL_OTP}
+                      onChange={(e) => onChange("EMAIL_OTP", e.target.checked)}
                     />
-                  </div>
-                </Col>
-              ))}
+
+                    <small className="text-muted d-block mt-2">
+                      Send OTP to registered email address.
+                    </small>
+                  </Card.Body>
+                </Card>
+              </Col>
+
+              <Col md={6}>
+                <Card className="setting-card h-100">
+                  <Card.Body>
+                    <Form.Check
+                      type="switch"
+                      id={`${title}-sms`}
+                      label="SMS OTP"
+                      checked={data.SMS_OTP}
+                      onChange={(e) => onChange("SMS_OTP", e.target.checked)}
+                    />
+
+                    <small className="text-muted d-block mt-2">
+                      Send OTP to registered mobile number.
+                    </small>
+                  </Card.Body>
+                </Card>
+              </Col>
             </Row>
 
             <div className="alert alert-light border mt-4 mb-0">
-              <small className="text-muted">
-                OTP expiry time and resend limits are configured in the{" "}
-                <strong>OTP Settings</strong> section below. These settings
-                apply to login verification, password reset, and two-factor
-                authentication OTPs.
-              </small>
+              <strong>Note:</strong> You can enable one or both OTP methods.
+              Users will authenticate using the enabled verification methods.
             </div>
           </>
         )}
-      </div>
-    </div>
+      </Card.Body>
+    </Card>
   );
 };
 
