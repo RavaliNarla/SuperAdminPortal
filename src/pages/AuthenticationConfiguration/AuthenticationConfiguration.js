@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
 
 import CandidateLoginSection from "./CandidateLoginSection";
@@ -12,8 +13,12 @@ import AuthenticationFooter from "./AuthenticationFooter";
 import "../../css/AuthenticationConfiguration.css";
 import authenticationApiService from "../AuthenticationConfiguration/services/authServices";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { showToast } from "../../utils/customToast";
+
+import { FiCheckCircle, FiAlertCircle, FiTrash2 } from "react-icons/fi";
 
 const AuthenticationConfiguration = () => {
+  const navigate = useNavigate();
   const organizationId = useAppSelector(
     (state) => state.eligibility.selectedOrganization,
   );
@@ -26,15 +31,15 @@ const AuthenticationConfiguration = () => {
     portal: "candidate",
 
     candidateLogin: {
-      EMAIL_PASSWORD: true,
-      defaultLoginMethod: "EMAIL_PASSWORD",
+      EMAIL_PASSWORD: false,
+      defaultLoginMethod: "",
     },
 
     recruitmentLogin: {
       ENTRA_ID: false,
-      EMAIL_PASSWORD: true,
-      enableCaptcha: true,
-      defaultLoginMethod: "EMAIL_PASSWORD",
+      EMAIL_PASSWORD: false,
+      enableCaptcha: false,
+      defaultLoginMethod: "",
     },
 
     candidateTwoFactor: {
@@ -50,43 +55,43 @@ const AuthenticationConfiguration = () => {
     },
 
     candidatePassword: {
-      minLength: 8,
-      maxLength: 20,
-      uppercase: true,
-      lowercase: true,
-      number: true,
-      specialCharacter: true,
-      enableExpiry: true,
-      enableHistory: true,
-      expiryDays: 90,
-      historyCount: 5,
-      lockAttempts: 5,
-      unlockDuration: 30,
+      minLength: "",
+      maxLength: "",
+      uppercase: false,
+      lowercase: false,
+      number: false,
+      specialCharacter: false,
+      enableExpiry: false,
+      enableHistory: false,
+      expiryDays: "",
+      historyCount: "",
+      lockAttempts: "",
+      unlockDuration: "",
     },
 
     recruitmentPassword: {
-      minLength: 8,
-      maxLength: 20,
-      uppercase: true,
-      lowercase: true,
-      number: true,
-      specialCharacter: true,
-      enableExpiry: true,
-      enableHistory: true,
-      expiryDays: 90,
-      historyCount: 5,
-      lockAttempts: 5,
-      unlockDuration: 30,
+      minLength: "",
+      maxLength: "",
+      uppercase: false,
+      lowercase: false,
+      number: false,
+      specialCharacter: false,
+      enableExpiry: false,
+      enableHistory: false,
+      expiryDays: "",
+      historyCount: "",
+      lockAttempts: "",
+      unlockDuration: "",
     },
 
     candidateSession: {
-      idleTimeout: 15,
-      concurrentSessions: 1,
+      idleTimeout: "",
+      concurrentSessions: "",
     },
 
     recruitmentSession: {
-      idleTimeout: 15,
-      concurrentSessions: 1,
+      idleTimeout: "",
+      concurrentSessions: "",
     },
   };
 
@@ -126,15 +131,13 @@ const AuthenticationConfiguration = () => {
       },
     }),
   });
-
+  const [loading, setLoading] = useState(false);
   const fetchAuthenticationConfiguration = async () => {
     try {
       const response =
         await authenticationApiService.getAuthenticationConfiguration(
           organizationId,
         );
-
-      // console.log("GET Response:", response.data);
 
       const apiData = response?.data?.data?.authenticationJson || {};
 
@@ -239,113 +242,60 @@ const AuthenticationConfiguration = () => {
     },
   });
 
-  // const buildSavePayload = (fullConfig) => {
-  //   const payload = {
-  //     orgCode: selectedOrganization?.orgCode || "",
-  //     portal: fullConfig.portal,
-  //   };
-
-  //   if (fullConfig.portal === "candidate") {
-  //     payload.candidateLogin = {
-  //       EMAIL_PASSWORD: fullConfig.candidateLogin.EMAIL_PASSWORD,
-  //       defaultLoginMethod: fullConfig.candidateLogin.defaultLoginMethod,
-  //     };
-
-  //     payload.candidateTwoFactor = {
-  //       enabled: fullConfig.candidateTwoFactor.enabled,
-  //       EMAIL_OTP: fullConfig.candidateTwoFactor.EMAIL_OTP,
-  //       SMS_OTP: fullConfig.candidateTwoFactor.SMS_OTP,
-  //     };
-  //   }
-
-  //   if (fullConfig.portal === "recruitment") {
-  //     payload.recruitmentLogin = {
-  //       ENTRA_ID: fullConfig.recruitmentLogin.ENTRA_ID,
-  //       EMAIL_PASSWORD: fullConfig.recruitmentLogin.EMAIL_PASSWORD,
-  //       defaultLoginMethod: fullConfig.recruitmentLogin.defaultLoginMethod,
-  //     };
-
-  //     payload.recruitmentTwoFactor = {
-  //       enabled: fullConfig.recruitmentTwoFactor.enabled,
-  //       EMAIL_OTP: fullConfig.recruitmentTwoFactor.EMAIL_OTP,
-  //       SMS_OTP: fullConfig.recruitmentTwoFactor.SMS_OTP,
-  //     };
-  //   }
-
-  //   payload.password = {
-  //     minLength: fullConfig.password.minLength,
-  //     maxLength: fullConfig.password.maxLength,
-  //     uppercase: fullConfig.password.uppercase,
-  //     lowercase: fullConfig.password.lowercase,
-  //     number: fullConfig.password.number,
-  //     specialCharacter: fullConfig.password.specialCharacter,
-  //     enableExpiry: fullConfig.password.enableExpiry,
-  //     enableHistory: fullConfig.password.enableHistory,
-  //     expiryDays: fullConfig.password.expiryDays,
-  //   };
-
-  //   payload.session = {
-  //     idleTimeout: fullConfig.session.idleTimeout,
-  //     concurrentSessions: fullConfig.session.concurrentSessions,
-  //   };
-
-  //   return payload;
-  // };
-
   const handleSave = async () => {
     try {
+      setLoading(true);
+
       const payload = buildSavePayload(config);
-      // console.log("Saving Configuration", organizationId, payload);
 
-      const response =
-        await authenticationApiService.updateAuthenticationConfiguration(
-          organizationId,
-          payload,
-        );
+      await authenticationApiService.updateAuthenticationConfiguration(
+        organizationId,
+        payload,
+      );
 
-      console.log("POST Response:", response.data);
-
-      // Reload configuration after saving
       await fetchAuthenticationConfiguration();
 
-      alert("Configuration Saved Successfully");
+      showToast({
+        type: "success",
+        message: "Authentication configuration saved successfully.",
+      });
     } catch (error) {
-      console.error("Save Error:", error);
-
-      alert(error.response?.data?.message || "Failed to save configuration.");
+      showToast({
+        type: "error",
+        message:
+          error.response?.data?.message ||
+          "Failed to save authentication configuration.",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
-  // const handleSave = async () => {
-  //   try {
-  //     console.log("Saving Configuration", organizationId, config);
-
-  //     const response =
-  //       await authenticationApiService.saveAuthenticationConfiguration(
-  //         organizationId,
-  //         config,
-  //       );
-
-  //     console.log(response.data);
-
-  //     alert("Configuration Saved Successfully");
-  //   } catch (error) {
-  //     console.error(error);
-
-  //     alert(error.response?.data?.message || "Failed to save configuration.");
-  //   }
-  // };
-
-  const handleReset = () => {
+  const handleDiscard = () => {
     setConfig(initialState);
+
+    showToast({
+      type: "warning",
+      message: "All changes have been discarded.",
+    });
   };
 
   const handleCancel = () => {
-    alert("Cancelled");
+    setConfig(initialState);
+
+    showToast({
+      type: "warning",
+      message: "Changes discarded.",
+    });
+
+    navigate("/organizations");
   };
 
-  const handlePublish = () => {
-    alert("Published Successfully");
+  const handleDraft = () => {
+    showToast({
+      type: "info",
+      message: "Draft saved successfully.",
+    });
   };
 
   return (
@@ -357,20 +307,19 @@ const AuthenticationConfiguration = () => {
             <Card.Header className="authentication-header border-0">
               <div className="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
                 {/* Left Side */}
-                <div className="d-flex align-items-center gap-3">
+                <div className="d-flex align-items-center gap-2">
                   <div className="header-icon">
                     <i className="bi bi-shield-lock-fill"></i>
                   </div>
 
                   <div>
-                    <h2 className="authentication-title mb-1">
+                    <h4 className="authentication-title mb-1">
                       Authentication Configuration
-                    </h2>
+                    </h4>
 
                     <p className="authentication-subtitle mb-0">
-                      Configure login methods, security policies, password
-                      policies, two-factor authentication, OTP settings, and
-                      session management for your portals.
+                      Configure login methods, password policies, two-factor
+                      authentication, and session management.
                     </p>
                   </div>
                 </div>
@@ -379,8 +328,56 @@ const AuthenticationConfiguration = () => {
 
             <Card.Body className="p-4">
               {/* Portal Selection */}
-
               <Card className="border-0 shadow-sm mb-4">
+                <Card.Body>
+                  <div className="mb-3">
+                    <h5 className="fw-bold mb-1">Select Portal</h5>
+                    <small className="text-muted">
+                      Choose the portal whose authentication settings you want
+                      to configure.
+                    </small>
+                  </div>
+
+                  <ul className="nav nav-tabs custom-portal-tabs">
+                    <li className="nav-item">
+                      <button
+                        type="button"
+                        className={`nav-link ${
+                          config.portal === "candidate" ? "active" : ""
+                        }`}
+                        onClick={() =>
+                          setConfig({
+                            ...config,
+                            portal: "candidate",
+                          })
+                        }
+                      >
+                        <i className="bi bi-person-circle me-2"></i>
+                        Candidate Portal
+                      </button>
+                    </li>
+
+                    <li className="nav-item">
+                      <button
+                        type="button"
+                        className={`nav-link ${
+                          config.portal === "recruitment" ? "active" : ""
+                        }`}
+                        onClick={() =>
+                          setConfig({
+                            ...config,
+                            portal: "recruitment",
+                          })
+                        }
+                      >
+                        <i className="bi bi-briefcase-fill me-2"></i>
+                        Recruiter Portal
+                      </button>
+                    </li>
+                  </ul>
+                </Card.Body>
+              </Card>
+              {/* <Card className="border-0 shadow-sm mb-4">
                 <Card.Body>
                   <div className="mb-3">
                     <h5 className="fw-bold mb-1">Select Portal</h5>
@@ -425,7 +422,7 @@ const AuthenticationConfiguration = () => {
                     </button>
                   </div>
                 </Card.Body>
-              </Card>
+              </Card> */}
               {config.portal === "candidate" && (
                 <CandidateLoginSection
                   data={config.candidateLogin}
@@ -511,9 +508,10 @@ const AuthenticationConfiguration = () => {
 
       <AuthenticationFooter
         onSave={handleSave}
-        onReset={handleReset}
+        onDraft={handleDraft}
+        onDiscard={handleDiscard}
         onCancel={handleCancel}
-        onPublish={handlePublish}
+        loading={loading}
       />
     </Container>
   );

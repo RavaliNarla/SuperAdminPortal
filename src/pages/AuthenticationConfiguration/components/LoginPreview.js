@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Badge, Form, Button, Row, Col } from "react-bootstrap";
-import { FiMail, FiShield, FiLock, FiCheckCircle } from "react-icons/fi";
+import { FiMail, FiShield, FiLock, FiCheckCircle, FiClock, FiUsers } from "react-icons/fi";
 const RECRUITMENT_METHOD_ORDER = ["EMAIL_PASSWORD", "ENTRA_ID"];
 const TWO_FACTOR_METHOD_ORDER = ["EMAIL_OTP", "SMS_OTP"];
 
@@ -51,21 +51,29 @@ const LoginPreview = ({ config }) => {
     config.portal === "candidate"
       ? config.candidateTwoFactor
       : config.recruitmentTwoFactor;
+
+  const passwordPolicy =
+    config.portal === "candidate"
+      ? config.candidatePassword
+      : config.recruitmentPassword;
+
+  const sessionPolicy =
+    config.portal === "candidate"
+      ? config.candidateSession
+      : config.recruitmentSession;
   const get2FAMethod = () => {
-    const activeMethod = TWO_FACTOR_METHOD_ORDER.find(
-      (key) => activeTwoFactor?.[key],
-    );
+    const methods = [];
 
-    switch (activeMethod) {
-      case "EMAIL_OTP":
-        return "Email OTP";
-      case "SMS_OTP":
-        return "SMS OTP";
-      default:
-        return "Not Configured";
+    if (activeTwoFactor?.EMAIL_OTP) {
+      methods.push("Email OTP");
     }
-  };
 
+    if (activeTwoFactor?.SMS_OTP) {
+      methods.push("SMS OTP");
+    }
+
+    return methods.length ? methods.join(" & ") : "Not Configured";
+  };
   return (
     <Card className="login-preview-card">
       <Card.Header>
@@ -131,28 +139,6 @@ const LoginPreview = ({ config }) => {
                 </Form.Group>
               )}
 
-              {/* Remember Me */}
-
-              <div className="preview-remember">
-                <label className="remember-container">
-                  <input type="checkbox" checked readOnly />
-
-                  <span className="checkmark"></span>
-
-                  <span>Remember Me</span>
-                </label>
-
-               {config.candidateLogin?.EMAIL_PASSWORD && (
-                  <span className="preview-link">Forgot Password?</span>
-                )}
-              </div>
-
-              {/* Candidate CAPTCHA */}
-
-              {config.candidateLogin.enableCaptcha && (
-                <div className="preview-captcha">Candidate CAPTCHA</div>
-              )}
-
               <Button className="preview-login-btn w-100 mt-3" disabled>
                 Login
               </Button>
@@ -216,90 +202,223 @@ const LoginPreview = ({ config }) => {
                 </Form.Group>
               )}
 
-              {/* Remember Me */}
-
-              <div className="preview-remember">
-                <label className="remember-container">
-                  <input type="checkbox" checked readOnly />
-
-                  <span className="checkmark"></span>
-
-                  <span>Remember Me</span>
-                </label>
-              </div>
-
-              {/* CAPTCHA */}
-
-              {config.recruitmentLogin.enableCaptcha && (
-                <div className="preview-captcha recruitment-captcha">
-                  Recruitment CAPTCHA
-                </div>
-              )}
-
               <Button className="preview-login-btn w-100 mt-3" disabled>
                 Login
               </Button>
 
               <div className="preview-divider" />
-
-              {/* Authentication Settings */}
-
-              <div className="preview-settings">
-                <h6>Authentication Settings</h6>
-
-                <Row className="g-3">
-                  <Col xs={12}>
-                    <div className="preview-setting-item">
-                      <div>
-                        <strong>CAPTCHA</strong>
-                        <small>Bot protection for login.</small>
-                      </div>
-
-                      <Badge
-                        bg={
-                          config.recruitmentLogin.enableCaptcha
-                            ? "success"
-                            : "secondary"
-                        }
-                      >
-                        {config.recruitmentLogin.enableCaptcha
-                          ? "Enabled"
-                          : "Disabled"}
-                      </Badge>
-                    </div>
-                  </Col>
-
-                  <Col xs={12}>
-                    <div className="preview-setting-item">
-                      <div>
-                        <strong>Two-Factor Authentication</strong>
-                        <small>Additional authentication layer.</small>
-                      </div>
-
-                      <Badge
-                        bg={activeTwoFactor?.enabled ? "success" : "secondary"}
-                      >
-                        {activeTwoFactor?.enabled ? "Enabled" : "Disabled"}
-                      </Badge>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
             </Card.Body>
           </Card>
         )}
 
         {activeTwoFactor?.enabled && (
-          <Form.Group className="mt-4">
-            <Form.Label>2FA Method</Form.Label>
+          <Card className="preview-portal-card mt-4">
+            <Card.Header>Two-Factor Authentication</Card.Header>
 
-            <Form.Control
-              className="preview-input"
-              value={get2FAMethod()}
-              readOnly
-            />
-          </Form.Group>
+            <Card.Body>
+              <div className="text-center mb-3">
+                <div className="preview-avatar">
+                  <FiShield />
+                </div>
+
+                <h6 className="mt-3">Verification Required</h6>
+
+                <p className="text-muted mb-3">
+                  {activeTwoFactor?.EMAIL_OTP && activeTwoFactor?.SMS_OTP
+                    ? "Enter the OTPs sent to your Email and Mobile."
+                    : activeTwoFactor?.EMAIL_OTP
+                      ? "Enter the OTP sent to your Email."
+                      : "Enter the OTP sent to your Mobile."}
+                </p>
+              </div>
+
+              {activeTwoFactor?.EMAIL_OTP && (
+                <Form.Group className="mb-3">
+                  <Form.Label>Email OTP</Form.Label>
+                  <Form.Control
+                    className="preview-input"
+                    placeholder="Enter Email OTP"
+                    readOnly
+                  />
+                </Form.Group>
+              )}
+
+              {activeTwoFactor?.SMS_OTP && (
+                <Form.Group className="mb-3">
+                  <Form.Label>SMS OTP</Form.Label>
+                  <Form.Control
+                    className="preview-input"
+                    placeholder="Enter SMS OTP"
+                    readOnly
+                  />
+                </Form.Group>
+              )}
+
+              <Button className="preview-login-btn w-100" disabled>
+                Verify
+              </Button>
+            </Card.Body>
+          </Card>
         )}
+        <Card className="preview-portal-card mt-4">
+          <Card.Header>Password Policy</Card.Header>
+
+          <Card.Body>
+            <Row className="g-3">
+              <Col xs={12}>
+                <div className="d-flex justify-content-between">
+                  <span>Minimum Password Length</span>
+                  <Badge bg="primary">{passwordPolicy?.minLength || "-"}</Badge>
+                </div>
+              </Col>
+
+              <Col xs={12}>
+                <div className="d-flex justify-content-between">
+                  <span>Maximum Password Length</span>
+                  <Badge bg="primary">{passwordPolicy?.maxLength || "-"}</Badge>
+                </div>
+              </Col>
+
+              <Col xs={12}>
+                <div className="d-flex justify-content-between">
+                  <span>Uppercase Letter</span>
+                  <Badge
+                    bg={passwordPolicy?.uppercase ? "success" : "secondary"}
+                  >
+                    {passwordPolicy?.uppercase ? "Required" : "Optional"}
+                  </Badge>
+                </div>
+              </Col>
+
+              <Col xs={12}>
+                <div className="d-flex justify-content-between">
+                  <span>Lowercase Letter</span>
+                  <Badge
+                    bg={passwordPolicy?.lowercase ? "success" : "secondary"}
+                  >
+                    {passwordPolicy?.lowercase ? "Required" : "Optional"}
+                  </Badge>
+                </div>
+              </Col>
+
+              <Col xs={12}>
+                <div className="d-flex justify-content-between">
+                  <span>Numeric Character</span>
+                  <Badge bg={passwordPolicy?.number ? "success" : "secondary"}>
+                    {passwordPolicy?.number ? "Required" : "Optional"}
+                  </Badge>
+                </div>
+              </Col>
+
+              <Col xs={12}>
+                <div className="d-flex justify-content-between">
+                  <span>Special Character</span>
+                  <Badge
+                    bg={
+                      passwordPolicy?.specialCharacter ? "success" : "secondary"
+                    }
+                  >
+                    {passwordPolicy?.specialCharacter ? "Required" : "Optional"}
+                  </Badge>
+                </div>
+              </Col>
+
+              <Col xs={12}>
+                <div className="d-flex justify-content-between">
+                  <span>Password Expiry</span>
+                  <Badge
+                    bg={passwordPolicy?.enableExpiry ? "success" : "secondary"}
+                  >
+                    {passwordPolicy?.enableExpiry
+                      ? `${passwordPolicy?.expiryDays} Days`
+                      : "Disabled"}
+                  </Badge>
+                </div>
+              </Col>
+
+              <Col xs={12}>
+                <div className="d-flex justify-content-between">
+                  <span>Password History</span>
+                  <Badge
+                    bg={passwordPolicy?.enableHistory ? "success" : "secondary"}
+                  >
+                    {passwordPolicy?.enableHistory ? "Enabled" : "Disabled"}
+                  </Badge>
+                </div>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+
+        <Card className="preview-portal-card mt-4">
+          <Card.Header>Session Policy</Card.Header>
+
+          <Card.Body>
+            <Row className="g-3">
+              <Col xs={12}>
+                <div className="d-flex justify-content-between align-items-center">
+                  <span>
+                    <FiClock className="me-2" />
+                    Idle Timeout
+                  </span>
+
+                  <Badge bg="primary">
+                    {sessionPolicy?.idleTimeout
+                      ? `${sessionPolicy.idleTimeout} Minutes`
+                      : "Not Configured"}
+                  </Badge>
+                </div>
+              </Col>
+
+              <Col xs={12}>
+                <div className="d-flex justify-content-between align-items-center">
+                  <span>
+                    <FiUsers className="me-2" />
+                    Concurrent Sessions
+                  </span>
+
+                  <Badge bg="primary">
+                    {sessionPolicy?.concurrentSessions || "Not Configured"}
+                  </Badge>
+                </div>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+
+        {/* {activeTwoFactor?.EMAIL_OTP && (
+          <div className="mb-4">
+            <Form.Group className="mb-2">
+              <Form.Label>Email OTP</Form.Label>
+              <Form.Control
+                className="preview-input"
+                placeholder="Enter Email OTP"
+                readOnly
+              />
+            </Form.Group>
+
+            <Button className="preview-login-btn w-100" disabled>
+              Verify Email OTP
+            </Button>
+          </div>
+        )}
+
+        {activeTwoFactor?.SMS_OTP && (
+          <div className="mb-3">
+            <Form.Group className="mb-2">
+              <Form.Label>SMS OTP</Form.Label>
+              <Form.Control
+                className="preview-input"
+                placeholder="Enter SMS OTP"
+                readOnly
+              />
+            </Form.Group>
+
+            <Button className="preview-login-btn w-100" disabled>
+              Verify SMS OTP
+            </Button>
+          </div>
+        )} */}
       </Card.Body>
     </Card>
   );
