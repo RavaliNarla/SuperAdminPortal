@@ -6,7 +6,6 @@ import { FiClock, FiMonitor, FiUsers } from "react-icons/fi";
 
 import "../../../css/Section.css";
 
-
 const SessionPolicySection = ({ data, onChange }) => {
   return (
     <div className="session-policy-card mb-4">
@@ -30,22 +29,29 @@ const SessionPolicySection = ({ data, onChange }) => {
         {/* Session Settings */}
 
         <Row className="g-4">
-
           <Col lg={4}>
             <label className="form-label">
               <FiClock className="me-2" />
               Idle Timeout (Minutes)
             </label>
-
             <Form.Control
               className="modern-input"
               type="number"
               min="1"
+              max="1440"
+              placeholder="e.g. 30"
               value={data.idleTimeout || ""}
-              onChange={(e) =>
-                onChange("idleTimeout", e.target.value)
+              isInvalid={
+                data.idleTimeout !== "" &&
+                (Number(data.idleTimeout) < 1 ||
+                  Number(data.idleTimeout) > 1440)
               }
+              onChange={(e) => onChange("idleTimeout", e.target.value)}
             />
+
+            <Form.Control.Feedback type="invalid">
+              Idle timeout must be between 1 and 1440 minutes.
+            </Form.Control.Feedback>
           </Col>
 
           <Col lg={4}>
@@ -58,15 +64,22 @@ const SessionPolicySection = ({ data, onChange }) => {
               className="modern-input"
               type="number"
               min="1"
+              max="10"
+              placeholder="e.g. 2"
               value={data.concurrentSessions || ""}
-              onChange={(e) =>
-                onChange("concurrentSessions", e.target.value)
+              isInvalid={
+                data.concurrentSessions !== "" &&
+                (Number(data.concurrentSessions) < 1 ||
+                  Number(data.concurrentSessions) > 10)
               }
+              onChange={(e) => onChange("concurrentSessions", e.target.value)}
             />
+
+            <Form.Control.Feedback type="invalid">
+              Concurrent sessions must be between 1 and 10.
+            </Form.Control.Feedback>
           </Col>
-
         </Row>
-
       </div>
     </div>
   );

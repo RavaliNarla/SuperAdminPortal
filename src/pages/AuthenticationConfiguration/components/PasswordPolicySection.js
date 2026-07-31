@@ -48,9 +48,18 @@ const PasswordPolicySection = ({ data, onChange }) => {
               type="number"
               min="6"
               max="32"
+              placeholder="e.g. 8"
               value={data.minLength || ""}
+              isInvalid={
+                data.minLength !== "" &&
+                (Number(data.minLength) < 6 || Number(data.minLength) > 32)
+              }
               onChange={(e) => onChange("minLength", e.target.value)}
             />
+
+            <Form.Control.Feedback type="invalid">
+              Minimum length must be between 6 and 32.
+            </Form.Control.Feedback>
           </Col>
 
           <Col lg={6}>
@@ -64,9 +73,21 @@ const PasswordPolicySection = ({ data, onChange }) => {
               type="number"
               min="6"
               max="64"
+              placeholder="e.g. 16"
               value={data.maxLength || ""}
+              isInvalid={
+                data.maxLength !== "" &&
+                (Number(data.maxLength) < 6 ||
+                  Number(data.maxLength) > 64 ||
+                  Number(data.maxLength) < Number(data.minLength))
+              }
               onChange={(e) => onChange("maxLength", e.target.value)}
             />
+
+            <Form.Control.Feedback type="invalid">
+              Maximum length must be between 6 and 64 and greater than minimum
+              length.
+            </Form.Control.Feedback>
           </Col>
         </Row>
 
@@ -89,9 +110,7 @@ const PasswordPolicySection = ({ data, onChange }) => {
               <Form.Check
                 type="switch"
                 checked={data.uppercase || false}
-                onChange={(e) =>
-                  onChange("uppercase", e.target.checked)
-                }
+                onChange={(e) => onChange("uppercase", e.target.checked)}
               />
             </div>
           </div>
@@ -112,9 +131,7 @@ const PasswordPolicySection = ({ data, onChange }) => {
               <Form.Check
                 type="switch"
                 checked={data.lowercase || false}
-                onChange={(e) =>
-                  onChange("lowercase", e.target.checked)
-                }
+                onChange={(e) => onChange("lowercase", e.target.checked)}
               />
             </div>
           </div>
@@ -135,9 +152,7 @@ const PasswordPolicySection = ({ data, onChange }) => {
               <Form.Check
                 type="switch"
                 checked={data.number || false}
-                onChange={(e) =>
-                  onChange("number", e.target.checked)
-                }
+                onChange={(e) => onChange("number", e.target.checked)}
               />
             </div>
           </div>
@@ -158,12 +173,7 @@ const PasswordPolicySection = ({ data, onChange }) => {
               <Form.Check
                 type="switch"
                 checked={data.specialCharacter || false}
-                onChange={(e) =>
-                  onChange(
-                    "specialCharacter",
-                    e.target.checked
-                  )
-                }
+                onChange={(e) => onChange("specialCharacter", e.target.checked)}
               />
             </div>
           </div>
@@ -188,9 +198,7 @@ const PasswordPolicySection = ({ data, onChange }) => {
               <Form.Check
                 type="switch"
                 checked={data.enableExpiry || false}
-                onChange={(e) =>
-                  onChange("enableExpiry", e.target.checked)
-                }
+                onChange={(e) => onChange("enableExpiry", e.target.checked)}
               />
             </div>
           </div>
@@ -203,17 +211,13 @@ const PasswordPolicySection = ({ data, onChange }) => {
                   Enable Password History
                 </h6>
 
-                <small>
-                  Prevent users from reusing previous passwords.
-                </small>
+                <small>Prevent users from reusing previous passwords.</small>
               </div>
 
               <Form.Check
                 type="switch"
                 checked={data.enableHistory || false}
-                onChange={(e) =>
-                  onChange("enableHistory", e.target.checked)
-                }
+                onChange={(e) => onChange("enableHistory", e.target.checked)}
               />
             </div>
           </div>
@@ -232,12 +236,21 @@ const PasswordPolicySection = ({ data, onChange }) => {
               className="password-policy-input"
               type="number"
               min="1"
+              max="365"
+              placeholder="e.g. 90"
               disabled={!data.enableExpiry}
               value={data.expiryDays || ""}
-              onChange={(e) =>
-                onChange("expiryDays", e.target.value)
+              isInvalid={
+                data.enableExpiry &&
+                data.expiryDays !== "" &&
+                (Number(data.expiryDays) < 1 || Number(data.expiryDays) > 365)
               }
+              onChange={(e) => onChange("expiryDays", e.target.value)}
             />
+
+            <Form.Control.Feedback type="invalid">
+              Expiry days must be between 1 and 365.
+            </Form.Control.Feedback>
           </Col>
 
           {/* Password History Count, Account Lock Attempts, and Account

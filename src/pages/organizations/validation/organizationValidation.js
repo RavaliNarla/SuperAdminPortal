@@ -1,7 +1,7 @@
 // src/pages/organizations/validation/organizationValidation.js
 
-const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-const mobileRegex = /^[6-9]\d{9}$/;
+// const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+// const mobileRegex = /^[6-9]\d{9}$/;
 
 const isEmpty = (value) =>
   value === undefined || value === null || value.toString().trim() === "";

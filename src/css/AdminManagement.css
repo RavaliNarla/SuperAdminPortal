@@ -1,0 +1,768 @@
+/* ==========================================================
+   Page
+========================================================== */
+
+.admin-management-page {
+  padding: 24px;
+  background: #f8f9fc;
+  min-height: 100vh;
+}
+
+/* ==========================================================
+   Header
+========================================================== */
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.page-subtitle {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* ==========================================================
+   Card
+========================================================== */
+
+.organization-card {
+  border: none;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+}
+
+.organization-card .card-body {
+  padding: 24px;
+}
+
+/* ==========================================================
+   Bootstrap Inputs
+========================================================== */
+
+.form-control,
+.form-select {
+  min-height: 44px;
+  border-radius: 10px;
+  border: 1px solid #dbe3ec;
+  font-size: 14px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.18);
+}
+
+/* ==========================================================
+   Input Group
+========================================================== */
+
+.input-group-text {
+  background: #fff;
+  border: 1px solid #dbe3ec;
+  border-right: none;
+  border-radius: 10px 0 0 10px;
+}
+
+.input-group .form-control {
+  border-left: none;
+}
+
+/* ==========================================================
+   Primary Button
+========================================================== */
+
+.btn-primary-custom {
+  background: #0d6efd;
+  border: none;
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.btn-primary-custom:hover {
+  background: #0b5ed7;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================
+   Toolbar
+========================================================== */
+
+.toolbar-row {
+  margin-bottom: 20px;
+}
+
+.toolbar-row .btn {
+  min-height: 44px;
+}
+
+/* ==========================================================
+   Table
+========================================================== */
+
+.category-table {
+  margin-bottom: 0;
+}
+
+.category-table thead th {
+  background: #f8f9fc;
+  color: #374151;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 2px solid #e5e7eb;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.category-table tbody td {
+  vertical-align: middle;
+  font-size: 14px;
+  border-bottom: 1px solid #eef2f7;
+  padding: 14px 12px;
+}
+
+.category-table tbody tr:hover {
+  background: #f9fbff;
+}
+/* ==========================================================
+   Status Badge
+========================================================== */
+
+.badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 30px;
+}
+
+.bg-success {
+  background-color: #198754 !important;
+}
+
+.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+/* ==========================================================
+   Action Dropdown
+========================================================== */
+
+.dropdown-toggle {
+  min-width: 95px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.dropdown-toggle::after {
+  margin-left: 8px;
+}
+
+.dropdown-menu {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.dropdown-item {
+  padding: 10px 16px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: #f5f7fb;
+}
+
+.dropdown-item.text-danger:hover {
+  background: rgba(220, 53, 69, 0.08);
+}
+
+/* ==========================================================
+   Modal
+========================================================== */
+
+.modal-content {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.modal-header {
+  border-bottom: 1px solid #eef2f7;
+  padding: 18px 22px;
+}
+
+.modal-title {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-footer {
+  border-top: 1px solid #eef2f7;
+  padding: 16px 22px;
+}
+
+/* ==========================================================
+   Permission Cards
+========================================================== */
+
+.modal .card {
+  border-radius: 12px;
+  border: 1px solid #edf1f7;
+}
+
+.modal .card-header {
+  background: #f8f9fc;
+  font-weight: 600;
+  border-bottom: 1px solid #edf1f7;
+}
+
+.form-check {
+  padding: 8px 0;
+}
+
+.form-check-input {
+  cursor: pointer;
+}
+
+.form-check-label {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* ==========================================================
+   Empty State
+========================================================== */
+
+.text-center.py-5 svg {
+  opacity: 0.6;
+}
+
+.text-center.py-5 h5 {
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+.text-center.py-5 p {
+  color: #6c757d;
+}
+
+/* ==========================================================
+   Pagination
+========================================================== */
+
+.pagination {
+  margin-bottom: 0;
+}
+
+.page-link {
+  border-radius: 8px !important;
+  margin: 0 3px;
+  border: 1px solid #dee2e6;
+  color: #495057;
+}
+
+.page-item.active .page-link {
+  background: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.page-link:hover {
+  background: #eef5ff;
+}
+
+/* ==========================================================
+   Buttons
+========================================================== */
+
+.btn {
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.btn-light {
+  border: 1px solid #dee2e6;
+}
+
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-danger {
+  min-width: 38px;
+}
+
+/* ==========================================================
+   Table Responsive
+========================================================== */
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media (max-width: 992px) {
+  .admin-management-page {
+    padding: 18px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .organization-card .card-body {
+    padding: 18px;
+  }
+
+  .dropdown-toggle {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 22px;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+  }
+
+  .category-table th,
+  .category-table td {
+    white-space: nowrap;
+  }
+
+  .modal-body {
+    padding: 18px;
+  }
+
+  .modal-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+  }
+
+  .pagination {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-management-page {
+    padding: 14px;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .btn-primary-custom {
+    width: 100%;
+  }
+
+  .toolbar-row .col-lg-2,
+  .toolbar-row .col-lg-3,
+  .toolbar-row .col-lg-4 {
+    margin-bottom: 10px;
+  }
+}
+
+.admin-management-page .dropdown-menu {
+  z-index: 9999999 !important;
+}
+
+.action-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.action-btn svg {
+  font-size: 18px;
+}
+
+.action-btn:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.action-btn:focus {
+  box-shadow: none;
+}
+
+.action-btn .text-success {
+  color: #198754 !important;
+}
+
+.action-btn .text-primary {
+  color: #0d6efd !important;
+}
+
+.action-btn .text-danger {
+  color: #dc3545 !important;
+}
+
+/* ===========================================================
+   Role Dialog Theme
+=========================================================== */
+
+.role-dialog-modal .modal-content,
+.module-access-modal .modal-content,
+.delete-role-modal .modal-content {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+}
+
+/* ===========================================================
+   Header
+=========================================================== */
+
+.role-dialog-header {
+  padding: 24px 28px;
+  background: #ffffff;
+  border-bottom: 1px solid #edf1f7;
+}
+
+.role-dialog-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(24, 145, 208, 0.08);
+  color: #1891d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.role-dialog-header h4 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #062b80;
+}
+
+.role-dialog-header p {
+  margin: 4px 0 0;
+  color: #64748b;
+}
+
+/* ===========================================================
+   Body
+=========================================================== */
+
+.role-dialog-modal .modal-body,
+.module-access-modal .modal-body {
+  background: #f8fafc;
+  padding: 24px;
+}
+
+/* ===========================================================
+   Cards
+=========================================================== */
+
+.role-stat-card,
+.permission-card {
+  border: 1px solid #edf1f7;
+  border-radius: 14px;
+  background: #ffffff;
+  transition: 0.25s;
+}
+
+.role-stat-card:hover,
+.permission-card:hover {
+  border-color: #1891d0;
+  box-shadow: 0 8px 18px rgba(24, 145, 208, 0.08);
+}
+
+/* ===========================================================
+   Permission Header
+=========================================================== */
+
+.permission-header {
+  background: #ffffff;
+  border-bottom: 1px solid #edf1f7;
+  padding: 16px 20px;
+}
+
+.permission-header h6 {
+  margin: 0;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.permission-header small {
+  color: #64748b;
+}
+
+/* ===========================================================
+   Permission Item
+=========================================================== */
+
+.permission-item {
+  border: 1px solid #edf1f7;
+  border-radius: 12px;
+  transition: 0.25s;
+  background: #ffffff;
+}
+
+.permission-item:hover {
+  border-color: #1891d0;
+  background: #f8fbff;
+}
+
+.permission-item.border-primary {
+  border-color: #1891d0 !important;
+  background: rgba(24, 145, 208, 0.05);
+}
+
+/* ===========================================================
+   Search
+=========================================================== */
+
+.search-box {
+  position: relative;
+}
+
+.search-box svg {
+  position: absolute;
+  left: 14px;
+  top: 15px;
+  color: #94a3b8;
+}
+
+.search-box input,
+.search-box .form-control {
+  padding-left: 42px;
+}
+
+/* ===========================================================
+   Inputs
+=========================================================== */
+
+.form-control,
+.form-select {
+  border: 1px solid #dbe4ef;
+  border-radius: 12px;
+  min-height: 48px;
+  box-shadow: none;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #1891d0;
+  box-shadow: 0 0 0 0.15rem rgba(24, 145, 208, 0.15);
+}
+
+textarea.form-control {
+  min-height: 120px;
+}
+
+/* ===========================================================
+   Switch
+=========================================================== */
+
+.form-check-input {
+  width: 46px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: #1891d0;
+  border-color: #1891d0;
+}
+
+/* ===========================================================
+   Buttons
+=========================================================== */
+
+.btn-primary {
+  background: #1891d0;
+  border-color: #1891d0;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #147cb3;
+  border-color: #147cb3;
+}
+
+.btn-outline-primary {
+  border-radius: 10px;
+}
+
+.btn-light {
+  border-radius: 10px;
+}
+
+/* ===========================================================
+   Badge
+=========================================================== */
+
+.badge.bg-primary {
+  background: #1891d0 !important;
+}
+
+/* ===========================================================
+   Footer
+=========================================================== */
+
+.role-dialog-footer {
+  padding: 18px 24px;
+  background: #ffffff;
+  border-top: 1px solid #edf1f7;
+}
+
+/* ===========================================================
+   Delete Dialog
+=========================================================== */
+
+.delete-role-modal .modal-body {
+  padding: 30px;
+}
+
+.delete-role-modal .modal-footer {
+  border-top: 1px solid #edf1f7;
+}
+
+.delete-role-modal .btn-danger {
+  border-radius: 10px;
+}
+
+/* ===========================================================
+   Statistics
+=========================================================== */
+
+.role-stat-card h2 {
+  color: #062b80;
+  margin-top: 8px;
+  margin-bottom: 0;
+  font-weight: 700;
+}
+
+.role-stat-card small {
+  color: #64748b;
+}
+
+/* ===========================================================
+   Scrollbar
+=========================================================== */
+
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+
+/* ===========================================================
+   Responsive
+=========================================================== */
+
+@media (max-width: 991px) {
+  .role-dialog-header {
+    padding: 20px;
+  }
+
+  .role-dialog-modal .modal-body,
+  .module-access-modal .modal-body {
+    padding: 20px;
+  }
+
+  .role-dialog-footer {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 12px;
+  }
+
+  .role-dialog-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .role-dialog-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .role-dialog-header h4 {
+    font-size: 18px;
+  }
+
+  .role-dialog-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .role-dialog-footer .btn {
+    width: 100%;
+  }
+
+  .permission-item {
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .modal-body {
+    padding: 16px !important;
+  }
+
+  .role-dialog-header {
+    padding: 16px;
+  }
+
+  .role-dialog-header h4 {
+    font-size: 17px;
+  }
+
+  .role-dialog-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .role-stat-card h2 {
+    font-size: 22px;
+  }
+}

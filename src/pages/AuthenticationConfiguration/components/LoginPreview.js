@@ -1,6 +1,14 @@
 import React from "react";
 import { Card, Badge, Form, Button, Row, Col } from "react-bootstrap";
-import { FiMail, FiShield, FiLock, FiCheckCircle, FiClock, FiUsers } from "react-icons/fi";
+import {
+  FiMail,
+  FiShield,
+  FiLock,
+  FiCheckCircle,
+  FiClock,
+  FiUsers,
+  FiMonitor,
+} from "react-icons/fi";
 const RECRUITMENT_METHOD_ORDER = ["EMAIL_PASSWORD", "ENTRA_ID"];
 const TWO_FACTOR_METHOD_ORDER = ["EMAIL_OTP", "SMS_OTP"];
 
@@ -261,128 +269,102 @@ const LoginPreview = ({ config }) => {
           </Card>
         )}
         <Card className="preview-portal-card mt-4">
-          <Card.Header>Password Policy</Card.Header>
+          <Card.Header className="d-flex align-items-center">
+            <FiLock className="me-2 text-primary" />
+            <span className="fw-semibold">Password Policy</span>
+          </Card.Header>
 
-          <Card.Body>
-            <Row className="g-3">
-              <Col xs={12}>
-                <div className="d-flex justify-content-between">
-                  <span>Minimum Password Length</span>
-                  <Badge bg="primary">{passwordPolicy?.minLength || "-"}</Badge>
-                </div>
-              </Col>
+          <Card.Body className="p-3">
+            <div className="preview-setting">
+              <span>Minimum Password Length</span>
+              <Badge bg="primary">{passwordPolicy?.minLength || "--"}</Badge>
+            </div>
 
-              <Col xs={12}>
-                <div className="d-flex justify-content-between">
-                  <span>Maximum Password Length</span>
-                  <Badge bg="primary">{passwordPolicy?.maxLength || "-"}</Badge>
-                </div>
-              </Col>
+            <div className="preview-setting">
+              <span>Maximum Password Length</span>
+              <Badge bg="primary">{passwordPolicy?.maxLength || "--"}</Badge>
+            </div>
 
-              <Col xs={12}>
-                <div className="d-flex justify-content-between">
-                  <span>Uppercase Letter</span>
-                  <Badge
-                    bg={passwordPolicy?.uppercase ? "success" : "secondary"}
-                  >
-                    {passwordPolicy?.uppercase ? "Required" : "Optional"}
-                  </Badge>
-                </div>
-              </Col>
+            <div className="preview-setting">
+              <span>Uppercase Letter</span>
+              <Badge bg={passwordPolicy?.uppercase ? "success" : "light"}>
+                {passwordPolicy?.uppercase ? "Required" : "Optional"}
+              </Badge>
+            </div>
 
-              <Col xs={12}>
-                <div className="d-flex justify-content-between">
-                  <span>Lowercase Letter</span>
-                  <Badge
-                    bg={passwordPolicy?.lowercase ? "success" : "secondary"}
-                  >
-                    {passwordPolicy?.lowercase ? "Required" : "Optional"}
-                  </Badge>
-                </div>
-              </Col>
+            <div className="preview-setting">
+              <span>Lowercase Letter</span>
+              <Badge bg={passwordPolicy?.lowercase ? "success" : "light"}>
+                {passwordPolicy?.lowercase ? "Required" : "Optional"}
+              </Badge>
+            </div>
 
-              <Col xs={12}>
-                <div className="d-flex justify-content-between">
-                  <span>Numeric Character</span>
-                  <Badge bg={passwordPolicy?.number ? "success" : "secondary"}>
-                    {passwordPolicy?.number ? "Required" : "Optional"}
-                  </Badge>
-                </div>
-              </Col>
+            <div className="preview-setting">
+              <span>Numeric Character</span>
+              <Badge bg={passwordPolicy?.number ? "success" : "light"}>
+                {passwordPolicy?.number ? "Required" : "Optional"}
+              </Badge>
+            </div>
 
-              <Col xs={12}>
-                <div className="d-flex justify-content-between">
-                  <span>Special Character</span>
-                  <Badge
-                    bg={
-                      passwordPolicy?.specialCharacter ? "success" : "secondary"
-                    }
-                  >
-                    {passwordPolicy?.specialCharacter ? "Required" : "Optional"}
-                  </Badge>
-                </div>
-              </Col>
+            <div className="preview-setting">
+              <span>Special Character</span>
+              <Badge
+                bg={passwordPolicy?.specialCharacter ? "success" : "light"}
+              >
+                {passwordPolicy?.specialCharacter ? "Required" : "Optional"}
+              </Badge>
+            </div>
 
-              <Col xs={12}>
-                <div className="d-flex justify-content-between">
-                  <span>Password Expiry</span>
-                  <Badge
-                    bg={passwordPolicy?.enableExpiry ? "success" : "secondary"}
-                  >
-                    {passwordPolicy?.enableExpiry
-                      ? `${passwordPolicy?.expiryDays} Days`
-                      : "Disabled"}
-                  </Badge>
-                </div>
-              </Col>
+            <div className="preview-setting">
+              <span>Password Expiry</span>
+              <Badge
+                bg={passwordPolicy?.enableExpiry ? "warning" : "secondary"}
+              >
+                {passwordPolicy?.enableExpiry
+                  ? `${passwordPolicy.expiryDays} Days`
+                  : "Disabled"}
+              </Badge>
+            </div>
 
-              <Col xs={12}>
-                <div className="d-flex justify-content-between">
-                  <span>Password History</span>
-                  <Badge
-                    bg={passwordPolicy?.enableHistory ? "success" : "secondary"}
-                  >
-                    {passwordPolicy?.enableHistory ? "Enabled" : "Disabled"}
-                  </Badge>
-                </div>
-              </Col>
-            </Row>
+            <div className="preview-setting border-bottom-0">
+              <span>Password History</span>
+              <Badge bg={passwordPolicy?.enableHistory ? "info" : "secondary"}>
+                {passwordPolicy?.enableHistory ? "Enabled" : "Disabled"}
+              </Badge>
+            </div>
           </Card.Body>
         </Card>
 
         <Card className="preview-portal-card mt-4">
-          <Card.Header>Session Policy</Card.Header>
+          <Card.Header className="d-flex align-items-center">
+            <FiMonitor className="me-2 text-primary" />
+            <span className="fw-semibold">Session Policy</span>
+          </Card.Header>
 
-          <Card.Body>
-            <Row className="g-3">
-              <Col xs={12}>
-                <div className="d-flex justify-content-between align-items-center">
-                  <span>
-                    <FiClock className="me-2" />
-                    Idle Timeout
-                  </span>
+          <Card.Body className="p-3">
+            <div className="preview-setting">
+              <span className="d-flex align-items-center">
+                <FiClock className="me-2 text-muted" />
+                Idle Timeout
+              </span>
 
-                  <Badge bg="primary">
-                    {sessionPolicy?.idleTimeout
-                      ? `${sessionPolicy.idleTimeout} Minutes`
-                      : "Not Configured"}
-                  </Badge>
-                </div>
-              </Col>
+              <Badge bg="primary">
+                {sessionPolicy?.idleTimeout
+                  ? `${sessionPolicy.idleTimeout} min`
+                  : "--"}
+              </Badge>
+            </div>
 
-              <Col xs={12}>
-                <div className="d-flex justify-content-between align-items-center">
-                  <span>
-                    <FiUsers className="me-2" />
-                    Concurrent Sessions
-                  </span>
+            <div className="preview-setting border-bottom-0">
+              <span className="d-flex align-items-center">
+                <FiUsers className="me-2 text-muted" />
+                Concurrent Sessions
+              </span>
 
-                  <Badge bg="primary">
-                    {sessionPolicy?.concurrentSessions || "Not Configured"}
-                  </Badge>
-                </div>
-              </Col>
-            </Row>
+              <Badge bg="info">
+                {sessionPolicy?.concurrentSessions || "--"}
+              </Badge>
+            </div>
           </Card.Body>
         </Card>
 

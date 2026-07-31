@@ -17,6 +17,8 @@ import ValidationWorkflow from "./pages/ValidationWorkflow/ValidationWorkflow";
 import DynamicFormsHome from "./pages/organizations/DynamicForms/DynamicFormsHome";
 import EligibilityOverview from "./pages/EligibilityOverview/Overview";
 import DashboardList from "../src/pages/dashboard/dashboardOverview";
+import RolesManagementApp from "../src/pages/Admin/RolesManagement"
+
 import { Toaster } from "react-hot-toast";
 function ProtectedLayout() {
   const loggedIn = useAppSelector((state) => state.auth.loggedIn);
@@ -86,6 +88,7 @@ function App() {
             element={<OrganizationDetails />}
           />
           <Route path="/dashboard" element={<DashboardList />} />
+          <Route path="/admin" element={<RolesManagementApp />} />
           {/* Eligibility Configuration */}
           <Route
             path="/eligibility-configuration"

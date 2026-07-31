@@ -116,3 +116,34 @@ a {
     transform: translateX(80px);
   }
 }
+
+.preview-setting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.preview-setting:last-child {
+  border-bottom: none;
+}
+
+.preview-setting span:first-child {
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.preview-setting .badge {
+  min-width: 90px;
+  text-align: center;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.preview-setting .bg-light {
+  color: #6b7280 !important;
+  border: 1px solid #d1d5db;
+}
