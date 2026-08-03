@@ -766,3 +766,155 @@ textarea.form-control {
     font-size: 22px;
   }
 }
+.view-role-modal .modal-content {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.view-role-header {
+  background: #fff;
+  border-bottom: 1px solid #edf1f7;
+  padding: 22px 26px;
+}
+
+.view-role-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: #eef6fc;
+  color: #1891d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.view-value {
+  min-height: 48px;
+  background: #f8fafc;
+  border: 1px solid #edf1f7;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.permission-view-item {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #edf1f7;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  transition: 0.25s;
+}
+
+.permission-view-item:hover {
+  border-color: #1891d0;
+  background: #f8fbff;
+  box-shadow: 0 8px 18px rgba(24, 145, 208, 0.08);
+}
+
+.delete-role-modal .modal-content {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.delete-role-header {
+  padding: 22px 26px;
+  background: #fff;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.header-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef6fc;
+  color: #1891d0;
+}
+
+.header-icon.danger {
+  background: #fff2f2;
+  color: #dc3545;
+}
+
+.icon-button {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid #edf2f7;
+  background: #fff;
+}
+
+.delete-role-avatar {
+  width: 74px;
+  height: 74px;
+  margin: auto;
+  border-radius: 18px;
+  background: #fff2f2;
+  color: #dc3545;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-details-card {
+  border: 1px solid #edf2f7 !important;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.field-box {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.delete-warning-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px;
+  background: #fff8f8;
+  border: 1px solid #ffd6d6;
+  border-radius: 12px;
+}
+
+.btn-cancel {
+  min-width: 120px;
+}
+
+.btn-delete {
+  min-width: 150px;
+}
+

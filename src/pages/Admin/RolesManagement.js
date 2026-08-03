@@ -706,6 +706,7 @@ const AdminManagement = () => {
         show={showViewDialog}
         onHide={() => setShowViewDialog(false)}
         role={selectedRole}
+        moduleGroups={MODULE_GROUPS}
       />
     </Container>
   );

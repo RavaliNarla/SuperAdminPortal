@@ -16,9 +16,9 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
       path: "/organizations",
     },
     {
-      name: "Admin",
+      name: "User & Role Management",
       icon: "bi-people",
-      path: "/admin",
+      path: "/User-RoleManagement",
     },
     {
       name: "Roles & Privileges",

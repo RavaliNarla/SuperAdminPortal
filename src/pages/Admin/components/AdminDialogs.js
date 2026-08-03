@@ -654,9 +654,7 @@ export const DeleteDialog = ({ show, onHide, role, onConfirm }) => {
   const handleDelete = async () => {
     try {
       setLoading(true);
-
       await onConfirm();
-
       toast.success("Role deleted successfully.");
     } catch (error) {
       toast.error("Unable to delete role.");
@@ -673,88 +671,106 @@ export const DeleteDialog = ({ show, onHide, role, onConfirm }) => {
       backdrop="static"
       dialogClassName="delete-role-modal"
     >
-      {/* ==========================================
-          Header
-      ========================================== */}
+      {/* Header */}
 
-      <Modal.Header closeButton className="border-0 pb-0">
-        <Modal.Title className="fw-bold text-danger">Delete Role</Modal.Title>
-      </Modal.Header>
-
-      {/* ==========================================
-          Body
-      ========================================== */}
-
-      <Modal.Body className="px-4 pb-4">
-        <div className="text-center">
-          {/* Icon */}
-
-          <div
-            className="mx-auto mb-4 d-flex align-items-center justify-content-center rounded-circle"
-            style={{
-              width: 90,
-              height: 90,
-              background: "linear-gradient(135deg,#ff6b6b,#dc3545)",
-              color: "#fff",
-            }}
-          >
-            <FiTrash2 size={42} />
+      <Modal.Header className="delete-role-header border-0">
+        <div className="d-flex align-items-center w-100">
+          <div className="header-icon danger">
+            <FiTrash2 size={22} />
           </div>
 
-          {/* Title */}
+          <div className="ms-3 flex-grow-1">
+            <h4 className="mb-1 fw-bold">Delete Role</h4>
 
-          <h4 className="fw-bold mb-3">Delete Role?</h4>
+            <p className="text-muted mb-0">
+              Confirm before removing this role.
+            </p>
+          </div>
 
-          {/* Description */}
-
-          <p className="text-muted mb-2">You are about to permanently delete</p>
-
-          <h5 className="fw-semibold text-dark">
-            {role?.roleName || "Selected Role"}
-          </h5>
-
-          <p className="text-muted mt-3 mb-0">
-            This action cannot be undone. All permissions associated with this
-            role will be removed permanently.
-          </p>
+          <Button variant="light" className="icon-button" onClick={onHide}>
+            <FiX />
+          </Button>
         </div>
+      </Modal.Header>
+
+      {/* Body */}
+
+      <Modal.Body className="p-4">
+        <div className="text-center mb-4">
+          <div className="delete-role-avatar">
+            <FiTrash2 size={34} />
+          </div>
+
+          <h4 className="fw-bold mt-3">Delete this Role?</h4>
+
+          <p className="text-muted">This action cannot be undone.</p>
+        </div>
+
+        {/* Role Details */}
+
+        <Card className="delete-details-card mb-4">
+          <Card.Body>
+            <Row className="g-4">
+              <Col md={6}>
+                <label className="field-label">Role Name</label>
+
+                <div className="field-box">{role?.roleName || "-"}</div>
+              </Col>
+
+              <Col md={6}>
+                <label className="field-label">Status</label>
+
+                <div className="field-box">
+                  <Badge
+                    bg={role?.status === "ACTIVE" ? "success" : "secondary"}
+                  >
+                    {role?.status}
+                  </Badge>
+                </div>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
 
         {/* Warning */}
 
-        <Card className="border-danger bg-danger bg-opacity-10 mt-4">
-          <Card.Body>
-            <div className="d-flex">
-              <FiTrash2 className="text-danger mt-1 me-3" size={20} />
+        <div className="delete-warning-box">
+          <FiTrash2 className="text-danger mt-1 me-3" size={22} />
 
-              <div>
-                <div className="fw-semibold text-danger">Warning</div>
+          <div>
+            <div className="fw-bold text-danger mb-1">Warning</div>
 
-                <small className="text-muted">
-                  Deleting this role may affect users currently assigned to it.
-                </small>
-              </div>
-            </div>
-          </Card.Body>
-        </Card>
+            <small className="text-muted">
+              Deleting this role permanently removes all permissions assigned to
+              it. Users currently assigned to this role may immediately lose
+              access to the associated modules.
+            </small>
+          </div>
+        </div>
       </Modal.Body>
 
-      {/* ==========================================
-          Footer
-      ========================================== */}
+      {/* Footer */}
 
-      <Modal.Footer className="border-0">
-        <Button variant="light" onClick={onHide} disabled={loading}>
+      <Modal.Footer className="border-0 pt-0 px-4 pb-4">
+        <Button
+          variant="light"
+          className="btn-cancel"
+          onClick={onHide}
+          disabled={loading}
+        >
           <FiX className="me-2" />
           Cancel
         </Button>
 
-        <Button variant="danger" onClick={handleDelete} disabled={loading}>
+        <Button
+          variant="danger"
+          className="btn-delete"
+          onClick={handleDelete}
+          disabled={loading}
+        >
           {loading ? (
             <>
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                role="status"
-              />
+              <span className="spinner-border spinner-border-sm me-2" />
               Deleting...
             </>
           ) : (
@@ -1056,7 +1072,6 @@ export const ModuleAccessDialog = ({
         ))}
       </Modal.Body>
 
-
       <Modal.Footer className="border-0">
         <Button variant="light" onClick={onHide} disabled={saving}>
           <FiX className="me-2" />
@@ -1085,7 +1100,7 @@ export const ModuleAccessDialog = ({
    View Role Dialog
 =========================================================== */
 
-export const ViewRoleDialog = ({ show, onHide, role }) => {
+export const ViewRoleDialog = ({ show, onHide, role, moduleGroups = [] }) => {
   if (!role) return null;
 
   return (
@@ -1093,60 +1108,99 @@ export const ViewRoleDialog = ({ show, onHide, role }) => {
       show={show}
       onHide={onHide}
       centered
-      size="lg"
+      size="xl"
       backdrop="static"
+      dialogClassName="view-role-modal"
     >
-      <Modal.Header closeButton>
-        <Modal.Title className="d-flex align-items-center">
-          <FiEye className="me-2 text-primary" />
-          View Role
-        </Modal.Title>
+      <Modal.Header className="border-0 view-role-header">
+        <div className="d-flex align-items-center w-100">
+          <div className="view-role-icon">
+            <FiEye size={28} />
+          </div>
+
+          <div className="ms-3 flex-grow-1">
+            <h4 className="mb-1">View Role</h4>
+            <p className="mb-0 text-muted">
+              View role information and assigned permissions
+            </p>
+          </div>
+
+          <Button variant="light" onClick={onHide}>
+            <FiX />
+          </Button>
+        </div>
       </Modal.Header>
 
-      <Modal.Body>
-        <Row className="g-4">
-          <Col md={6}>
-            <Form.Label className="fw-semibold">Role Name</Form.Label>
-            <Form.Control value={role.roleName || ""} readOnly />
-          </Col>
+      <Modal.Body className="p-4">
+        {/* Information */}
 
-          <Col md={6}>
-            <Form.Label className="fw-semibold">Status</Form.Label>
-            <Form.Control value={role.status || ""} readOnly />
-          </Col>
+        <Card className="organization-card mb-4">
+          <Card.Body>
+            <Row className="g-4">
+              <Col md={6}>
+                <label className="view-label">Role Name</label>
 
-          <Col md={12}>
-            <Form.Label className="fw-semibold">Description</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              value={role.description || ""}
-              readOnly
-            />
-          </Col>
+                <div className="view-value">{role.roleName}</div>
+              </Col>
 
-          <Col md={12}>
-            <Form.Label className="fw-semibold mb-3">
-              Permissions
-            </Form.Label>
+              <Col md={6}>
+                <label className="view-label">Status</label>
 
-            <Row className="g-2">
-              {role.permissions &&
-                Object.entries(role.permissions)
-                  .filter(([_, value]) => value)
-                  .map(([key]) => (
-                    <Col md={4} key={key}>
-                      <Badge bg="primary" className="w-100 py-2">
-                        {key.replace(/_/g, " ")}
-                      </Badge>
+                <div className="view-value">
+                  <Badge
+                    bg={role.status === "ACTIVE" ? "success" : "secondary"}
+                  >
+                    {role.status}
+                  </Badge>
+                </div>
+              </Col>
+
+              <Col md={12}>
+                <label className="view-label">Description</label>
+
+                <div className="view-value">{role.description}</div>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+
+        {/* Permissions */}
+
+        {moduleGroups.map((group) => {
+          const enabled = group.modules.filter(
+            (module) => role?.permissions?.[module.key] === true,
+          );
+          if (enabled.length === 0) return null;
+
+          return (
+            <Card key={group.title} className="organization-card mb-3">
+              <Card.Header className="bg-white">
+                <div className="d-flex justify-content-between">
+                  <strong>{group.title}</strong>
+
+                  <Badge bg="primary">{enabled.length}</Badge>
+                </div>
+              </Card.Header>
+
+              <Card.Body>
+                <Row>
+                  {enabled.map((module) => (
+                    <Col lg={4} md={6} key={module.key}>
+                      <div className="permission-view-item">
+                        <FiCheckCircle className="text-success me-2" />
+
+                        {module.name}
+                      </div>
                     </Col>
                   ))}
-            </Row>
-          </Col>
-        </Row>
+                </Row>
+              </Card.Body>
+            </Card>
+          );
+        })}
       </Modal.Body>
 
-      <Modal.Footer>
+      <Modal.Footer className="border-0">
         <Button variant="primary" onClick={onHide}>
           Close
         </Button>

@@ -88,7 +88,7 @@ function App() {
             element={<OrganizationDetails />}
           />
           <Route path="/dashboard" element={<DashboardList />} />
-          <Route path="/admin" element={<RolesManagementApp />} />
+          <Route path="/User-RoleManagement" element={<RolesManagementApp />} />
           {/* Eligibility Configuration */}
           <Route
             path="/eligibility-configuration"
