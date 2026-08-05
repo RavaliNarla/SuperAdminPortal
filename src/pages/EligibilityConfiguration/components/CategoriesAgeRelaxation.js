@@ -13,6 +13,7 @@ import {
 
 const CategoriesAgeRelaxation = () => {
   const [settings, setSettings] = useState({
+    ageValidation: true,
     applyRelaxation: true,
     reservedVacancyOnly: false,
     allowMultipleRelaxation: true,
@@ -20,10 +21,25 @@ const CategoriesAgeRelaxation = () => {
   });
   const [activeTab, setActiveTab] = useState("vertical");
   const handleToggle = async (field) => {
-    const updatedSettings = {
-      ...settings,
-      [field]: !settings[field],
-    };
+    let updatedSettings;
+
+    if (field === "ageValidation") {
+      const nextAgeValidation = !settings.ageValidation;
+      updatedSettings = {
+        ...settings,
+        ageValidation: nextAgeValidation,
+        // Age Validation is the master switch for the whole age check - turning it
+        // off also forces Apply Age Relaxation off, since relaxation is meaningless
+        // without age validation running at all. Turning Age Validation back on
+        // leaves Apply Age Relaxation off for the admin to re-enable explicitly.
+        applyRelaxation: nextAgeValidation ? settings.applyRelaxation : false,
+      };
+    } else {
+      updatedSettings = {
+        ...settings,
+        [field]: !settings[field],
+      };
+    }
 
     setSettings(updatedSettings);
 
@@ -66,6 +82,7 @@ const CategoriesAgeRelaxation = () => {
 
     if (eligibilityData.settings) {
       setSettings({
+        ageValidation: eligibilityData.settings.ageValidation ?? true,
         applyRelaxation: eligibilityData.settings.applyRelaxation ?? true,
         reservedVacancyOnly:
           eligibilityData.settings.reservedVacancyOnly ?? false,
@@ -229,20 +246,44 @@ const CategoriesAgeRelaxation = () => {
             <div className="col-lg-6">
               <div className="setting-item">
                 <div>
+                  <h6>Age Validation</h6>
+                  <small>
+                    Enable age eligibility checks for this organization.
+                    Turning this off skips age validation entirely.
+                  </small>
+                </div>
+                <div className="form-check form-switch">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={settings.ageValidation}
+                    onChange={() => handleToggle("ageValidation")}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6">
+              <div className="setting-item">
+                <div>
                   <h6>Apply Age Relaxation</h6>
-                  <small>Enable age relaxation rules.</small>
+                  <small>
+                    Enable age relaxation rules.
+                    {!settings.ageValidation &&
+                      " (Requires Age Validation to be enabled.)"}
+                  </small>
                 </div>
                 <div className="form-check form-switch">
                   <input
                     className="form-check-input"
                     type="checkbox"
                     checked={settings.applyRelaxation}
+                    disabled={!settings.ageValidation}
                     onChange={() => handleToggle("applyRelaxation")}
                   />
                 </div>
               </div>
             </div>
-            <div className="col-lg-6">
+            <div className="col-lg-6 mt-4">
               <div className="setting-item">
                 <div>
                   <h6>Reserved Vacancy Required</h6>
